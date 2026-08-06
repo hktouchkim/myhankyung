@@ -34,9 +34,10 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 type BadgeGroupId = "premium" | "welcome" | "explorer" | "heritage" | "hidden";
+type BadgeGroupFilter = "all" | BadgeGroupId;
 type BadgeFilter = "all" | "earned" | "locked";
 type BadgeTone = "premium" | "silver" | "navy" | "green" | "purple" | "gold";
 
@@ -174,12 +175,23 @@ function progressText(badge: BadgeRecord) {
 
 export default function BadgesClient() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [groupFilter, setGroupFilter] = useState<BadgeGroupFilter>("all");
   const [filter, setFilter] = useState<BadgeFilter>("all");
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
   const [seenCodes, setSeenCodes] = useState<string[]>([]);
   const selectedBadge = BADGES.find((badge) => badge.code === selectedCode) ?? null;
   const earnedBadges = BADGES.filter((badge) => badge.earnedAt);
-  const recentBadge = [...earnedBadges].sort((a, b) => (b.earnedAt ?? "").localeCompare(a.earnedAt ?? ""))[0] ?? BADGES[0];
+  const scopedBadges = BADGES.filter((badge) => groupFilter === "all" || badge.group === groupFilter);
+  const earnedScopedCount = scopedBadges.filter((badge) => badge.earnedAt).length;
+  const statusFilterOptions: { id: BadgeFilter; label: string; count: number }[] = [
+    { id: "all", label: "전체", count: scopedBadges.length },
+    { id: "earned", label: "획득", count: earnedScopedCount },
+    { id: "locked", label: "미획득", count: scopedBadges.length - earnedScopedCount },
+  ];
+  const groupFilterOptions: { id: BadgeGroupFilter; label: string; count: number }[] = [
+    { id: "all", label: "전체", count: BADGES.length },
+    ...BADGE_GROUPS.map((group) => ({ id: group.id, label: group.name, count: BADGES.filter((badge) => badge.group === group.id).length })),
+  ];
 
   useEffect(() => {
     const requestedCode = new URLSearchParams(window.location.search).get("badge");
@@ -207,11 +219,6 @@ export default function BadgesClient() {
     };
   }, [selectedBadge]);
 
-  const groupCounts = useMemo(() => BADGE_GROUPS.filter((group) => group.id !== "hidden").map((group) => {
-    const groupBadges = BADGES.filter((badge) => badge.group === group.id);
-    return { ...group, earned: groupBadges.filter((badge) => badge.earnedAt).length, total: groupBadges.length };
-  }), []);
-
   const openBadge = (badge: BadgeRecord) => {
     if (badge.group === "hidden" && !badge.earnedAt) return;
     setSelectedCode(badge.code);
@@ -222,10 +229,6 @@ export default function BadgesClient() {
   const closeBadge = () => {
     setSelectedCode(null);
     window.history.replaceState(null, "", "/badges");
-  };
-
-  const jumpToGroup = (groupId: BadgeGroupId) => {
-    document.getElementById(`badge-group-${groupId}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
@@ -264,44 +267,34 @@ export default function BadgesClient() {
             <span>2026.08.06 기준</span>
           </section>
 
-          <section className="badge-module badge-summary-module" aria-labelledby="badge-summary-title">
+          <section className="badge-module badge-summary-module badge-summary-compact" aria-labelledby="badge-summary-title">
             <div className="badge-summary-lead">
               <span>획득한 배지</span>
               <strong id="badge-summary-title">{earnedBadges.length}<em>개</em></strong>
               <p>읽고, 참여하고, 탐험하며 쌓아온 나의 한경 기록입니다.</p>
             </div>
-            <button className="badge-latest-card" type="button" onClick={() => openBadge(recentBadge)}>
-              <BadgeEmblem badge={recentBadge} />
-              <span><small>최근 획득</small><strong>{recentBadge.name}</strong><time>{recentBadge.earnedAt}</time></span>
-            </button>
-            <div className="badge-group-overview" aria-label="그룹별 배지 획득 현황">
-              {groupCounts.map((group) => (
-                <button type="button" key={group.id} onClick={() => jumpToGroup(group.id)}>
-                  <span>{group.name}</span><strong>{group.earned}<em>/{group.total}</em></strong>
-                </button>
-              ))}
-            </div>
           </section>
 
           <section className="badge-toolbar" aria-label="배지 목록 도구">
-            <div className="badge-group-nav" role="group" aria-label="배지 그룹 이동">
-              {BADGE_GROUPS.map((group) => (
-                <button type="button" key={group.id} onClick={() => jumpToGroup(group.id)}>{group.name}</button>
+            <div className="badge-group-nav" role="group" aria-label="배지 그룹 필터">
+              {groupFilterOptions.map((option) => (
+                <button type="button" key={option.id} className={groupFilter === option.id ? "badge-filter-active" : ""} aria-pressed={groupFilter === option.id} onClick={() => setGroupFilter(option.id)}>
+                  {option.label}<em>{option.count}</em>
+                </button>
               ))}
             </div>
             <div className="badge-status-filter" role="group" aria-label="배지 획득 상태 필터">
-              {(["all", "earned", "locked"] as BadgeFilter[]).map((value) => (
-                <button type="button" key={value} className={filter === value ? "badge-filter-active" : ""} aria-pressed={filter === value} onClick={() => setFilter(value)}>
-                  {value === "all" ? "전체" : value === "earned" ? "획득" : "미획득"}
+              {statusFilterOptions.map((option) => (
+                <button type="button" key={option.id} className={filter === option.id ? "badge-filter-active" : ""} aria-pressed={filter === option.id} onClick={() => setFilter(option.id)}>
+                  {option.label}<em>{option.count}</em>
                 </button>
               ))}
             </div>
           </section>
 
           <div className="badge-groups">
-            {BADGE_GROUPS.map((group) => {
+            {BADGE_GROUPS.filter((group) => groupFilter === "all" || group.id === groupFilter).map((group) => {
               const groupBadges = BADGES.filter((badge) => badge.group === group.id)
-                .filter((badge) => group.id !== "hidden" || badge.earnedAt)
                 .filter((badge) => filter === "all" || (filter === "earned" ? badge.earnedAt : !badge.earnedAt));
               const earnedCount = BADGES.filter((badge) => badge.group === group.id && badge.earnedAt).length;
               const totalCount = BADGES.filter((badge) => badge.group === group.id).length;
@@ -318,14 +311,15 @@ export default function BadgesClient() {
                     <div className="badge-card-grid">
                       {groupBadges.map((badge) => {
                         const earned = Boolean(badge.earnedAt);
+                        const mystery = group.id === "hidden" && !earned;
                         const progress = progressText(badge);
                         const showNew = badge.isNew && !seenCodes.includes(badge.code);
                         return (
-                          <button className={`badge-card ${earned ? "badge-card-earned" : "badge-card-locked"}`} type="button" key={badge.code} onClick={() => openBadge(badge)}>
+                          <button className={`badge-card ${earned ? "badge-card-earned" : "badge-card-locked"} ${mystery ? "badge-card-mystery" : ""}`} type="button" key={badge.code} disabled={mystery} onClick={() => openBadge(badge)}>
                             {showNew ? <span className="badge-new-chip">NEW</span> : null}
-                            <BadgeEmblem badge={badge} />
-                            <strong>{badge.name}</strong>
-                            {earned ? <><span className="badge-state badge-state-earned"><Check size={12} /> 획득</span><time>{badge.earnedAt}</time></> : <><span className="badge-state"><LockKeyhole size={12} /> 미획득</span>{progress ? <div className="badge-card-progress"><span><i style={{ width: `${Math.min(100, ((badge.current ?? 0) / (badge.target ?? 1)) * 100)}%` }} /></span><small>{progress}</small></div> : null}</>}
+                            {mystery ? <span className="badge-emblem badge-emblem-mystery" aria-hidden="true"><b>?</b></span> : <BadgeEmblem badge={badge} />}
+                            <strong>{mystery ? "히든 배지" : badge.name}</strong>
+                            {earned ? <><span className="badge-state badge-state-earned"><Check size={12} /> 획득</span><time>{badge.earnedAt}</time></> : <><span className="badge-state"><LockKeyhole size={12} /> 미획득</span>{!mystery && progress ? <div className="badge-card-progress"><span><i style={{ width: `${Math.min(100, ((badge.current ?? 0) / (badge.target ?? 1)) * 100)}%` }} /></span><small>{progress}</small></div> : null}</>}
                           </button>
                         );
                       })}
@@ -352,7 +346,6 @@ export default function BadgesClient() {
                 <>
                   <time>{selectedBadge.earnedAt} 획득</time>
                   <p>{selectedBadge.hint} 한경과 함께 쌓아온 활동이 또 하나의 소중한 기록으로 남았습니다.</p>
-                  <div className="badge-detail-complete"><Check size={17} /><span>배지 획득 조건을 완료했습니다.</span></div>
                 </>
               ) : (
                 <>
@@ -363,7 +356,6 @@ export default function BadgesClient() {
                       <span><i style={{ width: `${Math.min(100, (selectedBadge.current / selectedBadge.target) * 100)}%` }} /></span>
                     </div>
                   ) : null}
-                  {selectedBadge.actionLabel && selectedBadge.actionHref ? <Link className="badge-detail-action" href={selectedBadge.actionHref}>{selectedBadge.actionLabel}</Link> : null}
                 </>
               )}
             </div>

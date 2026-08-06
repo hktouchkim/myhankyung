@@ -3326,6 +3326,10 @@ p {
   align-items: stretch;
 }
 
+.badge-summary-compact {
+  grid-template-columns: 1fr;
+}
+
 .badge-summary-lead {
   min-width: 0;
   padding: 7px 4px;
@@ -3496,15 +3500,39 @@ p {
   white-space: nowrap;
 }
 
+.badge-group-nav button em,
+.badge-status-filter button em {
+  display: inline-flex;
+  min-width: 18px;
+  height: 18px;
+  margin-left: 5px;
+  padding: 0 5px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #f0f1f3;
+  color: #777c84;
+  font-size: 9px;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+}
+
 .badge-group-nav button:hover,
 .badge-status-filter button:hover {
   border-color: #b5bac3;
   color: #1f2227;
 }
 
+.badge-group-nav .badge-filter-active,
 .badge-status-filter .badge-filter-active {
   border-color: #17191d;
   background: #17191d;
+  color: #fff;
+}
+
+.badge-group-nav .badge-filter-active em,
+.badge-status-filter .badge-filter-active em {
+  background: rgba(255, 255, 255, 0.16);
   color: #fff;
 }
 
@@ -3720,6 +3748,18 @@ p {
   background: linear-gradient(145deg, #f2cb65, #aa661f 56%, #713a12);
 }
 
+.badge-emblem-mystery {
+  background: linear-gradient(145deg, #d8dbe0, #9ca1a9 56%, #747a83);
+  color: #fff;
+  opacity: 0.66;
+}
+
+.badge-emblem-mystery > b {
+  font-size: 35px;
+  line-height: 1;
+  transform: rotate(-45deg);
+}
+
 .badge-emblem-locked {
   filter: grayscale(1);
   opacity: 0.42;
@@ -3740,6 +3780,17 @@ p {
   height: 120px;
   border-width: 12px;
   border-radius: 39px;
+}
+
+.badge-card-mystery:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.badge-card-mystery:disabled:hover {
+  border-color: #e3e5e8;
+  box-shadow: none;
+  transform: none;
 }
 
 .badge-filter-empty {

@@ -80,12 +80,15 @@ test("server-renders the My한경 badge collection", async () => {
   assert.match(html, /한경 헤리티지/);
   assert.match(html, /히든 배지/);
   assert.match(html, /획득한 배지/);
-  assert.match(html, /최근 획득/);
   assert.match(html, /미획득/);
   assert.match(html, /badge-status-filter/);
-  assert.equal((html.match(/class="badge-card /g) ?? []).length, 38);
+  assert.match(html, /배지 그룹 필터/);
+  assert.match(html, /전체<em>40<\/em>/);
+  assert.equal((html.match(/class="badge-card /g) ?? []).length, 40);
+  assert.equal((html.match(/badge-emblem-mystery/g) ?? []).length, 2);
   assert.match(html, /생일파티 손님/);
   assert.doesNotMatch(html, /끝을 보는 성격|권리의 수호자/);
+  assert.doesNotMatch(html, /최근 획득|배지 획득 조건을 완료했습니다|badge-detail-action/);
 });
 
 test("server-renders the My한경 최근 본 기사 experience", async () => {
