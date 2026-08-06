@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Award,
   BarChart3,
   Bookmark,
   BrainCircuit,
@@ -37,6 +38,7 @@ type RecentArticle = ArticleSeed & {
 
 const NAV_ITEMS: { label: string; icon: LucideIcon; href: string; active?: boolean }[] = [
   { label: "My 브리핑", icon: Home, href: "/" },
+  { label: "배지", icon: Award, href: "/badges" },
   { label: "관심 기자", icon: UserRound, href: "/" },
   { label: "뉴스 스크랩", icon: Bookmark, href: "/" },
   { label: "최근 본 기사", icon: Clock3, href: "/recent-articles", active: true },

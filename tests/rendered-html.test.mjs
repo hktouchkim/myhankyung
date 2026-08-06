@@ -63,7 +63,29 @@ test("keeps the My한경 dashboard at the root URL", async () => {
   assert.match(html, /보유 배지/);
   assert.match(html, /뉴스 스크랩/);
   assert.match(html, /관심 기자/);
+  assert.equal((html.match(/dashboard-badge-item/g) ?? []).length, 6);
+  assert.match(html, /href="\/badges\?badge=/);
   assert.doesNotMatch(html, /타임 브리핑/);
+});
+
+test("server-renders the My한경 badge collection", async () => {
+  const response = await render("/badges");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+
+  assert.match(html, /<title>배지 \| My한경<\/title>/i);
+  assert.match(html, /프리미엄9 라운지/);
+  assert.match(html, /월컴 스타터/);
+  assert.match(html, /한경 탐험가/);
+  assert.match(html, /한경 헤리티지/);
+  assert.match(html, /히든 배지/);
+  assert.match(html, /획득한 배지/);
+  assert.match(html, /최근 획득/);
+  assert.match(html, /미획득/);
+  assert.match(html, /badge-status-filter/);
+  assert.equal((html.match(/class="badge-card /g) ?? []).length, 38);
+  assert.match(html, /생일파티 손님/);
+  assert.doesNotMatch(html, /끝을 보는 성격|권리의 수호자/);
 });
 
 test("server-renders the My한경 최근 본 기사 experience", async () => {
@@ -103,7 +125,7 @@ test("keeps the My한경 dashboard modules in the requested order", async () => 
   assert.ok(scrapIndex < watchlistIndex);
   assert.ok(watchlistIndex < reporterIndex);
   assert.match(dashboardSource, /DASHBOARD_BADGES\.map/);
-  assert.doesNotMatch(dashboardSource, /보유 배지 전체보기/);
+  assert.doesNotMatch(dashboardSource, />보유 배지 전체보기</);
   assert.match(styles, /\.dashboard-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2,/s);
   assert.match(styles, /\.dashboard-watch-card\s*\{[^}]*grid-column:\s*auto;/s);
   assert.match(styles, /\.module-collapse-button\s*\{[^}]*border:\s*0;[^}]*background:\s*transparent;/s);

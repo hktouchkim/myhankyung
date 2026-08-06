@@ -618,6 +618,7 @@ const REPORTS: Report[] = [
 
 const NAV_ITEMS: { id: string; label: string; icon: LucideIcon }[] = [
   { id: "home", label: "My 브리핑", icon: Home },
+  { id: "badges", label: "배지", icon: Award },
   { id: "reporter", label: "관심 기자", icon: UserRound },
   { id: "scrap", label: "뉴스 스크랩", icon: Bookmark },
   { id: "recent", label: "최근 본 기사", icon: Clock3 },
@@ -628,14 +629,13 @@ const NAV_ITEMS: { id: string; label: string; icon: LucideIcon }[] = [
   { id: "logout", label: "로그아웃", icon: LogOut },
 ];
 
-const DASHBOARD_BADGES: { name: string; icon: LucideIcon; tone: string }[] = [
-  { name: "한경 프레스티지", icon: Star, tone: "premium" },
-  { name: "AI 투자 고수", icon: BarChart3, tone: "silver" },
-  { name: "오늘부터 한경인", icon: Newspaper, tone: "navy" },
-  { name: "공감 맛집", icon: Bell, tone: "green" },
-  { name: "ALICE Q의 초대", icon: Bookmark, tone: "green" },
-  { name: "이게 바로 나", icon: UserRound, tone: "green" },
-  { name: "마이 뉴스룸", icon: FileText, tone: "green" },
+const DASHBOARD_BADGES: { code: string; name: string; icon: LucideIcon; tone: string }[] = [
+  { code: "ai-invest-master", name: "AI 투자 고수", icon: BarChart3, tone: "silver" },
+  { code: "hankyung-prestige", name: "한경 프레스티지", icon: Star, tone: "premium" },
+  { code: "perfect-week", name: "퍼펙트 위크", icon: Award, tone: "green" },
+  { code: "push-lover", name: "한경 알림 ON", icon: Bell, tone: "green" },
+  { code: "share-good", name: "좋은 건 함께", icon: Bookmark, tone: "green" },
+  { code: "my-newsroom", name: "마이 뉴스룸", icon: FileText, tone: "green" },
 ];
 
 const DEFAULT_ALERTS: AlertSettings = {
@@ -987,6 +987,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const handleNav = (id: string) => {
     setMobileNavOpen(false);
     if (id === "home") window.location.assign("/");
+    else if (id === "badges") window.location.assign("/badges");
     else if (id === "recent") window.location.assign("/recent-articles");
     else if (id === "watchlist") window.location.assign("/watchlist");
     else showToast("이번 프로토타입은 관심종목 개편 범위에 집중했습니다.");
@@ -1041,6 +1042,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
               groups={groups}
               selectedGroupId={selectedGroupId}
               onSelectGroup={chooseGroup}
+              onOpenBadges={() => window.location.assign("/badges")}
               onOpenWatchlist={() => window.location.assign("/watchlist")}
             />
           ) : (
@@ -1681,11 +1683,13 @@ function Dashboard({
   groups,
   selectedGroupId,
   onSelectGroup,
+  onOpenBadges,
   onOpenWatchlist,
 }: {
   groups: WatchGroup[];
   selectedGroupId: string;
   onSelectGroup: (groupId: string) => void;
+  onOpenBadges: () => void;
   onOpenWatchlist: () => void;
 }) {
   const selectedGroup = groups.find((group) => group.id === selectedGroupId) ?? groups[0];
@@ -1710,18 +1714,19 @@ function Dashboard({
       <div className="dashboard-grid">
         <article className="dashboard-card dashboard-badge-card">
           <div className="dashboard-card-title">
-            <div className="title-with-icon"><Award size={21} /><h2>보유 배지</h2><span>{DASHBOARD_BADGES.length}개</span></div>
+            <div className="title-with-icon"><Award size={21} /><h2>보유 배지</h2></div>
+            <button type="button" onClick={onOpenBadges} aria-label="보유 배지 전체보기"><ChevronRight size={20} /></button>
           </div>
-          <div className="dashboard-badge-grid" aria-label="보유 배지 목록">
+          <div className="dashboard-badge-grid" aria-label="최근 획득한 배지 목록">
             {DASHBOARD_BADGES.map((badge) => {
               const Icon = badge.icon;
               return (
-                <div className="dashboard-badge-item" key={badge.name}>
+                <a className="dashboard-badge-item" href={`/badges?badge=${badge.code}`} key={badge.code}>
                   <span className={`dashboard-badge-emblem badge-tone-${badge.tone}`} aria-hidden="true">
                     <Icon size={29} strokeWidth={1.65} />
                   </span>
                   <strong>{badge.name}</strong>
-                </div>
+                </a>
               );
             })}
           </div>
