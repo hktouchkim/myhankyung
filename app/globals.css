@@ -3799,6 +3799,51 @@ p {
   opacity: 0.42;
 }
 
+.badge-emblem-locked-shape {
+  border-color: #f0f1f3;
+  background: linear-gradient(145deg, #c7cbd1, #949aa3 60%, #777e88);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55), 0 6px 14px rgba(39, 45, 54, 0.1);
+  color: #f8f9fa;
+  filter: none;
+  opacity: 1;
+}
+
+.badge-emblem-locked-shape .badge-emblem-lock {
+  display: none;
+}
+
+.badge-emblem-shape-premium {
+  border-radius: 0;
+  clip-path: polygon(50% 0%, 61% 17%, 80% 9%, 82% 30%, 100% 36%, 86% 51%, 96% 69%, 75% 72%, 72% 93%, 52% 83%, 36% 100%, 30% 78%, 9% 82%, 16% 61%, 0% 49%, 19% 38%, 14% 17%, 37% 21%);
+  transform: none;
+}
+
+.badge-emblem-shape-premium > svg,
+.badge-emblem-shape-welcome > svg,
+.badge-emblem-shape-heritage > svg {
+  transform: none;
+}
+
+.badge-emblem-shape-welcome {
+  border-radius: 0;
+  clip-path: polygon(50% 1%, 65% 7%, 77% 18%, 83% 35%, 83% 61%, 96% 77%, 96% 84%, 64% 84%, 59% 97%, 41% 97%, 36% 84%, 4% 84%, 4% 77%, 17% 61%, 17% 35%, 23% 18%, 35% 7%);
+  transform: none;
+}
+
+.badge-emblem-shape-explorer {
+  border-radius: 18px;
+}
+
+.badge-emblem-shape-heritage {
+  border-radius: 0;
+  clip-path: polygon(8% 2%, 22% 2%, 22% 13%, 91% 13%, 73% 35%, 91% 58%, 22% 58%, 22% 98%, 8% 98%);
+  transform: none;
+}
+
+.badge-emblem-shape-heritage > svg:first-child {
+  transform: translate(8px, -9px);
+}
+
 .badge-emblem-lock {
   position: absolute;
   right: -4px;

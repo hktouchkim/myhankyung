@@ -171,7 +171,7 @@ function BadgeEmblem({ badge, large = false }: { badge: BadgeRecord; large?: boo
     );
   }
   return (
-    <span className={`badge-emblem badge-emblem-${badge.tone} ${locked ? "badge-emblem-locked" : ""} ${large ? "badge-emblem-large" : ""}`} aria-hidden="true">
+    <span className={`badge-emblem badge-emblem-${badge.tone} ${locked ? `badge-emblem-locked badge-emblem-locked-shape badge-emblem-shape-${badge.group}` : ""} ${large ? "badge-emblem-large" : ""}`} aria-hidden="true">
       <Icon size={large ? 49 : 31} strokeWidth={1.65} />
       {locked ? <LockKeyhole className="badge-emblem-lock" size={large ? 21 : 16} /> : null}
     </span>

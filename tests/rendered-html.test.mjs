@@ -86,6 +86,10 @@ test("server-renders the My한경 badge collection", async () => {
   assert.match(html, /전체<em>40<\/em>/);
   assert.equal((html.match(/class="badge-card /g) ?? []).length, 40);
   assert.equal((html.match(/badge-emblem-mystery/g) ?? []).length, 2);
+  assert.equal((html.match(/badge-emblem-shape-premium/g) ?? []).length, 3);
+  assert.equal((html.match(/badge-emblem-shape-welcome/g) ?? []).length, 2);
+  assert.equal((html.match(/badge-emblem-shape-explorer/g) ?? []).length, 11);
+  assert.equal((html.match(/badge-emblem-shape-heritage/g) ?? []).length, 7);
   for (const imageName of ["hankyung-prestige", "hankyung-member", "feedback-place", "alice-invite", "this-is-me", "my-newsroom", "first-conversation", "share-good"]) {
     assert.match(html, new RegExp(`/badges/${imageName}\\.png`));
   }
