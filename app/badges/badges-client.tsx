@@ -114,10 +114,10 @@ const BADGE_GROUPS: BadgeGroup[] = [
 
 const BADGES: BadgeRecord[] = [
   { code: "hankyung-prestige", group: "premium", name: "한경 프레스티지", icon: Crown, tone: "premium", image: "/badges/hankyung-prestige.png", earnedAt: "2026.08.01", hint: "한경 프리미엄9 구독자가 되어 특별한 컬렉션을 시작해 보세요." },
-  { code: "ai-invest-master", group: "premium", name: "AI 투자 고수", icon: BarChart3, tone: "silver", earnedAt: "2026.08.05", isNew: true, hint: "epic AI에게 10번 질문하고 이번 달 이용권을 모두 사용해 보세요." },
+  { code: "ai-invest-master", group: "premium", name: "AI 투자 고수", icon: BarChart3, tone: "silver", hint: "epic AI에게 10번 질문하고 이번 달 이용권을 모두 사용해 보세요." },
   { code: "premium-reader", group: "premium", name: "프리미엄 탐독가", icon: BookOpen, tone: "premium", current: 63, target: 100, unit: "개", hint: "한경 프리미엄9 기사를 100개 이상 읽어보세요.", actionLabel: "프리미엄 기사 보기", actionHref: "/recent-articles" },
-  { code: "paid-months", group: "premium", name: "유료구독 4개월", icon: CalendarDays, tone: "gold", earnedAt: "2026.08.01", hint: "프리미엄 구독을 유지하며 함께한 시간을 쌓아보세요." },
-  { code: "prestige-ambassador-2026", group: "premium", name: "2026 프레스티지 앰배서더", icon: Award, tone: "gold", earnedAt: "2026.02.03", hint: "2026년에 프리미엄9 구독을 시작하면 받을 수 있습니다." },
+  { code: "paid-months", group: "premium", name: "유료구독 4개월", icon: CalendarDays, tone: "gold", hint: "프리미엄 구독을 유지하며 함께한 시간을 쌓아보세요." },
+  { code: "prestige-ambassador-2026", group: "premium", name: "2026 프레스티지 앰배서더", icon: Award, tone: "gold", hint: "2026년에 프리미엄9 구독을 시작하면 받을 수 있습니다." },
   { code: "knowledge-navigator", group: "premium", name: "지식의 항해사", icon: Lightbulb, tone: "navy", current: 31, target: 50, unit: "회", hint: "AI가 추천한 관련 기사를 50회 확인해 보세요.", actionLabel: "추천 기사 보기", actionHref: "/recent-articles" },
   { code: "careful-reader", group: "premium", name: "꼼꼼한 탐독가", icon: Eye, tone: "navy", current: 18, target: 50, unit: "회", hint: "단어를 드래그해 AI 용어 설명을 50회 사용해 보세요.", actionLabel: "기사 보러 가기", actionHref: "/recent-articles" },
 
@@ -130,9 +130,9 @@ const BADGES: BadgeRecord[] = [
   { code: "hankyung-in-hand", group: "welcome", name: "내 손안의 한경", icon: WalletCards, tone: "green", current: 0, target: 1, unit: "회", hint: "한경 앱을 설치하고 처음 로그인해 보세요.", actionLabel: "앱 안내 보기", actionHref: "/" },
   { code: "thought-archive", group: "welcome", name: "생각의 보관함", icon: Bookmark, tone: "green", current: 0, target: 1, unit: "회", hint: "기억하고 싶은 기사를 처음으로 스크랩해 보세요.", actionLabel: "기사 보러 가기", actionHref: "/recent-articles" },
   { code: "share-good", group: "welcome", name: "좋은 건 함께", icon: Share2, tone: "green", image: "/badges/share-good.png", earnedAt: "2026.07.22", hint: "유익한 기사를 주변에 5번 공유해 보세요." },
-  { code: "push-lover", group: "welcome", name: "한경 알림 ON", icon: Bell, tone: "green", earnedAt: "2026.07.28", hint: "한경 푸시 알림을 통해 앱에 3번 접속해 보세요." },
+  { code: "push-lover", group: "welcome", name: "한경 알림 ON", icon: Bell, tone: "green", hint: "한경 푸시 알림을 통해 앱에 3번 접속해 보세요." },
 
-  { code: "perfect-week", group: "explorer", name: "퍼펙트 위크", icon: CalendarDays, tone: "purple", earnedAt: "2026.07.30", isNew: true, hint: "7일 연속으로 한경을 방문해 보세요." },
+  { code: "perfect-week", group: "explorer", name: "퍼펙트 위크", icon: CalendarDays, tone: "purple", hint: "7일 연속으로 한경을 방문해 보세요." },
   { code: "regular-debater", group: "explorer", name: "단골 토론가", icon: MessageCircle, tone: "purple", current: 12, target: 50, unit: "개", hint: "댓글을 50개 작성해 생각을 나눠보세요.", actionLabel: "기사 보러 가기", actionHref: "/recent-articles" },
   { code: "knowledge-sharer", group: "explorer", name: "지식 전파자", icon: Share2, tone: "purple", current: 18, target: 100, unit: "회", hint: "기사 공유 100회를 달성해 보세요.", actionLabel: "기사 보러 가기", actionHref: "/recent-articles" },
   { code: "month-record", group: "explorer", name: "한 달의 기록", icon: CalendarDays, tone: "purple", current: 9, target: 30, unit: "일", hint: "30일 연속 방문 기록을 만들어 보세요." },
@@ -146,7 +146,7 @@ const BADGES: BadgeRecord[] = [
   { code: "alphabet-linker", group: "explorer", name: "알파벳 연결술사", icon: Gamepad2, tone: "green", current: 1, target: 3, unit: "회", hint: "영문 크로스워드를 세 번 완료해 보세요.", actionLabel: "ALICE Q 가기", actionHref: "/" },
 
   { code: "hundred-days", group: "heritage", name: "백일의 동행", icon: CalendarDays, tone: "gold", current: 42, target: 100, unit: "일", hint: "한경과 100일 연속 방문 기록을 만들어 보세요." },
-  { code: "endless-voyager", group: "heritage", name: "끝없는 항해자", icon: BookOpen, tone: "navy", earnedAt: "2026.05.27", hint: "한 번의 방문에서 기사 20개를 탐독해 보세요." },
+  { code: "endless-voyager", group: "heritage", name: "끝없는 항해자", icon: BookOpen, tone: "navy", hint: "한 번의 방문에서 기사 20개를 탐독해 보세요." },
   { code: "deep-focus", group: "heritage", name: "무아지경", icon: Eye, tone: "navy", current: 11, target: 15, unit: "회", hint: "최근 30일 동안 깊이 있는 읽기 세션을 15회 만들어 보세요.", actionLabel: "기사 보러 가기", actionHref: "/recent-articles" },
   { code: "trend-setter", group: "heritage", name: "트렌드 세터", icon: Newspaper, tone: "navy", current: 68, target: 100, unit: "회", hint: "메인 톱편집 기사를 100회 확인해 보세요.", actionLabel: "한경 홈 가기", actionHref: "/" },
   { code: "all-rounder", group: "heritage", name: "한경 올라운더", icon: Award, tone: "gold", current: 7, target: 10, unit: "개", hint: "최근 30일 동안 한경의 서비스 그룹 10개를 경험해 보세요." },
@@ -154,7 +154,7 @@ const BADGES: BadgeRecord[] = [
   { code: "hankyung-analyst", group: "heritage", name: "한경 애널리스트", icon: Database, tone: "silver", current: 46, target: 100, unit: "회", hint: "데이터 상세 페이지를 100회 이상 살펴보세요.", actionLabel: "관심종목 보기", actionHref: "/watchlist" },
   { code: "hankyung-companion", group: "heritage", name: "한경의 동반자", icon: Star, tone: "gold", current: 0, target: 1, unit: "년", hint: "가입 후 1년 동안 한경과 꾸준히 함께해 보세요." },
 
-  { code: "birthday-guest", group: "hidden", name: "생일파티 손님", icon: PartyPopper, tone: "gold", earnedAt: "2025.10.12", hint: "한경의 특별한 날에 함께한 기록입니다." },
+  { code: "birthday-guest", group: "hidden", name: "생일파티 손님", icon: PartyPopper, tone: "gold", hint: "한경의 특별한 날에 함께한 기록입니다." },
   { code: "scroll-to-end", group: "hidden", name: "끝을 보는 성격", icon: Eye, tone: "navy", hint: "숨겨진 조건입니다." },
   { code: "rights-guardian", group: "hidden", name: "권리의 수호자", icon: LockKeyhole, tone: "purple", hint: "숨겨진 조건입니다." },
 ];
@@ -323,7 +323,7 @@ export default function BadgesClient() {
                         const earned = Boolean(badge.earnedAt);
                         const mystery = group.id === "hidden" && !earned;
                         const progress = progressText(badge);
-                        const showNew = badge.isNew && !seenCodes.includes(badge.code);
+                        const showNew = earned && badge.isNew && !seenCodes.includes(badge.code);
                         return (
                           <button className={`badge-card ${earned ? "badge-card-earned" : "badge-card-locked"} ${mystery ? "badge-card-mystery" : ""}`} type="button" key={badge.code} disabled={mystery} onClick={() => openBadge(badge)}>
                             {showNew ? <span className="badge-new-chip">NEW</span> : null}

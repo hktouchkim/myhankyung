@@ -64,6 +64,7 @@ test("keeps the My한경 dashboard at the root URL", async () => {
   assert.match(html, /뉴스 스크랩/);
   assert.match(html, /관심 기자/);
   assert.equal((html.match(/dashboard-badge-item/g) ?? []).length, 6);
+  assert.equal((html.match(/dashboard-badge-emblem-image/g) ?? []).length, 6);
   assert.match(html, /href="\/badges\?badge=/);
   assert.doesNotMatch(html, /타임 브리핑/);
 });
@@ -85,16 +86,18 @@ test("server-renders the My한경 badge collection", async () => {
   assert.match(html, /배지 그룹 필터/);
   assert.match(html, /전체<em>40<\/em>/);
   assert.equal((html.match(/class="badge-card /g) ?? []).length, 40);
-  assert.equal((html.match(/badge-emblem-mystery/g) ?? []).length, 2);
-  assert.equal((html.match(/badge-emblem-shape-premium/g) ?? []).length, 3);
-  assert.equal((html.match(/badge-emblem-shape-welcome/g) ?? []).length, 2);
-  assert.equal((html.match(/badge-emblem-shape-explorer/g) ?? []).length, 11);
-  assert.equal((html.match(/badge-emblem-shape-heritage/g) ?? []).length, 7);
+  assert.match(html, /획득한 배지[\s\S]*?<strong[^>]*>8<em>개<\/em>/);
+  assert.match(html, /획득<em>8<\/em>/);
+  assert.match(html, /미획득<em>32<\/em>/);
+  assert.equal((html.match(/badge-emblem-mystery/g) ?? []).length, 3);
+  assert.equal((html.match(/badge-emblem-shape-premium/g) ?? []).length, 6);
+  assert.equal((html.match(/badge-emblem-shape-welcome/g) ?? []).length, 3);
+  assert.equal((html.match(/badge-emblem-shape-explorer/g) ?? []).length, 12);
+  assert.equal((html.match(/badge-emblem-shape-heritage/g) ?? []).length, 8);
   for (const imageName of ["hankyung-prestige", "hankyung-member", "feedback-place", "alice-invite", "this-is-me", "my-newsroom", "first-conversation", "share-good"]) {
     assert.match(html, new RegExp(`/badges/${imageName}\\.png`));
   }
-  assert.match(html, /생일파티 손님/);
-  assert.doesNotMatch(html, /끝을 보는 성격|권리의 수호자/);
+  assert.doesNotMatch(html, /생일파티 손님|끝을 보는 성격|권리의 수호자/);
   assert.doesNotMatch(html, /최근 획득|배지 획득 조건을 완료했습니다|badge-detail-action/);
 });
 

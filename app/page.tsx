@@ -631,12 +631,12 @@ const NAV_ITEMS: { id: string; label: string; icon: LucideIcon }[] = [
 ];
 
 const DASHBOARD_BADGES: { code: string; name: string; icon: LucideIcon; tone: string; image?: string }[] = [
-  { code: "ai-invest-master", name: "AI 투자 고수", icon: BarChart3, tone: "silver" },
   { code: "hankyung-prestige", name: "한경 프레스티지", icon: Star, tone: "premium", image: "/badges/hankyung-prestige.png" },
-  { code: "perfect-week", name: "퍼펙트 위크", icon: Award, tone: "green" },
-  { code: "push-lover", name: "한경 알림 ON", icon: Bell, tone: "green" },
   { code: "share-good", name: "좋은 건 함께", icon: Bookmark, tone: "green", image: "/badges/share-good.png" },
   { code: "my-newsroom", name: "마이 뉴스룸", icon: FileText, tone: "green", image: "/badges/my-newsroom.png" },
+  { code: "first-conversation", name: "소통의 첫걸음", icon: BookOpen, tone: "green", image: "/badges/first-conversation.png" },
+  { code: "feedback-place", name: "공감 맛집", icon: Award, tone: "green", image: "/badges/feedback-place.png" },
+  { code: "alice-invite", name: "ALICE Q의 초대", icon: Star, tone: "green", image: "/badges/alice-invite.png" },
 ];
 
 const DEFAULT_ALERTS: AlertSettings = {
