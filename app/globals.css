@@ -349,6 +349,28 @@ p {
   gap: 8px;
 }
 
+.module-title-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: #202329;
+  text-decoration: none;
+}
+
+.module-title-link svg {
+  color: #858a92;
+  transition: transform 160ms ease, color 160ms ease;
+}
+
+.module-title-link:hover h2 {
+  color: var(--navy);
+}
+
+.module-title-link:hover svg {
+  color: var(--navy);
+  transform: translateX(2px);
+}
+
 .module-collapse-button {
   display: flex;
   width: 36px;
@@ -369,7 +391,7 @@ p {
 
 .timeline-list {
   margin: 0;
-  height: 270px;
+  height: 205px;
   padding: 18px 10px 0 0;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -1082,68 +1104,6 @@ p {
 
 .report-card > button {
   min-height: 106px;
-}
-
-.report-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.report-grid .report-card {
-  min-width: 0;
-  overflow: hidden;
-  border: 1px solid var(--line-soft);
-  border-radius: 13px;
-  background: #fff;
-}
-
-.report-grid .report-card > button {
-  position: relative;
-  min-height: 220px;
-  padding: 17px;
-  align-items: flex-start;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.report-grid .report-card > button > svg {
-  position: absolute;
-  top: 17px;
-  right: 15px;
-  color: #9a9ea5;
-}
-
-.report-grid .report-meta {
-  min-height: 32px;
-  margin-bottom: 8px;
-  padding-right: 14px;
-}
-
-.report-grid .report-card h3 {
-  display: -webkit-box;
-  min-height: 48px;
-  margin-bottom: 13px;
-  overflow: hidden;
-  font-size: 16px;
-  line-height: 1.5;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.report-grid .report-details {
-  align-items: flex-start;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.report-grid .content-empty {
-  grid-column: 1 / -1;
-}
-
-.consensus-more-button {
-  width: 100%;
-  margin-top: 14px;
 }
 
 .report-logo {
@@ -2370,10 +2330,6 @@ p {
     grid-template-columns: 1fr;
   }
 
-  .report-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .manage-layout {
     overflow-y: auto;
   }
@@ -2458,7 +2414,7 @@ p {
   }
 
   .timeline-list {
-    height: 330px;
+    height: 245px;
   }
 
   .timeline-copy p {
@@ -2487,14 +2443,6 @@ p {
     align-items: flex-start;
     flex-direction: column;
     gap: 3px;
-  }
-
-  .report-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .report-grid .report-card > button {
-    min-height: 190px;
   }
 
   .add-group-checklist {

@@ -719,7 +719,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const [groups, setGroups] = useState<WatchGroup[]>(INITIAL_GROUPS);
   const [selectedGroupId, setSelectedGroupId] = useState(INITIAL_GROUPS[0].id);
   const [articleStockFilter, setArticleStockFilter] = useState("all");
-  const [reportStockFilter, setReportStockFilter] = useState("all");
   const [dialog, setDialog] = useState<"add" | "alerts" | "manage" | null>(null);
   const [toast, setToast] = useState("");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -811,10 +810,9 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const filteredArticles = groupArticles
     .filter((article) => articleStockFilter === "all" || article.stockIds.includes(articleStockFilter))
     .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 10);
+    .slice(0, 5);
   const groupReports = REPORTS.filter((report) => selectedGroup.stockIds.includes(report.stockId));
   const filteredReports = groupReports
-    .filter((report) => reportStockFilter === "all" || report.stockId === reportStockFilter)
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 12);
   const normalizedSearchQuery = searchQuery.trim().toLowerCase();
@@ -876,7 +874,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const chooseGroup = (groupId: string) => {
     setSelectedGroupId(groupId);
     setArticleStockFilter("all");
-    setReportStockFilter("all");
   };
 
   const toggleModule = (module: CollapsibleModule) => {
@@ -966,7 +963,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
     if (selectedGroupId === pendingDeleteGroup.id) {
       setSelectedGroupId(nextGroups[0].id);
       setArticleStockFilter("all");
-      setReportStockFilter("all");
     }
     setPendingDeleteGroupId(null);
     showToast(`${pendingDeleteGroup.name} 그룹을 삭제했습니다.`);
@@ -981,7 +977,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
       ),
     );
     if (articleStockFilter === stock.id) setArticleStockFilter("all");
-    if (reportStockFilter === stock.id) setReportStockFilter("all");
     showToast(`${stock.name}를 현재 그룹에서 삭제했습니다.`);
   };
 
@@ -1295,21 +1290,15 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
 
               <section className="content-panel content-panel-separate" aria-labelledby="reports-title">
                 <div className="module-heading content-module-heading">
-                  <h2 id="reports-title">리포트</h2>
+                  <a
+                    className="module-title-link"
+                    href="https://markets.hankyung.com/consensus"
+                    aria-label="리포트 전체보기"
+                  >
+                    <h2 id="reports-title">리포트</h2>
+                    <ChevronRight size={19} aria-hidden="true" />
+                  </a>
                   <div className="module-heading-actions">
-                    <label className="stock-filter-select">
-                      <span>종목</span>
-                      <select
-                        value={reportStockFilter}
-                        onChange={(event) => setReportStockFilter(event.target.value)}
-                        aria-label="리포트 종목 선택"
-                      >
-                        <option value="all">전체 종목</option>
-                        {selectedGroupStocks.map((stock) => (
-                          <option key={stock.id} value={stock.id}>{stock.name}</option>
-                        ))}
-                      </select>
-                    </label>
                     <CollapseButton
                       label="리포트"
                       collapsed={collapsedModules.reports}
@@ -1318,25 +1307,15 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                   </div>
                 </div>
                 {!collapsedModules.reports ? (
-                  <>
-                    <div className="report-grid">
-                      {filteredReports.length ? (
-                        filteredReports.map((report) => (
-                          <ReportCard key={report.id} report={report} onOpen={() => setPreview({ type: "report", item: report })} />
-                        ))
-                      ) : (
-                        <ContentEmpty type="리포트" />
-                      )}
-                    </div>
-                    <button
-                      className="button action-control-button consensus-more-button"
-                      type="button"
-                      onClick={() => window.location.assign("https://markets.hankyung.com/consensus")}
-                    >
-                      리포트 더보기
-                      <ChevronRight size={17} />
-                    </button>
-                  </>
+                  <div className="report-list">
+                    {filteredReports.length ? (
+                      filteredReports.map((report) => (
+                        <ReportCard key={report.id} report={report} onOpen={() => setPreview({ type: "report", item: report })} />
+                      ))
+                    ) : (
+                      <ContentEmpty type="리포트" />
+                    )}
+                  </div>
                 ) : null}
               </section>
             </section>

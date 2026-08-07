@@ -35,8 +35,10 @@ test("server-renders the My한경 관심종목 experience", async () => {
   assert.match(html, /종목추가/);
   assert.match(html, /관련기사/);
   assert.match(html, /리포트/);
-  assert.match(html, /report-grid/);
-  assert.match(html, /리포트 더보기/);
+  assert.match(html, /report-list/);
+  assert.match(html, /class="module-title-link" href="https:\/\/markets\.hankyung\.com\/consensus"/);
+  assert.equal((html.match(/class="article-card"/g) ?? []).length, 5);
+  assert.doesNotMatch(html, /리포트 종목 선택|리포트 더보기|report-grid|consensus-more-button/);
   assert.equal((html.match(/module-collapse-button/g) ?? []).length, 4);
   assert.doesNotMatch(html, /content-tabs/);
   assert.doesNotMatch(html, /오늘의 관심 브리핑/);
