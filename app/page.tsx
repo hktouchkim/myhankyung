@@ -32,6 +32,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 type Stock = {
@@ -629,13 +630,13 @@ const NAV_ITEMS: { id: string; label: string; icon: LucideIcon }[] = [
   { id: "logout", label: "로그아웃", icon: LogOut },
 ];
 
-const DASHBOARD_BADGES: { code: string; name: string; icon: LucideIcon; tone: string }[] = [
+const DASHBOARD_BADGES: { code: string; name: string; icon: LucideIcon; tone: string; image?: string }[] = [
   { code: "ai-invest-master", name: "AI 투자 고수", icon: BarChart3, tone: "silver" },
-  { code: "hankyung-prestige", name: "한경 프레스티지", icon: Star, tone: "premium" },
+  { code: "hankyung-prestige", name: "한경 프레스티지", icon: Star, tone: "premium", image: "/badges/hankyung-prestige.png" },
   { code: "perfect-week", name: "퍼펙트 위크", icon: Award, tone: "green" },
   { code: "push-lover", name: "한경 알림 ON", icon: Bell, tone: "green" },
-  { code: "share-good", name: "좋은 건 함께", icon: Bookmark, tone: "green" },
-  { code: "my-newsroom", name: "마이 뉴스룸", icon: FileText, tone: "green" },
+  { code: "share-good", name: "좋은 건 함께", icon: Bookmark, tone: "green", image: "/badges/share-good.png" },
+  { code: "my-newsroom", name: "마이 뉴스룸", icon: FileText, tone: "green", image: "/badges/my-newsroom.png" },
 ];
 
 const DEFAULT_ALERTS: AlertSettings = {
@@ -1722,8 +1723,8 @@ function Dashboard({
               const Icon = badge.icon;
               return (
                 <a className="dashboard-badge-item" href={`/badges?badge=${badge.code}`} key={badge.code}>
-                  <span className={`dashboard-badge-emblem badge-tone-${badge.tone}`} aria-hidden="true">
-                    <Icon size={29} strokeWidth={1.65} />
+                  <span className={`dashboard-badge-emblem badge-tone-${badge.tone} ${badge.image ? "dashboard-badge-emblem-image" : ""}`} aria-hidden="true">
+                    {badge.image ? <Image src={badge.image} alt="" width={80} height={80} unoptimized /> : <Icon size={29} strokeWidth={1.65} />}
                   </span>
                   <strong>{badge.name}</strong>
                 </a>
