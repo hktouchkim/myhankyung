@@ -61,6 +61,7 @@ test("keeps the My한경 dashboard at the root URL", async () => {
 
   assert.match(html, /<title>My한경<\/title>/i);
   assert.match(html, /보유 배지/);
+  assert.match(html, /보유 배지<\/h2><span>8개<\/span>/);
   assert.match(html, /뉴스 스크랩/);
   assert.match(html, /관심 기자/);
   assert.equal((html.match(/dashboard-badge-item/g) ?? []).length, 6);

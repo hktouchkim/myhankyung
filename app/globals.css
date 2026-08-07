@@ -1420,10 +1420,10 @@ p {
   transform: translate(-15px, -15px);
 }
 
-.dashboard-badge-emblem-image {
+.dashboard-badge-emblem.dashboard-badge-emblem-image {
   border: 0;
   border-radius: 0;
-  background: transparent;
+  background: #fff;
   box-shadow: none;
   transform: none;
 }

@@ -1715,7 +1715,7 @@ function Dashboard({
       <div className="dashboard-grid">
         <article className="dashboard-card dashboard-badge-card">
           <div className="dashboard-card-title">
-            <div className="title-with-icon"><Award size={21} /><h2>보유 배지</h2></div>
+            <div className="title-with-icon"><Award size={21} /><h2>보유 배지</h2><span>8개</span></div>
             <button type="button" onClick={onOpenBadges} aria-label="보유 배지 전체보기"><ChevronRight size={20} /></button>
           </div>
           <div className="dashboard-badge-grid" aria-label="최근 획득한 배지 목록">
