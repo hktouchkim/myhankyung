@@ -130,6 +130,10 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   assert.equal((html.match(/reading-donut-segment /g) ?? []).length, 7);
   assert.equal((html.match(/reading-time-column/g) ?? []).length, 6);
   assert.match(html, /읽은 시간대/);
+  assert.match(html, /22~02/);
+  assert.match(html, /18~22/);
+  assert.match(html, /취침 전 타임 \(올빼미 독자\)/);
+  assert.doesNotMatch(html, /00~04|20~24/);
   assert.match(html, /더보기/);
   assert.match(html, /최근 3개월/);
   assert.match(html, /recent-delete-button/);
