@@ -8,6 +8,7 @@ import {
   BookOpen,
   CalendarDays,
   Check,
+  ChevronDown,
   Clock3,
   Crown,
   Database,
@@ -178,11 +179,6 @@ function BadgeEmblem({ badge, large = false }: { badge: BadgeRecord; large?: boo
   );
 }
 
-function progressText(badge: BadgeRecord) {
-  if (badge.current == null || badge.target == null) return null;
-  return `${badge.current}/${badge.target}${badge.unit ?? ""}`;
-}
-
 export default function BadgesClient() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [groupFilter, setGroupFilter] = useState<BadgeGroupFilter>("all");
@@ -190,17 +186,17 @@ export default function BadgesClient() {
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
   const [seenCodes, setSeenCodes] = useState<string[]>([]);
   const selectedBadge = BADGES.find((badge) => badge.code === selectedCode) ?? null;
-  const earnedBadges = BADGES.filter((badge) => badge.earnedAt);
-  const scopedBadges = BADGES.filter((badge) => groupFilter === "all" || badge.group === groupFilter);
-  const earnedScopedCount = scopedBadges.filter((badge) => badge.earnedAt).length;
-  const statusFilterOptions: { id: BadgeFilter; label: string; count: number }[] = [
-    { id: "all", label: "전체", count: scopedBadges.length },
-    { id: "earned", label: "획득", count: earnedScopedCount },
-    { id: "locked", label: "미획득", count: scopedBadges.length - earnedScopedCount },
+  const statusFilterOptions: { id: BadgeFilter; label: string }[] = [
+    { id: "all", label: "전체" },
+    { id: "earned", label: "획득" },
+    { id: "locked", label: "미획득" },
   ];
-  const groupFilterOptions: { id: BadgeGroupFilter; label: string; count: number }[] = [
-    { id: "all", label: "전체", count: BADGES.length },
-    ...BADGE_GROUPS.map((group) => ({ id: group.id, label: group.name, count: BADGES.filter((badge) => badge.group === group.id).length })),
+  const groupFilterOptions: { id: BadgeGroupFilter; label: string; earned: number; total: number }[] = [
+    { id: "all", label: "전체", earned: BADGES.filter((badge) => badge.earnedAt).length, total: BADGES.length },
+    ...BADGE_GROUPS.map((group) => {
+      const groupBadges = BADGES.filter((badge) => badge.group === group.id);
+      return { id: group.id, label: group.name, earned: groupBadges.filter((badge) => badge.earnedAt).length, total: groupBadges.length };
+    }),
   ];
 
   useEffect(() => {
@@ -277,28 +273,19 @@ export default function BadgesClient() {
             <span>2026.08.06 기준</span>
           </section>
 
-          <section className="badge-module badge-summary-module badge-summary-compact" aria-labelledby="badge-summary-title">
-            <div className="badge-summary-lead">
-              <span>획득한 배지</span>
-              <strong id="badge-summary-title">{earnedBadges.length}<em>개</em></strong>
-              <p>읽고, 참여하고, 탐험하며 쌓아온 나의 한경 기록입니다.</p>
-            </div>
-          </section>
-
           <section className="badge-toolbar" aria-label="배지 목록 도구">
             <div className="badge-group-nav" role="group" aria-label="배지 그룹 필터">
               {groupFilterOptions.map((option) => (
                 <button type="button" key={option.id} className={groupFilter === option.id ? "badge-filter-active" : ""} aria-pressed={groupFilter === option.id} onClick={() => setGroupFilter(option.id)}>
-                  {option.label}<em>{option.count}</em>
+                  {option.label}<em>{option.earned}/{option.total}</em>
                 </button>
               ))}
             </div>
-            <div className="badge-status-filter" role="group" aria-label="배지 획득 상태 필터">
-              {statusFilterOptions.map((option) => (
-                <button type="button" key={option.id} className={filter === option.id ? "badge-filter-active" : ""} aria-pressed={filter === option.id} onClick={() => setFilter(option.id)}>
-                  {option.label}<em>{option.count}</em>
-                </button>
-              ))}
+            <div className="badge-status-select-wrap">
+              <select aria-label="배지 획득 상태 필터" value={filter} onChange={(event) => setFilter(event.target.value as BadgeFilter)}>
+                {statusFilterOptions.map((option) => <option value={option.id} key={option.id}>{option.label}</option>)}
+              </select>
+              <ChevronDown size={16} aria-hidden="true" />
             </div>
           </section>
 
@@ -322,14 +309,13 @@ export default function BadgesClient() {
                       {groupBadges.map((badge) => {
                         const earned = Boolean(badge.earnedAt);
                         const mystery = group.id === "hidden" && !earned;
-                        const progress = progressText(badge);
                         const showNew = earned && badge.isNew && !seenCodes.includes(badge.code);
                         return (
                           <button className={`badge-card ${earned ? "badge-card-earned" : "badge-card-locked"} ${mystery ? "badge-card-mystery" : ""}`} type="button" key={badge.code} disabled={mystery} onClick={() => openBadge(badge)}>
                             {showNew ? <span className="badge-new-chip">NEW</span> : null}
                             {mystery ? <span className="badge-emblem badge-emblem-mystery" aria-hidden="true"><b>?</b></span> : <BadgeEmblem badge={badge} />}
                             <strong>{mystery ? "히든 배지" : badge.name}</strong>
-                            {earned ? <><span className="badge-state badge-state-earned"><Check size={12} /> 획득</span><time>{badge.earnedAt}</time></> : <><span className="badge-state"><LockKeyhole size={12} /> 미획득</span>{!mystery && progress ? <div className="badge-card-progress"><span><i style={{ width: `${Math.min(100, ((badge.current ?? 0) / (badge.target ?? 1)) * 100)}%` }} /></span><small>{progress}</small></div> : null}</>}
+                            {earned ? <><span className="badge-state badge-state-earned"><Check size={12} /> 획득</span><time>{badge.earnedAt}</time></> : <span className="badge-state"><LockKeyhole size={12} /> 미획득</span>}
                           </button>
                         );
                       })}
@@ -350,7 +336,7 @@ export default function BadgesClient() {
             <button className="badge-detail-close" type="button" onClick={closeBadge} aria-label="배지 상세 닫기"><X size={21} /></button>
             <div className="badge-detail-visual"><BadgeEmblem badge={selectedBadge} large /></div>
             <div className="badge-detail-copy">
-              <span className={`badge-detail-state ${selectedBadge.earnedAt ? "badge-detail-state-earned" : ""}`}>{selectedBadge.earnedAt ? "획득 완료" : "도전 중"}</span>
+              <span className={`badge-detail-state ${selectedBadge.earnedAt ? "badge-detail-state-earned" : ""}`}>{selectedBadge.earnedAt ? "획득 완료" : "미획득"}</span>
               <h2 id="badge-detail-title">{selectedBadge.name}</h2>
               {selectedBadge.earnedAt ? (
                 <>
@@ -358,15 +344,7 @@ export default function BadgesClient() {
                   <p>{selectedBadge.hint} 한경과 함께 쌓아온 활동이 또 하나의 소중한 기록으로 남았습니다.</p>
                 </>
               ) : (
-                <>
-                  <p>{selectedBadge.hint}</p>
-                  {selectedBadge.current != null && selectedBadge.target != null ? (
-                    <div className="badge-detail-progress">
-                      <div><span>현재 진행률</span><strong>{progressText(selectedBadge)}</strong></div>
-                      <span><i style={{ width: `${Math.min(100, (selectedBadge.current / selectedBadge.target) * 100)}%` }} /></span>
-                    </div>
-                  ) : null}
-                </>
+                <p>{selectedBadge.hint}</p>
               )}
             </div>
           </section>

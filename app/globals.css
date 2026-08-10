@@ -3558,6 +3558,43 @@ p {
   gap: 6px;
 }
 
+.badge-status-select-wrap {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.badge-status-select-wrap select {
+  min-width: 112px;
+  height: 36px;
+  padding: 0 34px 0 12px;
+  appearance: none;
+  border: 1px solid #d7d9de;
+  border-radius: 9px;
+  background: #fff;
+  color: #2f3339;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.badge-status-select-wrap select:hover {
+  border-color: #aeb3bc;
+}
+
+.badge-status-select-wrap select:focus-visible {
+  outline: 2px solid rgba(23, 54, 109, 0.2);
+  outline-offset: 2px;
+}
+
+.badge-status-select-wrap svg {
+  position: absolute;
+  right: 11px;
+  pointer-events: none;
+  color: #686d75;
+}
+
 .badge-group-nav button,
 .badge-status-filter button {
   min-height: 34px;
@@ -4127,6 +4164,10 @@ p {
 
   .badge-status-filter {
     justify-content: flex-end;
+  }
+
+  .badge-status-select-wrap {
+    align-self: flex-end;
   }
 
   .badge-group-section {
