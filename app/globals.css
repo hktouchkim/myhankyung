@@ -928,29 +928,51 @@ p {
   font-size: 17px;
 }
 
-.stock-filter-select {
-  display: flex;
+.article-analysis-toggle {
+  display: inline-flex;
+  min-height: 36px;
+  padding: 0 2px;
   align-items: center;
   gap: 8px;
-  color: #686d74;
+  color: #676c74;
   font-size: 12px;
   font-weight: 700;
 }
 
-.stock-filter-select select {
-  min-width: 150px;
-  height: 36px;
-  padding: 0 34px 0 11px;
-  border: 1px solid #d7d9dd;
-  border-radius: 9px;
-  background: #fff;
-  color: #34383e;
-  font-size: 12px;
+.article-analysis-toggle:hover,
+.article-analysis-toggle-active {
+  color: #272b31;
 }
 
-.stock-filter-select select:hover,
-.stock-filter-select select:focus {
-  border-color: var(--navy);
+.article-analysis-toggle-track {
+  position: relative;
+  display: inline-flex;
+  width: 32px;
+  height: 18px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #d7d9de;
+  transition: background 160ms ease;
+}
+
+.article-analysis-toggle-track > span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(31, 35, 42, 0.22);
+  transition: transform 160ms ease;
+}
+
+.article-analysis-toggle-active .article-analysis-toggle-track {
+  background: var(--navy);
+}
+
+.article-analysis-toggle-active .article-analysis-toggle-track > span {
+  transform: translateX(14px);
 }
 
 .article-list,
@@ -1034,6 +1056,34 @@ p {
   display: grid;
   margin: 9px 0 10px;
   gap: 6px;
+}
+
+.article-analysis-summary {
+  display: flex;
+  min-height: 24px;
+  margin: 7px 0 8px;
+  align-items: center;
+  gap: 0;
+  color: #62666e;
+}
+
+.article-analysis-summary-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 13px;
+}
+
+.article-analysis-summary-item + .article-analysis-summary-item::before {
+  margin: 0 8px;
+  color: #c2c5ca;
+  content: "·";
+}
+
+.article-analysis-summary-item strong {
+  color: #5a5f67;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
 }
 
 .article-analysis-row {
@@ -2341,10 +2391,6 @@ p {
     gap: 11px;
   }
 
-  .stock-filter-select {
-    justify-content: flex-end;
-  }
-
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
@@ -2403,14 +2449,6 @@ p {
 
   .button {
     padding: 0 13px;
-  }
-
-  .content-module-heading .stock-filter-select span {
-    display: none;
-  }
-
-  .content-module-heading .stock-filter-select select {
-    min-width: 118px;
   }
 
   .timeline-panel,

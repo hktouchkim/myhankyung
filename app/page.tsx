@@ -688,6 +688,7 @@ const DEFAULT_COLLAPSED_MODULES: CollapsedModules = {
 };
 
 const COLLAPSED_MODULES_STORAGE_KEY = "myhankyung-watchlist-collapsed-modules";
+const ARTICLE_ANALYSIS_VISIBILITY_STORAGE_KEY = "myhankyung-watchlist-article-analysis-visible";
 
 function formatRate(rate: number) {
   return `${rate > 0 ? "+" : ""}${rate.toFixed(2)}%`;
@@ -697,10 +698,9 @@ function stockById(id: string) {
   return STOCKS.find((stock) => stock.id === id);
 }
 
-function visibleArticleAnalyses(article: Article, groupStockIds: string[], stockFilter: string) {
-  const allowedStockIds = stockFilter === "all" ? groupStockIds : [stockFilter];
+function visibleArticleAnalyses(article: Article, groupStockIds: string[]) {
   return article.stockAnalyses
-    .filter((analysis) => allowedStockIds.includes(analysis.stockId))
+    .filter((analysis) => groupStockIds.includes(analysis.stockId))
     .slice(0, 3);
 }
 
@@ -758,7 +758,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const view = initialView;
   const [groups, setGroups] = useState<WatchGroup[]>(INITIAL_GROUPS);
   const [selectedGroupId, setSelectedGroupId] = useState(INITIAL_GROUPS[0].id);
-  const [articleStockFilter, setArticleStockFilter] = useState("all");
+  const [showArticleAnalysis, setShowArticleAnalysis] = useState(false);
   const [dialog, setDialog] = useState<"add" | "alerts" | "manage" | null>(null);
   const [toast, setToast] = useState("");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -848,7 +848,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
     article.stockIds.some((stockId) => selectedGroup.stockIds.includes(stockId)),
   );
   const filteredArticles = groupArticles
-    .filter((article) => articleStockFilter === "all" || article.stockIds.includes(articleStockFilter))
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 5);
   const groupReports = REPORTS.filter((report) => selectedGroup.stockIds.includes(report.stockId));
@@ -895,6 +894,12 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   }, []);
 
   useEffect(() => {
+    const saved = window.localStorage.getItem(ARTICLE_ANALYSIS_VISIBILITY_STORAGE_KEY);
+    if (saved === null) return;
+    window.requestAnimationFrame(() => setShowArticleAnalysis(saved === "true"));
+  }, []);
+
+  useEffect(() => {
     if (!dialog && !preview) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -913,7 +918,14 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
 
   const chooseGroup = (groupId: string) => {
     setSelectedGroupId(groupId);
-    setArticleStockFilter("all");
+  };
+
+  const toggleArticleAnalysis = () => {
+    setShowArticleAnalysis((current) => {
+      const next = !current;
+      window.localStorage.setItem(ARTICLE_ANALYSIS_VISIBILITY_STORAGE_KEY, String(next));
+      return next;
+    });
   };
 
   const toggleModule = (module: CollapsibleModule) => {
@@ -1002,7 +1014,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
     setGroups(nextGroups);
     if (selectedGroupId === pendingDeleteGroup.id) {
       setSelectedGroupId(nextGroups[0].id);
-      setArticleStockFilter("all");
     }
     setPendingDeleteGroupId(null);
     showToast(`${pendingDeleteGroup.name} 그룹을 삭제했습니다.`);
@@ -1016,7 +1027,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
           : group,
       ),
     );
-    if (articleStockFilter === stock.id) setArticleStockFilter("all");
     showToast(`${stock.name}를 현재 그룹에서 삭제했습니다.`);
   };
 
@@ -1285,19 +1295,15 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 <div className="module-heading content-module-heading">
                   <h2 id="articles-title">관련기사</h2>
                   <div className="module-heading-actions">
-                    <label className="stock-filter-select">
-                      <span>종목</span>
-                      <select
-                        value={articleStockFilter}
-                        onChange={(event) => setArticleStockFilter(event.target.value)}
-                        aria-label="관련기사 종목 선택"
-                      >
-                        <option value="all">전체 종목</option>
-                        {selectedGroupStocks.map((stock) => (
-                          <option key={stock.id} value={stock.id}>{stock.name}</option>
-                        ))}
-                      </select>
-                    </label>
+                    <button
+                      className={`article-analysis-toggle ${showArticleAnalysis ? "article-analysis-toggle-active" : ""}`}
+                      type="button"
+                      aria-pressed={showArticleAnalysis}
+                      onClick={toggleArticleAnalysis}
+                    >
+                      <span>종목별 분석</span>
+                      <span className="article-analysis-toggle-track" aria-hidden="true"><span /></span>
+                    </button>
                     <CollapseButton
                       label="관련기사"
                       collapsed={collapsedModules.articles}
@@ -1312,7 +1318,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         <ArticleCard
                           key={article.id}
                           article={article}
-                          analyses={visibleArticleAnalyses(article, selectedGroup.stockIds, articleStockFilter)}
+                          analyses={visibleArticleAnalyses(article, selectedGroup.stockIds)}
+                          showAnalysis={showArticleAnalysis}
                           onOpen={() => {
                             if (article.url) {
                               window.location.assign(article.url);
@@ -1654,7 +1661,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 <div className="preview-badges"><span>{preview.item.section}</span></div>
                 <h3>{preview.item.title}</h3>
                 <ArticleAnalysisList
-                  analyses={visibleArticleAnalyses(preview.item, selectedGroup.stockIds, articleStockFilter)}
+                  analyses={visibleArticleAnalyses(preview.item, selectedGroup.stockIds)}
                 />
                 <small>{preview.item.date} · 한경닷컴</small>
               </>
@@ -1862,13 +1869,42 @@ function ArticleAnalysisList({ analyses }: { analyses: ArticleStockAnalysis[] })
   );
 }
 
-function ArticleCard({ article, analyses, onOpen }: { article: Article; analyses: ArticleStockAnalysis[]; onOpen: () => void }) {
+function ArticleAnalysisSummary({ analyses }: { analyses: ArticleStockAnalysis[] }) {
+  const counts = (["긍정", "중립", "부정"] as const)
+    .map((sentiment) => ({ sentiment, count: analyses.filter((analysis) => analysis.sentiment === sentiment).length }))
+    .filter((item) => item.count > 0);
+
+  if (!counts.length) return null;
+
+  return (
+    <div className="article-analysis-summary" aria-label={counts.map((item) => `${item.sentiment} ${item.count}개`).join(", ")}>
+      {counts.map((item) => (
+        <span className="article-analysis-summary-item" key={item.sentiment} aria-hidden="true">
+          <span>{SENTIMENT_EMOJI[item.sentiment]}</span>
+          <strong>{item.count}</strong>
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function ArticleCard({
+  article,
+  analyses,
+  showAnalysis,
+  onOpen,
+}: {
+  article: Article;
+  analyses: ArticleStockAnalysis[];
+  showAnalysis: boolean;
+  onOpen: () => void;
+}) {
   return (
     <article className="article-card">
       <button type="button" onClick={onOpen}>
         <div className="article-copy">
           <h3>{article.title}</h3>
-          <ArticleAnalysisList analyses={analyses} />
+          {showAnalysis ? <ArticleAnalysisList analyses={analyses} /> : <ArticleAnalysisSummary analyses={analyses} />}
           <small>한경닷컴 · {article.section} · {article.date}</small>
         </div>
         <div className={`article-thumbnail thumb-${article.tone}`} aria-label="기사 썸네일">
@@ -1904,8 +1940,8 @@ function ContentEmpty({ type }: { type: string }) {
   return (
     <div className="content-empty">
       <FileText size={25} />
-      <strong>이 종목의 새 {type}가 없습니다.</strong>
-      <p>그룹 전체를 선택하면 다른 관심종목의 콘텐츠도 볼 수 있습니다.</p>
+      <strong>새 {type}가 없습니다.</strong>
+      <p>현재 관심그룹과 관련된 콘텐츠가 등록되면 이곳에 표시됩니다.</p>
     </div>
   );
 }
