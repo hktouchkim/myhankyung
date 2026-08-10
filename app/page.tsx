@@ -1954,7 +1954,6 @@ function ReportCard({ report, onOpen }: { report: Report; onOpen: () => void }) 
   return (
     <article className="report-card">
       <button type="button" onClick={onOpen}>
-        <div className="report-logo">{report.firm.slice(0, 1)}</div>
         <div className="report-main">
           <div className="report-meta"><span>{stock?.name}</span><span>{report.firm}</span><span>{report.date}</span></div>
           <h3>{report.title}</h3>
@@ -1963,7 +1962,6 @@ function ReportCard({ report, onOpen }: { report: Report; onOpen: () => void }) 
             <span>목표주가 <strong>{report.target}</strong></span>
           </div>
         </div>
-        <ChevronRight size={20} />
       </button>
     </article>
   );

@@ -1192,24 +1192,16 @@ p {
 
 .report-grid .report-card > button {
   position: relative;
-  min-height: 220px;
+  min-height: 176px;
   padding: 17px;
   align-items: flex-start;
   flex-direction: column;
-  gap: 12px;
-}
-
-.report-grid .report-card > button > svg {
-  position: absolute;
-  top: 17px;
-  right: 15px;
-  color: #9a9ea5;
+  gap: 0;
 }
 
 .report-grid .report-meta {
   min-height: 32px;
   margin-bottom: 8px;
-  padding-right: 14px;
 }
 
 .report-grid .report-card h3 {
@@ -1231,21 +1223,6 @@ p {
 
 .report-grid .content-empty {
   grid-column: 1 / -1;
-}
-
-.report-logo {
-  display: flex;
-  width: 45px;
-  height: 45px;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  background: #eef1f6;
-  color: var(--navy);
-  font-family: Georgia, serif;
-  font-size: 19px;
-  font-weight: 800;
 }
 
 .report-main {
