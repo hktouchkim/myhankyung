@@ -985,7 +985,6 @@ p {
   flex: 1;
 }
 
-.article-meta,
 .report-meta,
 .preview-badges {
   display: flex;
@@ -1016,11 +1015,6 @@ p {
   color: #315fc7;
 }
 
-.sentiment-중립 {
-  background: #f0f1f2;
-  color: #646971;
-}
-
 .article-card h3,
 .report-card h3 {
   margin-bottom: 5px;
@@ -1029,15 +1023,33 @@ p {
   letter-spacing: -0.035em;
 }
 
-.article-card p {
-  display: -webkit-box;
-  margin-bottom: 8px;
+.article-analysis-list {
+  display: grid;
+  margin: 9px 0 10px;
+  gap: 6px;
+}
+
+.article-analysis-row {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+}
+
+.article-analysis-row > strong {
+  color: #34383e;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.article-analysis-comment {
   overflow: hidden;
   color: #62666e;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.45;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .article-card small {

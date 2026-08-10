@@ -38,11 +38,15 @@ test("server-renders the My한경 관심종목 experience", async () => {
   assert.match(html, /report-list/);
   assert.match(html, /class="module-title-link" href="https:\/\/markets\.hankyung\.com\/consensus"/);
   assert.equal((html.match(/class="article-card"/g) ?? []).length, 5);
+  assert.equal((html.match(/class="article-analysis-row"/g) ?? []).length, 12);
+  assert.match(html, /sentiment-긍정[^>]*>긍정<\/span>/);
+  assert.match(html, /sentiment-부정[^>]*>부정<\/span>/);
+  assert.match(html, /article-analysis-comment/);
+  assert.doesNotMatch(html, /미국 반도체주가 일제히 급등하면서/);
   assert.doesNotMatch(html, /리포트 종목 선택|리포트 더보기|report-grid|consensus-more-button/);
   assert.equal((html.match(/module-collapse-button/g) ?? []).length, 4);
   assert.doesNotMatch(html, /content-tabs/);
   assert.doesNotMatch(html, /오늘의 관심 브리핑/);
-  assert.match(html, /sentiment-긍정[^>]*>긍정<\/span>/);
   assert.doesNotMatch(html, /AI 기사 분석/);
   assert.match(html, /고가/);
   assert.match(html, /저가/);

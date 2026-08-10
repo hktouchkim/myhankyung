@@ -59,12 +59,17 @@ type Article = {
   id: string;
   url?: string;
   stockIds: string[];
-  sentiment: "긍정" | "부정" | "중립";
   title: string;
-  lead: string;
   date: string;
   section: string;
   tone: string;
+  stockAnalyses: ArticleStockAnalysis[];
+};
+
+type ArticleStockAnalysis = {
+  stockId: string;
+  sentiment: "긍정" | "부정";
+  comment: string;
 };
 
 type Report = {
@@ -363,137 +368,157 @@ const ARTICLES: Article[] = [
   {
     id: "article-samsung-20260805-2",
     url: "https://www.hankyung.com/article/2026080555766",
-    stockIds: ["005930"],
-    sentiment: "긍정",
+    stockIds: ["005930", "005935", "009150"],
     title: "반도체가 돌아왔다…삼성전자·SK하이닉스부터 소부장도 강세 [종목+]",
-    lead: "미국 반도체주가 일제히 급등하면서 국내 반도체주가 장 초반 동반 강세를 보였다. 삼성전자와 SK하이닉스뿐 아니라 중소형 반도체주까지 오르며 업종 전반으로 온기가 확산됐다.",
     date: "2026.08.05 09:29",
     section: "증권",
     tone: "navy",
+    stockAnalyses: [
+      { stockId: "005930", sentiment: "긍정", comment: "미국 반도체주 강세와 업종 전반의 매수세 유입으로 동반 상승 기대가 형성됐습니다." },
+      { stockId: "005935", sentiment: "긍정", comment: "보통주와 함께 반도체 투자심리 개선의 수혜 종목으로 언급됐습니다." },
+      { stockId: "009150", sentiment: "긍정", comment: "반도체 전반으로 온기가 확산되며 전자부품 수요 회복 기대가 반영됐습니다." },
+    ],
   },
   {
     id: "article-samsung-20260805-3",
     url: "https://www.hankyung.com/article/2026080554876",
-    stockIds: ["005930"],
-    sentiment: "긍정",
+    stockIds: ["005930", "005935", "009150"],
     title: "코스피 4%대 급등 출발…반도체주 랠리에 6600선 회복",
-    lead: "코스피지수가 장 초반 6600선을 회복하며 강세를 보였다. 간밤 미국 증시의 반도체주 급등이 삼성전자 등 국내 대형 반도체주의 투자심리를 끌어올렸다.",
     date: "2026.08.05 09:11",
     section: "마켓",
     tone: "blue",
+    stockAnalyses: [
+      { stockId: "005930", sentiment: "긍정", comment: "미국 반도체주 급등과 외국인 매수세 유입으로 장 초반 강세가 나타났습니다." },
+      { stockId: "005935", sentiment: "긍정", comment: "보통주와 함께 상승하며 반도체 대형주 랠리에 동참했습니다." },
+      { stockId: "009150", sentiment: "긍정", comment: "반도체주 강세 속에서 두 자릿수 상승률을 기록하며 상승폭을 키웠습니다." },
+    ],
   },
   {
     id: "article-samsung-20260805-1",
     url: "https://www.hankyung.com/article/2026080565876",
-    stockIds: ["005930"],
-    sentiment: "긍정",
+    stockIds: ["005930", "005935", "009150"],
     title: "코스피, 외국인 1.4조 순매수에 3%대 상승…코스닥도 2.4%↑",
-    lead: "코스피지수가 외국인의 대규모 순매수에 힘입어 3% 넘게 상승했다. 미국 반도체주 강세에 삼성전자와 SK하이닉스를 비롯한 국내 반도체주로 매수세가 유입됐다.",
     date: "2026.08.05 03:43",
     section: "마켓",
     tone: "mint",
+    stockAnalyses: [
+      { stockId: "005930", sentiment: "긍정", comment: "외국인 순매수와 미국 반도체주 강세가 맞물리며 주가가 상승했습니다." },
+      { stockId: "005935", sentiment: "긍정", comment: "반도체주 매수세 확산으로 보통주보다 높은 상승률을 기록했습니다." },
+      { stockId: "009150", sentiment: "긍정", comment: "반도체 업종 전반의 강세 속에서 큰 폭의 상승세로 마감했습니다." },
+    ],
   },
   {
     id: "article-samsung-20260804-1",
     url: "https://www.hankyung.com/article/2026080444426",
-    stockIds: ["005930"],
-    sentiment: "중립",
+    stockIds: ["005930", "009150"],
     title: "\"삼성·현대차 집중 투자\"…우리운용, 피지컬AI 액티브 ETF 출시",
-    lead: "우리자산운용이 삼성전자와 현대차를 중심으로 피지컬 인공지능 산업에 투자하는 액티브 ETF를 선보였다. AI 반도체와 로봇, 부품, 전력 등 관련 밸류체인을 함께 담는다.",
     date: "2026.08.04 04:17",
     section: "증권",
     tone: "purple",
+    stockAnalyses: [],
   },
   {
     id: "article-samsung-20260804-2",
     url: "https://www.hankyung.com/article/2026080443336",
-    stockIds: ["005930"],
-    sentiment: "중립",
+    stockIds: ["005930", "032830", "028260"],
     title: "코스피, 삼전닉스 주춤해도 1%대 강세…코스닥선 바이오주 '불기둥'",
-    lead: "코스피가 개인 매수에 힘입어 상승 마감했다. 삼성전자와 SK하이닉스의 상승폭이 크지 않았지만 다수 종목이 강세를 보이며 지수를 끌어올렸다.",
     date: "2026.08.04 03:43",
     section: "마켓",
     tone: "sand",
+    stockAnalyses: [
+      { stockId: "005930", sentiment: "긍정", comment: "장중 약세를 회복하고 강보합으로 마감하며 하방 압력을 방어했습니다." },
+      { stockId: "032830", sentiment: "부정", comment: "삼성전자 지분가치가 부각됐던 흐름과 달리 3%대 하락세로 마감했습니다." },
+      { stockId: "028260", sentiment: "부정", comment: "삼성생명과 함께 약세를 보이며 1%대 하락으로 거래를 마쳤습니다." },
+    ],
   },
   {
     id: "article-1",
     stockIds: ["000660"],
-    sentiment: "긍정",
     title: "HBM4 양산 속도 낸 SK하이닉스…AI 메모리 주도권 굳힌다",
-    lead: "차세대 고대역폭메모리 공급 일정이 구체화되면서 하반기 실적 기대감이 커지고 있다. 주요 고객사의 인증 일정도 순조롭게 진행되며 생산 확대 가능성에 시장의 관심이 쏠린다.",
     date: "2026.08.03 10:42",
     section: "산업",
     tone: "navy",
+    stockAnalyses: [
+      { stockId: "000660", sentiment: "긍정", comment: "HBM4 공급 일정 구체화로 AI 메모리 시장의 주도권 강화 기대가 형성됐습니다." },
+    ],
   },
   {
     id: "article-2",
     stockIds: ["005930"],
-    sentiment: "긍정",
     title: "삼성전자, 차세대 파운드리 수율 개선…대형 고객사 확보 속도",
-    lead: "첨단 공정의 수율이 안정권에 접어들며 파운드리 사업의 수익성 회복 가능성이 주목된다. 신규 고객사와의 협의도 이어지면서 하반기 가동률 개선 여부가 핵심 변수로 떠올랐다.",
     date: "2026.08.03 09:18",
     section: "기업",
     tone: "blue",
+    stockAnalyses: [
+      { stockId: "005930", sentiment: "긍정", comment: "첨단 공정 수율 개선과 신규 고객사 협의로 파운드리 수익성 회복 기대가 커졌습니다." },
+    ],
   },
   {
     id: "article-3",
     stockIds: ["042700", "000660"],
-    sentiment: "긍정",
     title: "AI 서버 투자 확대로 HBM 장비 주문 증가…후공정 업계 분주",
-    lead: "글로벌 메모리 업체의 설비 투자가 늘면서 국내 반도체 장비 기업의 수주도 확대되고 있다. 후공정 생산능력 확충이 본격화되며 관련 부품과 검사 장비 수요도 함께 증가하는 모습이다.",
     date: "2026.08.02 17:35",
     section: "증권",
     tone: "mint",
+    stockAnalyses: [
+      { stockId: "042700", sentiment: "긍정", comment: "HBM 후공정 설비 투자 확대에 따라 장비 수주 증가 기대가 부각됐습니다." },
+      { stockId: "000660", sentiment: "긍정", comment: "AI 서버용 HBM 수요 증가가 생산능력 확대와 실적 성장 기대를 높였습니다." },
+    ],
   },
   {
     id: "article-4",
     stockIds: ["000660"],
-    sentiment: "부정",
     title: "단기 급등한 반도체주, 실적 눈높이도 따라왔나",
-    lead: "주가가 빠르게 오른 만큼 다음 분기 실적과 밸류에이션을 함께 점검해야 한다는 분석이 나온다. 단기 기대가 주가에 상당 부분 반영돼 실적 발표 전후 변동성이 커질 수 있다는 지적이다.",
     date: "2026.08.02 14:10",
     section: "마켓",
     tone: "red",
+    stockAnalyses: [
+      { stockId: "000660", sentiment: "부정", comment: "단기 급등으로 실적 기대가 주가에 선반영돼 변동성 확대 가능성이 제기됐습니다." },
+    ],
   },
   {
     id: "article-5",
     stockIds: ["005930", "000660"],
-    sentiment: "중립",
     title: "미국 반도체 지원정책 세부안 발표…국내 기업 영향은",
-    lead: "지원 범위는 확대됐지만 현지 투자 조건이 함께 제시돼 기업별 손익을 따져볼 필요가 있다. 세액공제와 보조금 효과는 긍정적이지만 추가 설비 투자 부담까지 함께 살펴야 한다는 평가다.",
     date: "2026.08.01 16:22",
     section: "글로벌",
     tone: "sand",
+    stockAnalyses: [
+      { stockId: "005930", sentiment: "긍정", comment: "미국 현지 투자에 대한 세액공제와 보조금 확대의 수혜 가능성이 부각됐습니다." },
+      { stockId: "000660", sentiment: "부정", comment: "지원 확대와 함께 추가 현지 설비 투자 조건이 제시돼 비용 부담이 커질 수 있습니다." },
+    ],
   },
   {
     id: "article-6",
     stockIds: ["373220", "086520"],
-    sentiment: "중립",
     title: "전기차 수요 회복 시점은…배터리 업계, 하반기 가동률에 촉각",
-    lead: "재고 조정은 마무리 단계지만 완성차 판매 흐름에 따라 회복 속도는 달라질 전망이다. 업체들은 신규 수주와 공장 가동률을 점검하며 하반기 생산 계획을 보수적으로 조정하고 있다.",
     date: "2026.08.03 08:20",
     section: "산업",
     tone: "green",
+    stockAnalyses: [],
   },
   {
     id: "article-7",
     stockIds: ["105560", "055550"],
-    sentiment: "긍정",
     title: "주주환원 확대 나선 금융주…배당 매력 다시 부각",
-    lead: "안정적인 이익과 자사주 소각 정책이 맞물리며 금융주에 장기 투자자의 관심이 이어지고 있다. 배당 확대와 자본비율 개선이 동시에 진행되면서 주주환원 정책의 지속 가능성도 높아졌다.",
     date: "2026.08.02 11:04",
     section: "증권",
     tone: "purple",
+    stockAnalyses: [
+      { stockId: "105560", sentiment: "긍정", comment: "안정적인 이익과 주주환원 확대가 배당 매력을 높이는 요인으로 부각됐습니다." },
+      { stockId: "055550", sentiment: "긍정", comment: "자본비율 개선과 배당 확대가 주주환원 정책의 지속 가능성을 높였습니다." },
+    ],
   },
   {
     id: "article-8",
     stockIds: ["TSLA"],
-    sentiment: "부정",
     title: "테슬라 가격 경쟁 심화…자동차 부문 마진 압박 커졌다",
-    lead: "글로벌 전기차 시장의 할인 경쟁이 길어지면서 수익성 개선 시점에 대한 전망이 엇갈린다. 판매량 방어를 위한 가격 인하가 이어져 자동차 부문의 마진 회복에는 시간이 더 필요하다는 분석이다.",
     date: "2026.08.03 07:32",
     section: "글로벌",
     tone: "charcoal",
+    stockAnalyses: [
+      { stockId: "TSLA", sentiment: "부정", comment: "전기차 할인 경쟁과 가격 인하가 이어지며 자동차 부문의 마진 압박이 커졌습니다." },
+    ],
   },
 ];
 
@@ -662,6 +687,13 @@ function formatRate(rate: number) {
 
 function stockById(id: string) {
   return STOCKS.find((stock) => stock.id === id);
+}
+
+function visibleArticleAnalyses(article: Article, groupStockIds: string[], stockFilter: string) {
+  const allowedStockIds = stockFilter === "all" ? groupStockIds : [stockFilter];
+  return article.stockAnalyses
+    .filter((analysis) => allowedStockIds.includes(analysis.stockId))
+    .slice(0, 3);
 }
 
 function Movement({ stock, compact = false }: { stock: Stock; compact?: boolean }) {
@@ -1272,6 +1304,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         <ArticleCard
                           key={article.id}
                           article={article}
+                          analyses={visibleArticleAnalyses(article, selectedGroup.stockIds, articleStockFilter)}
                           onOpen={() => {
                             if (article.url) {
                               window.location.assign(article.url);
@@ -1610,12 +1643,11 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
           <div className="dialog-body preview-content">
             {preview.type === "article" ? (
               <>
-                <div className="preview-badges">
-                  <span className={`sentiment sentiment-${preview.item.sentiment}`}>{preview.item.sentiment}</span>
-                  <span>{preview.item.section}</span>
-                </div>
+                <div className="preview-badges"><span>{preview.item.section}</span></div>
                 <h3>{preview.item.title}</h3>
-                <p>{preview.item.lead}</p>
+                <ArticleAnalysisList
+                  analyses={visibleArticleAnalyses(preview.item, selectedGroup.stockIds, articleStockFilter)}
+                />
                 <small>{preview.item.date} · 한경닷컴</small>
               </>
             ) : (
@@ -1795,18 +1827,33 @@ function CollapseButton({
   );
 }
 
-function ArticleCard({ article, onOpen }: { article: Article; onOpen: () => void }) {
-  const relatedStocks = article.stockIds.map(stockById).filter((stock): stock is Stock => Boolean(stock));
+function ArticleAnalysisList({ analyses }: { analyses: ArticleStockAnalysis[] }) {
+  if (!analyses.length) return null;
+
+  return (
+    <div className="article-analysis-list">
+      {analyses.map((analysis) => {
+        const stock = stockById(analysis.stockId);
+        if (!stock) return null;
+        return (
+          <div className="article-analysis-row" key={`${analysis.stockId}-${analysis.sentiment}`}>
+            <span className={`sentiment sentiment-${analysis.sentiment}`}>{analysis.sentiment}</span>
+            <strong>{stock.name}</strong>
+            <span className="article-analysis-comment">{analysis.comment}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ArticleCard({ article, analyses, onOpen }: { article: Article; analyses: ArticleStockAnalysis[]; onOpen: () => void }) {
   return (
     <article className="article-card">
       <button type="button" onClick={onOpen}>
         <div className="article-copy">
-          <div className="article-meta">
-            <span className={`sentiment sentiment-${article.sentiment}`}>{article.sentiment}</span>
-            <span>{relatedStocks.map((stock) => stock.name).join(" · ")}</span>
-          </div>
           <h3>{article.title}</h3>
-          <p>{article.lead}</p>
+          <ArticleAnalysisList analyses={analyses} />
           <small>한경닷컴 · {article.section} · {article.date}</small>
         </div>
         <div className={`article-thumbnail thumb-${article.tone}`} aria-label="기사 썸네일">
