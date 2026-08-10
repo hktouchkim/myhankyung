@@ -38,7 +38,10 @@ test("server-renders the My한경 관심종목 experience", async () => {
   assert.match(html, /report-list/);
   assert.match(html, /class="module-title-link" href="https:\/\/markets\.hankyung\.com\/consensus"/);
   assert.equal((html.match(/class="article-card"/g) ?? []).length, 5);
-  assert.equal((html.match(/class="article-analysis-row"/g) ?? []).length, 12);
+  assert.equal((html.match(/class="article-analysis-row"/g) ?? []).length, 13);
+  assert.equal((html.match(/sentiment-긍정/g) ?? []).length, 4);
+  assert.equal((html.match(/sentiment-중립/g) ?? []).length, 7);
+  assert.equal((html.match(/sentiment-부정/g) ?? []).length, 2);
   assert.match(html, /sentiment-긍정[^>]*>🙂<\/span>/);
   assert.match(html, /sentiment-중립[^>]*>😐<\/span>/);
   assert.match(html, /sentiment-부정[^>]*>😞<\/span>/);

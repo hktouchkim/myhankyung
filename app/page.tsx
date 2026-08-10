@@ -382,7 +382,7 @@ const ARTICLES: Article[] = [
     stockAnalyses: [
       { stockId: "005930", sentiment: "긍정", comment: "미국 반도체주 강세와 업종 전반의 매수세 유입으로 동반 상승 기대가 형성됐습니다." },
       { stockId: "005935", sentiment: "긍정", comment: "보통주와 함께 반도체 투자심리 개선의 수혜 종목으로 언급됐습니다." },
-      { stockId: "009150", sentiment: "긍정", comment: "반도체 전반으로 온기가 확산되며 전자부품 수요 회복 기대가 반영됐습니다." },
+      { stockId: "009150", sentiment: "부정", comment: "단기 상승폭이 커지며 차익 실현에 따른 변동성 확대 가능성이 제기됐습니다." },
     ],
   },
   {
@@ -395,8 +395,6 @@ const ARTICLES: Article[] = [
     tone: "blue",
     stockAnalyses: [
       { stockId: "005930", sentiment: "긍정", comment: "미국 반도체주 급등과 외국인 매수세 유입으로 장 초반 강세가 나타났습니다." },
-      { stockId: "005935", sentiment: "긍정", comment: "보통주와 함께 상승하며 반도체 대형주 랠리에 동참했습니다." },
-      { stockId: "009150", sentiment: "긍정", comment: "반도체주 강세 속에서 두 자릿수 상승률을 기록하며 상승폭을 키웠습니다." },
     ],
   },
   {
@@ -408,20 +406,24 @@ const ARTICLES: Article[] = [
     section: "마켓",
     tone: "mint",
     stockAnalyses: [
-      { stockId: "005930", sentiment: "긍정", comment: "외국인 순매수와 미국 반도체주 강세가 맞물리며 주가가 상승했습니다." },
-      { stockId: "005935", sentiment: "긍정", comment: "반도체주 매수세 확산으로 보통주보다 높은 상승률을 기록했습니다." },
-      { stockId: "009150", sentiment: "긍정", comment: "반도체 업종 전반의 강세 속에서 큰 폭의 상승세로 마감했습니다." },
+      { stockId: "005930", sentiment: "중립", comment: "시장 상승 흐름에는 동참했지만 종목 고유의 추가 재료는 제한적이었습니다." },
+      { stockId: "005935", sentiment: "중립", comment: "보통주와 비슷한 흐름을 보이며 뚜렷한 방향성 없이 거래됐습니다." },
+      { stockId: "009150", sentiment: "부정", comment: "급격한 주가 변동으로 단기적인 가격 부담이 커질 수 있다는 평가가 나왔습니다." },
     ],
   },
   {
     id: "article-samsung-20260804-1",
     url: "https://www.hankyung.com/article/2026080444426",
-    stockIds: ["005930", "009150"],
+    stockIds: ["005930", "009150", "006400"],
     title: "\"삼성·현대차 집중 투자\"…우리운용, 피지컬AI 액티브 ETF 출시",
     date: "2026.08.04 04:17",
     section: "증권",
     tone: "purple",
-    stockAnalyses: [],
+    stockAnalyses: [
+      { stockId: "005930", sentiment: "중립", comment: "신규 ETF 편입 소식이 전해졌지만 당장의 실적 변화는 확인되지 않았습니다." },
+      { stockId: "009150", sentiment: "중립", comment: "피지컬 AI 밸류체인에 포함됐으나 구체적인 투자 비중은 제한적입니다." },
+      { stockId: "006400", sentiment: "중립", comment: "관련 산업 노출 가능성은 있으나 직접적인 수혜 여부는 아직 불분명합니다." },
+    ],
   },
   {
     id: "article-samsung-20260804-2",
@@ -432,9 +434,9 @@ const ARTICLES: Article[] = [
     section: "마켓",
     tone: "sand",
     stockAnalyses: [
-      { stockId: "005930", sentiment: "중립", comment: "장중 약세를 회복했지만 강보합에 그치며 뚜렷한 방향성을 보이지 않았습니다." },
-      { stockId: "032830", sentiment: "부정", comment: "삼성전자 지분가치가 부각됐던 흐름과 달리 3%대 하락세로 마감했습니다." },
-      { stockId: "028260", sentiment: "부정", comment: "삼성생명과 함께 약세를 보이며 1%대 하락으로 거래를 마쳤습니다." },
+      { stockId: "005930", sentiment: "긍정", comment: "장중 약세를 회복하고 강보합으로 마감하며 하방 압력을 방어했습니다." },
+      { stockId: "032830", sentiment: "중립", comment: "지분가치가 다시 언급됐지만 뚜렷한 방향성으로 이어지지는 않았습니다." },
+      { stockId: "028260", sentiment: "중립", comment: "그룹주 흐름과 함께 움직이며 제한적인 등락을 보였습니다." },
     ],
   },
   {
