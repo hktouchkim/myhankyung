@@ -8,7 +8,6 @@ import {
   BookOpen,
   CalendarDays,
   Check,
-  ChevronDown,
   Clock3,
   Crown,
   Database,
@@ -40,7 +39,6 @@ import { useEffect, useState } from "react";
 
 type BadgeGroupId = "premium" | "welcome" | "explorer" | "heritage" | "hidden";
 type BadgeGroupFilter = "all" | BadgeGroupId;
-type BadgeFilter = "all" | "earned" | "locked";
 type BadgeTone = "premium" | "silver" | "navy" | "green" | "purple" | "gold";
 
 type BadgeGroup = {
@@ -182,15 +180,9 @@ function BadgeEmblem({ badge, large = false }: { badge: BadgeRecord; large?: boo
 export default function BadgesClient() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [groupFilter, setGroupFilter] = useState<BadgeGroupFilter>("all");
-  const [filter, setFilter] = useState<BadgeFilter>("all");
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
   const [seenCodes, setSeenCodes] = useState<string[]>([]);
   const selectedBadge = BADGES.find((badge) => badge.code === selectedCode) ?? null;
-  const statusFilterOptions: { id: BadgeFilter; label: string }[] = [
-    { id: "all", label: "전체" },
-    { id: "earned", label: "획득" },
-    { id: "locked", label: "미획득" },
-  ];
   const groupFilterOptions: { id: BadgeGroupFilter; label: string; earned: number; total: number }[] = [
     { id: "all", label: "전체", earned: BADGES.filter((badge) => badge.earnedAt).length, total: BADGES.length },
     ...BADGE_GROUPS.map((group) => {
@@ -282,18 +274,11 @@ export default function BadgesClient() {
                 </button>
               ))}
             </div>
-            <div className="badge-status-select-wrap">
-              <select aria-label="배지 획득 상태 필터" value={filter} onChange={(event) => setFilter(event.target.value as BadgeFilter)}>
-                {statusFilterOptions.map((option) => <option value={option.id} key={option.id}>{option.label}</option>)}
-              </select>
-              <ChevronDown size={16} aria-hidden="true" />
-            </div>
           </section>
 
           <div className="badge-groups">
             {BADGE_GROUPS.filter((group) => groupFilter === "all" || group.id === groupFilter).map((group) => {
-              const groupBadges = BADGES.filter((badge) => badge.group === group.id)
-                .filter((badge) => filter === "all" || (filter === "earned" ? badge.earnedAt : !badge.earnedAt));
+              const groupBadges = BADGES.filter((badge) => badge.group === group.id);
               const earnedCount = BADGES.filter((badge) => badge.group === group.id && badge.earnedAt).length;
               const totalCount = BADGES.filter((badge) => badge.group === group.id).length;
               return (
@@ -305,9 +290,8 @@ export default function BadgesClient() {
                       <p>{group.description}</p>
                     </div>
                   </div>
-                  {groupBadges.length ? (
-                    <div className="badge-card-grid">
-                      {groupBadges.map((badge) => {
+                  <div className="badge-card-grid">
+                    {groupBadges.map((badge) => {
                         const earned = Boolean(badge.earnedAt);
                         const mystery = group.id === "hidden" && !earned;
                         const showNew = earned && badge.isNew && !seenCodes.includes(badge.code);
@@ -319,9 +303,8 @@ export default function BadgesClient() {
                             {earned ? <><span className="badge-state badge-state-earned"><Check size={12} /> 획득</span><time>{badge.earnedAt}</time></> : <span className="badge-state"><LockKeyhole size={12} /> 미획득</span>}
                           </button>
                         );
-                      })}
-                    </div>
-                  ) : <p className="badge-filter-empty">선택한 상태의 배지가 없습니다.</p>}
+                    })}
+                  </div>
                 </section>
               );
             })}

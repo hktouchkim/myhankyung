@@ -3558,8 +3558,7 @@ p {
   backdrop-filter: blur(12px);
 }
 
-.badge-group-nav,
-.badge-status-filter {
+.badge-group-nav {
   display: flex;
   min-width: 0;
   flex-wrap: wrap;
@@ -3567,45 +3566,7 @@ p {
   gap: 6px;
 }
 
-.badge-status-select-wrap {
-  position: relative;
-  display: flex;
-  flex: 0 0 auto;
-  align-items: center;
-}
-
-.badge-status-select-wrap select {
-  min-width: 112px;
-  height: 36px;
-  padding: 0 34px 0 12px;
-  appearance: none;
-  border: 1px solid #d7d9de;
-  border-radius: 9px;
-  background: #fff;
-  color: #2f3339;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.badge-status-select-wrap select:hover {
-  border-color: #aeb3bc;
-}
-
-.badge-status-select-wrap select:focus-visible {
-  outline: 2px solid rgba(23, 54, 109, 0.2);
-  outline-offset: 2px;
-}
-
-.badge-status-select-wrap svg {
-  position: absolute;
-  right: 11px;
-  pointer-events: none;
-  color: #686d75;
-}
-
-.badge-group-nav button,
-.badge-status-filter button {
+.badge-group-nav button {
   min-height: 34px;
   padding: 0 12px;
   border: 1px solid #e0e2e6;
@@ -3617,8 +3578,7 @@ p {
   white-space: nowrap;
 }
 
-.badge-group-nav button em,
-.badge-status-filter button em {
+.badge-group-nav button em {
   display: inline-flex;
   min-width: 18px;
   height: 18px;
@@ -3634,21 +3594,18 @@ p {
   font-variant-numeric: tabular-nums;
 }
 
-.badge-group-nav button:hover,
-.badge-status-filter button:hover {
+.badge-group-nav button:hover {
   border-color: #b5bac3;
   color: #1f2227;
 }
 
-.badge-group-nav .badge-filter-active,
-.badge-status-filter .badge-filter-active {
+.badge-group-nav .badge-filter-active {
   border-color: #17191d;
   background: #17191d;
   color: #fff;
 }
 
-.badge-group-nav .badge-filter-active em,
-.badge-status-filter .badge-filter-active em {
+.badge-group-nav .badge-filter-active em {
   background: rgba(255, 255, 255, 0.16);
   color: #fff;
 }
@@ -4169,14 +4126,6 @@ p {
 
   .badge-group-nav::-webkit-scrollbar {
     display: none;
-  }
-
-  .badge-status-filter {
-    justify-content: flex-end;
-  }
-
-  .badge-status-select-wrap {
-    align-self: flex-end;
   }
 
   .badge-group-section {

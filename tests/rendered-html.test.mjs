@@ -96,13 +96,13 @@ test("server-renders the My한경 badge collection", async () => {
   assert.match(html, /한경 헤리티지/);
   assert.match(html, /히든 배지/);
   assert.match(html, /미획득/);
-  assert.match(html, /badge-status-select-wrap/);
   assert.match(html, /배지 그룹 필터/);
   assert.match(html, /전체<em>8(?:<!-- -->)?\/(?:<!-- -->)?40<\/em>/);
   assert.equal((html.match(/class="badge-card /g) ?? []).length, 40);
   assert.match(html, /프리미엄9 라운지<em>1(?:<!-- -->)?\/(?:<!-- -->)?7<\/em>/);
   assert.match(html, /월컴 스타터<em>7(?:<!-- -->)?\/(?:<!-- -->)?10<\/em>/);
   assert.equal((html.match(/nav-item-dot/g) ?? []).length, 3);
+  assert.doesNotMatch(html, /배지 획득 상태 필터|badge-status-select-wrap/);
   assert.doesNotMatch(html, /획득한 배지|badge-summary-compact|badge-card-progress|badge-detail-progress/);
   assert.equal((html.match(/badge-emblem-mystery/g) ?? []).length, 3);
   assert.equal((html.match(/badge-emblem-shape-premium/g) ?? []).length, 6);
