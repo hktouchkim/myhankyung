@@ -440,6 +440,39 @@ const ARTICLES: Article[] = [
     ],
   },
   {
+    id: "article-samsung-sdi-20260803",
+    stockIds: ["006400"],
+    title: "삼성SDI, 북미 배터리 생산라인 효율화 속도",
+    date: "2026.08.03 08:45",
+    section: "산업",
+    tone: "blue",
+    stockAnalyses: [
+      { stockId: "006400", sentiment: "부정", comment: "생산 효율화 과정에서 단기적인 비용 부담이 이어질 가능성이 제기됐습니다." },
+    ],
+  },
+  {
+    id: "article-samsung-bio-20260803",
+    stockIds: ["207940"],
+    title: "삼성바이오로직스, 대형 위탁생산 계약 추가 확보",
+    date: "2026.08.03 08:10",
+    section: "기업",
+    tone: "mint",
+    stockAnalyses: [
+      { stockId: "207940", sentiment: "긍정", comment: "대형 위탁생산 계약 확보로 중장기 매출 성장에 대한 기대가 높아졌습니다." },
+    ],
+  },
+  {
+    id: "article-samsung-heavy-20260803",
+    stockIds: ["010140"],
+    title: "삼성중공업, 친환경 선박 수주 경쟁 본격화",
+    date: "2026.08.03 07:40",
+    section: "산업",
+    tone: "navy",
+    stockAnalyses: [
+      { stockId: "010140", sentiment: "중립", comment: "수주 경쟁에 참여하고 있지만 구체적인 계약 규모는 아직 확인되지 않았습니다." },
+    ],
+  },
+  {
     id: "article-1",
     stockIds: ["000660"],
     title: "HBM4 양산 속도 낸 SK하이닉스…AI 메모리 주도권 굳힌다",
@@ -849,7 +882,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   );
   const filteredArticles = groupArticles
     .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 5);
+    .slice(0, 10);
   const groupReports = REPORTS.filter((report) => selectedGroup.stockIds.includes(report.stockId));
   const filteredReports = groupReports
     .sort((a, b) => b.date.localeCompare(a.date))
@@ -1355,7 +1388,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                   </div>
                 </div>
                 {!collapsedModules.reports ? (
-                  <div className="report-list">
+                  <div className="report-grid">
                     {filteredReports.length ? (
                       filteredReports.map((report) => (
                         <ReportCard key={report.id} report={report} onOpen={() => setPreview({ type: "report", item: report })} />
@@ -1870,20 +1903,20 @@ function ArticleAnalysisList({ analyses }: { analyses: ArticleStockAnalysis[] })
 }
 
 function ArticleAnalysisSummary({ analyses }: { analyses: ArticleStockAnalysis[] }) {
-  const counts = (["긍정", "중립", "부정"] as const)
-    .map((sentiment) => ({ sentiment, count: analyses.filter((analysis) => analysis.sentiment === sentiment).length }))
-    .filter((item) => item.count > 0);
-
-  if (!counts.length) return null;
+  if (!analyses.length) return null;
 
   return (
-    <div className="article-analysis-summary" aria-label={counts.map((item) => `${item.sentiment} ${item.count}개`).join(", ")}>
-      {counts.map((item) => (
-        <span className="article-analysis-summary-item" key={item.sentiment} aria-hidden="true">
-          <span>{SENTIMENT_EMOJI[item.sentiment]}</span>
-          <strong>{item.count}</strong>
-        </span>
-      ))}
+    <div className="article-analysis-summary" aria-label={analyses.map((analysis) => `${stockById(analysis.stockId)?.name ?? "종목"} ${analysis.sentiment}`).join(", ")}>
+      {analyses.map((analysis) => {
+        const stock = stockById(analysis.stockId);
+        if (!stock) return null;
+        return (
+          <span className="article-analysis-summary-item" key={`${analysis.stockId}-${analysis.sentiment}`} aria-hidden="true">
+            <span>{SENTIMENT_EMOJI[analysis.sentiment]}</span>
+            <strong>{stock.name}</strong>
+          </span>
+        );
+      })}
     </div>
   );
 }
