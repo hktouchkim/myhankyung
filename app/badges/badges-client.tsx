@@ -67,13 +67,13 @@ type BadgeRecord = {
   actionHref?: string;
 };
 
-const NAV_ITEMS: { label: string; icon: LucideIcon; href: string; active?: boolean }[] = [
+const NAV_ITEMS: { label: string; icon: LucideIcon; href: string; active?: boolean; highlighted?: boolean }[] = [
   { label: "My 브리핑", icon: Home, href: "/" },
-  { label: "배지", icon: Award, href: "/badges", active: true },
+  { label: "배지", icon: Award, href: "/badges", active: true, highlighted: true },
   { label: "관심 기자", icon: UserRound, href: "/" },
   { label: "뉴스 스크랩", icon: Bookmark, href: "/" },
-  { label: "최근 본 기사", icon: Clock3, href: "/recent-articles" },
-  { label: "관심종목", icon: Star, href: "/watchlist" },
+  { label: "최근 본 기사", icon: Clock3, href: "/recent-articles", highlighted: true },
+  { label: "관심종목", icon: Star, href: "/watchlist", highlighted: true },
   { label: "포트폴리오", icon: BarChart3, href: "/" },
   { label: "결제내역", icon: WalletCards, href: "/" },
   { label: "내 계정", icon: Settings, href: "/" },
@@ -258,6 +258,7 @@ export default function BadgesClient() {
                 <Link key={item.label} className={`nav-item ${item.active ? "nav-item-active" : ""}`} href={item.href} onClick={() => setMobileNavOpen(false)}>
                   <Icon size={20} strokeWidth={1.8} />
                   <span>{item.label}</span>
+                  {item.highlighted ? <span className="nav-item-dot" aria-hidden="true" /> : null}
                 </Link>
               );
             })}

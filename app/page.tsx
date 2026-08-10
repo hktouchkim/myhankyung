@@ -683,13 +683,13 @@ const REPORTS: Report[] = [
   },
 ];
 
-const NAV_ITEMS: { id: string; label: string; icon: LucideIcon }[] = [
+const NAV_ITEMS: { id: string; label: string; icon: LucideIcon; highlighted?: boolean }[] = [
   { id: "home", label: "My 브리핑", icon: Home },
-  { id: "badges", label: "배지", icon: Award },
+  { id: "badges", label: "배지", icon: Award, highlighted: true },
   { id: "reporter", label: "관심 기자", icon: UserRound },
   { id: "scrap", label: "뉴스 스크랩", icon: Bookmark },
-  { id: "recent", label: "최근 본 기사", icon: Clock3 },
-  { id: "watchlist", label: "관심종목", icon: Star },
+  { id: "recent", label: "최근 본 기사", icon: Clock3, highlighted: true },
+  { id: "watchlist", label: "관심종목", icon: Star, highlighted: true },
   { id: "portfolio", label: "포트폴리오", icon: BarChart3 },
   { id: "payment", label: "결제내역", icon: WalletCards },
   { id: "account", label: "내 계정", icon: Settings },
@@ -1109,6 +1109,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 >
                   <Icon size={20} strokeWidth={1.8} />
                   <span>{item.label}</span>
+                  {item.highlighted ? <span className="nav-item-dot" aria-hidden="true" /> : null}
                 </button>
               );
             })}

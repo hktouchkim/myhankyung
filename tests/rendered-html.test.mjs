@@ -57,6 +57,7 @@ test("server-renders the My한경 관심종목 experience", async () => {
   assert.match(html, /고가/);
   assert.match(html, /저가/);
   assert.match(html, /삼성바이오로직스/);
+  assert.equal((html.match(/nav-item-dot/g) ?? []).length, 3);
   assert.match(html, /stock-remove-button/);
   assert.doesNotMatch(html, /<tr[^>]*tabindex=/i);
   assert.doesNotMatch(html, /stock-list-more/);
@@ -78,6 +79,7 @@ test("keeps the My한경 dashboard at the root URL", async () => {
   assert.match(html, /관심 기자/);
   assert.equal((html.match(/dashboard-badge-item/g) ?? []).length, 6);
   assert.equal((html.match(/dashboard-badge-emblem-image/g) ?? []).length, 6);
+  assert.equal((html.match(/nav-item-dot/g) ?? []).length, 3);
   assert.match(html, /href="\/badges\?badge=/);
   assert.doesNotMatch(html, /타임 브리핑/);
 });
@@ -100,6 +102,7 @@ test("server-renders the My한경 badge collection", async () => {
   assert.equal((html.match(/class="badge-card /g) ?? []).length, 40);
   assert.match(html, /프리미엄9 라운지<em>1(?:<!-- -->)?\/(?:<!-- -->)?7<\/em>/);
   assert.match(html, /월컴 스타터<em>7(?:<!-- -->)?\/(?:<!-- -->)?10<\/em>/);
+  assert.equal((html.match(/nav-item-dot/g) ?? []).length, 3);
   assert.doesNotMatch(html, /획득한 배지|badge-summary-compact|badge-card-progress|badge-detail-progress/);
   assert.equal((html.match(/badge-emblem-mystery/g) ?? []).length, 3);
   assert.equal((html.match(/badge-emblem-shape-premium/g) ?? []).length, 6);
@@ -136,6 +139,7 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   assert.match(html, /더보기/);
   assert.match(html, /최근 3개월/);
   assert.match(html, /recent-delete-button/);
+  assert.equal((html.match(/nav-item-dot/g) ?? []).length, 3);
   assert.doesNotMatch(html, /MY CONTENT|매일 갱신|32\/30건|lucide-trash-2/);
   assert.doesNotMatch(html, /증권부|마켓인사이트|산업부|경제부|국제부|5명|lucide-chevron-right/);
 });

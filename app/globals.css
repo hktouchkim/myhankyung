@@ -177,6 +177,15 @@ p {
   font-weight: 700;
 }
 
+.nav-item-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  margin-left: -6px;
+  border-radius: 50%;
+  background: #e12b26;
+}
+
 .main-content {
   width: 100%;
   max-width: 850px;
