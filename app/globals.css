@@ -998,11 +998,13 @@ p {
 
 .sentiment {
   display: inline-flex;
-  padding: 3px 7px;
+  width: 24px;
+  height: 24px;
   align-items: center;
+  justify-content: center;
   border-radius: 5px;
-  font-size: 10px;
-  font-weight: 800;
+  font-size: 15px;
+  line-height: 1;
 }
 
 .sentiment-긍정 {
@@ -1013,6 +1015,11 @@ p {
 .sentiment-부정 {
   background: #edf2ff;
   color: #315fc7;
+}
+
+.sentiment-중립 {
+  background: #f0f1f2;
+  color: #646971;
 }
 
 .article-card h3,

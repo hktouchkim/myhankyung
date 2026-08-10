@@ -68,8 +68,14 @@ type Article = {
 
 type ArticleStockAnalysis = {
   stockId: string;
-  sentiment: "긍정" | "부정";
+  sentiment: "긍정" | "중립" | "부정";
   comment: string;
+};
+
+const SENTIMENT_EMOJI: Record<ArticleStockAnalysis["sentiment"], string> = {
+  긍정: "🙂",
+  중립: "😐",
+  부정: "😞",
 };
 
 type Report = {
@@ -426,7 +432,7 @@ const ARTICLES: Article[] = [
     section: "마켓",
     tone: "sand",
     stockAnalyses: [
-      { stockId: "005930", sentiment: "긍정", comment: "장중 약세를 회복하고 강보합으로 마감하며 하방 압력을 방어했습니다." },
+      { stockId: "005930", sentiment: "중립", comment: "장중 약세를 회복했지만 강보합에 그치며 뚜렷한 방향성을 보이지 않았습니다." },
       { stockId: "032830", sentiment: "부정", comment: "삼성전자 지분가치가 부각됐던 흐름과 달리 3%대 하락세로 마감했습니다." },
       { stockId: "028260", sentiment: "부정", comment: "삼성생명과 함께 약세를 보이며 1%대 하락으로 거래를 마쳤습니다." },
     ],
@@ -1837,7 +1843,14 @@ function ArticleAnalysisList({ analyses }: { analyses: ArticleStockAnalysis[] })
         if (!stock) return null;
         return (
           <div className="article-analysis-row" key={`${analysis.stockId}-${analysis.sentiment}`}>
-            <span className={`sentiment sentiment-${analysis.sentiment}`}>{analysis.sentiment}</span>
+            <span
+              className={`sentiment sentiment-${analysis.sentiment}`}
+              role="img"
+              aria-label={`${analysis.sentiment} 분석`}
+              title={analysis.sentiment}
+            >
+              {SENTIMENT_EMOJI[analysis.sentiment]}
+            </span>
             <strong>{stock.name}</strong>
             <span className="article-analysis-comment">{analysis.comment}</span>
           </div>
