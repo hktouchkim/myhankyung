@@ -116,6 +116,16 @@ test("server-renders the My한경 badge collection", async () => {
   assert.doesNotMatch(html, /최근 획득|배지 획득 조건을 완료했습니다|badge-detail-action/);
 });
 
+test("keeps acquired badge messages separate from earning hints", async () => {
+  const source = await readFile(new URL("../app/badges/badges-client.tsx", import.meta.url), "utf8");
+
+  assert.equal((source.match(/earnedMessage:/g) ?? []).length, 10);
+  assert.match(source, /ALICE Q의 첫 번째 게임을 클리어하셨습니다/);
+  assert.match(source, /한국경제신문의 소중한 회원이 되신 것을 진심으로 환영합니다/);
+  assert.match(source, /name: "알림은 못 참지"/);
+  assert.match(source, /selectedBadge\.earnedMessage \?\?/);
+});
+
 test("server-renders the My한경 최근 본 기사 experience", async () => {
   const response = await render("/recent-articles");
   assert.equal(response.status, 200);

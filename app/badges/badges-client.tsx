@@ -55,6 +55,7 @@ type BadgeRecord = {
   icon: LucideIcon;
   tone: BadgeTone;
   hint: string;
+  earnedMessage?: string;
   image?: string;
   earnedAt?: string;
   current?: number;
@@ -112,24 +113,24 @@ const BADGE_GROUPS: BadgeGroup[] = [
 ];
 
 const BADGES: BadgeRecord[] = [
-  { code: "hankyung-prestige", group: "premium", name: "한경 프레스티지", icon: Crown, tone: "premium", image: "/badges/hankyung-prestige.png", earnedAt: "2026.08.01", hint: "한경 프리미엄9 구독자가 되어 특별한 컬렉션을 시작해 보세요." },
-  { code: "ai-invest-master", group: "premium", name: "AI 투자 고수", icon: BarChart3, tone: "silver", hint: "epic AI에게 10번 질문하고 이번 달 이용권을 모두 사용해 보세요." },
+  { code: "hankyung-prestige", group: "premium", name: "한경 프레스티지", icon: Crown, tone: "premium", image: "/badges/hankyung-prestige.png", earnedAt: "2026.08.01", hint: "한경 프리미엄9 구독자가 되어 특별한 컬렉션을 시작해 보세요.", earnedMessage: "한경 프리미엄9 구독을 완료하셨습니다. 한경의 가장 소중한 파트너가 되신 것을 진심으로 환영합니다. 시대의 흐름을 선도하며 탁월한 성취를 이뤄가는 당신의 자부심을 증명하는 빛나는 증표가 되길 바랍니다. 프리미엄9과 함께 독보적인 인사이트의 세계를 누려보세요." },
+  { code: "ai-invest-master", group: "premium", name: "AI 투자 고수", icon: BarChart3, tone: "silver", hint: "epic AI에게 10번 질문하고 이번 달 이용권을 모두 사용해 보세요.", earnedMessage: "epic AI 월간 이용권을 모두 소진하셨습니다! 누구보다 적극적으로 AI를 활용해 시장의 흐름을 분석하고 투자의 힌트를 얻어내는 당신은 진정한 AI 투자 고수입니다. 스마트한 파트너와 함께 앞으로도 성공적인 투자를 이끌어가시길 바랍니다." },
   { code: "premium-reader", group: "premium", name: "프리미엄 탐독가", icon: BookOpen, tone: "premium", current: 63, target: 100, unit: "개", hint: "한경 프리미엄9 기사를 100개 이상 읽어보세요.", actionLabel: "프리미엄 기사 보기", actionHref: "/recent-articles" },
   { code: "paid-months", group: "premium", name: "유료구독 4개월", icon: CalendarDays, tone: "gold", hint: "프리미엄 구독을 유지하며 함께한 시간을 쌓아보세요." },
   { code: "prestige-ambassador-2026", group: "premium", name: "2026 프레스티지 앰배서더", icon: Award, tone: "gold", hint: "2026년에 프리미엄9 구독을 시작하면 받을 수 있습니다." },
   { code: "knowledge-navigator", group: "premium", name: "지식의 항해사", icon: Lightbulb, tone: "navy", current: 31, target: 50, unit: "회", hint: "AI가 추천한 관련 기사를 50회 확인해 보세요.", actionLabel: "추천 기사 보기", actionHref: "/recent-articles" },
   { code: "careful-reader", group: "premium", name: "꼼꼼한 탐독가", icon: Eye, tone: "navy", current: 18, target: 50, unit: "회", hint: "단어를 드래그해 AI 용어 설명을 50회 사용해 보세요.", actionLabel: "기사 보러 가기", actionHref: "/recent-articles" },
 
-  { code: "alice-invite", group: "welcome", name: "ALICE Q의 초대", icon: Gamepad2, tone: "green", image: "/badges/alice-invite.png", earnedAt: "2026.06.21", hint: "ALICE Q 게임을 한 번 완료해 보세요." },
-  { code: "this-is-me", group: "welcome", name: "이게 바로 나", icon: UserRound, tone: "green", image: "/badges/this-is-me.png", earnedAt: "2026.06.21", hint: "ALICE Q 닉네임이나 프로필 사진을 등록해 보세요." },
-  { code: "feedback-place", group: "welcome", name: "공감 맛집", icon: Bell, tone: "green", image: "/badges/feedback-place.png", earnedAt: "2026.07.02", hint: "기사에 좋아요 또는 싫어요 피드백을 3번 남겨보세요." },
-  { code: "my-newsroom", group: "welcome", name: "마이 뉴스룸", icon: Newspaper, tone: "green", image: "/badges/my-newsroom.png", earnedAt: "2026.07.18", hint: "응원하는 기자 3명을 구독해 나만의 뉴스룸을 완성해 보세요." },
-  { code: "first-conversation", group: "welcome", name: "소통의 첫걸음", icon: MessageCircle, tone: "green", image: "/badges/first-conversation.png", earnedAt: "2026.07.10", hint: "기사를 읽고 댓글을 3번 남겨보세요." },
-  { code: "hankyung-member", group: "welcome", name: "오늘부터 한경인", icon: Gift, tone: "navy", image: "/badges/hankyung-member.png", earnedAt: "2026.05.12", hint: "한경닷컴 회원이 되면 기본으로 받는 배지입니다." },
+  { code: "alice-invite", group: "welcome", name: "ALICE Q의 초대", icon: Gamepad2, tone: "green", image: "/badges/alice-invite.png", earnedAt: "2026.06.21", hint: "ALICE Q 게임을 한 번 완료해 보세요.", earnedMessage: "ALICE Q의 첫 번째 게임을 클리어하셨습니다. 지적 유희의 세계, ALICE Q에 합류하신 것을 환영합니다. 뉴스는 이제 당신의 정복을 기다리는 거대한 놀이터입니다. 첫 승리의 짜릿함을 시작으로, 앞으로 준비된 다채로운 지식 게임들도 거침없이 공략해 보세요. 더 많이 플레이할수록 세상을 읽는 당신의 감각은 더욱 예리해질 것입니다!" },
+  { code: "this-is-me", group: "welcome", name: "이게 바로 나", icon: UserRound, tone: "green", image: "/badges/this-is-me.png", earnedAt: "2026.06.21", hint: "ALICE Q 닉네임이나 프로필 사진을 등록해 보세요.", earnedMessage: "ALICE Q 프로필 설정을 완료하셨습니다! 이제 모든 준비가 끝났습니다. ALICE Q에서 열심히 참여해 높은 순위를 달성하고, 랭킹보드에서 다른 사람들에게 나의 멋진 프로필 사진과 닉네임을 당당하게 보여주세요! 높은 곳을 향한 당신의 도전을 진심으로 응원합니다." },
+  { code: "feedback-place", group: "welcome", name: "공감 맛집", icon: Bell, tone: "green", image: "/badges/feedback-place.png", earnedAt: "2026.07.02", hint: "기사에 좋아요 또는 싫어요 피드백을 3번 남겨보세요.", earnedMessage: "기사 피드백 3회를 모두 달성하셨습니다. 세상을 향한 당신의 소중한 발도장이 모였습니다. 당신의 확실한 리액션과 안목은 더 좋은 뉴스 생태계를 만드는 귀한 밑거름이 됩니다. 앞으로도 당신만의 감각으로 한경의 뉴스들과 즐겁게 소통해 주세요." },
+  { code: "my-newsroom", group: "welcome", name: "마이 뉴스룸", icon: Newspaper, tone: "green", image: "/badges/my-newsroom.png", earnedAt: "2026.07.18", hint: "응원하는 기자 3명을 구독해 나만의 뉴스룸을 완성해 보세요.", earnedMessage: "평소 눈여겨보던 기자 3명을 구독하며, 정보의 홍수 속에서 나만의 인사이트를 선별할 준비를 마치셨군요. 이제 '마이 뉴스룸'은 당신이 선택한 기자들의 날카로운 시선과 발 빠른 소식들로 가득 채워질 것입니다. 당신의 취향과 안목으로 완성된 이 특별한 공간에서 시대의 흐름을 가장 먼저 읽어보세요." },
+  { code: "first-conversation", group: "welcome", name: "소통의 첫걸음", icon: MessageCircle, tone: "green", image: "/badges/first-conversation.png", earnedAt: "2026.07.10", hint: "기사를 읽고 댓글을 3번 남겨보세요.", earnedMessage: "3번의 댓글 작성을 달성하셨습니다! 단순히 뉴스를 소비하는 데 그치지 않고, 기꺼이 키보드를 두드려 당신의 생각과 의견을 세상과 나누기 시작하셨군요. 당신의 소중한 목소리가 한경의 뉴스 공간을 더욱 풍성하게 만듭니다." },
+  { code: "hankyung-member", group: "welcome", name: "오늘부터 한경인", icon: Gift, tone: "navy", image: "/badges/hankyung-member.png", earnedAt: "2026.05.12", hint: "한경닷컴 회원이 되면 기본으로 받는 배지입니다.", earnedMessage: "한국경제신문의 소중한 회원이 되신 것을 진심으로 환영합니다! 이제 당신은 세상의 흐름을 한발 앞서 읽는 '한경인'으로서 첫걸음을 내딛으셨습니다. 매일 아침 전해지는 날카로운 분석과 깊이 있는 인사이트를 통해, 당신의 매일이 더 넓고 깊어지기를 기대합니다. 앞으로 다양한 배지들을 모으며 한경과 함께 더 스마트한 일상을 만들어 가세요!" },
   { code: "hankyung-in-hand", group: "welcome", name: "내 손안의 한경", icon: WalletCards, tone: "green", current: 0, target: 1, unit: "회", hint: "한경 앱을 설치하고 처음 로그인해 보세요.", actionLabel: "앱 안내 보기", actionHref: "/" },
   { code: "thought-archive", group: "welcome", name: "생각의 보관함", icon: Bookmark, tone: "green", current: 0, target: 1, unit: "회", hint: "기억하고 싶은 기사를 처음으로 스크랩해 보세요.", actionLabel: "기사 보러 가기", actionHref: "/recent-articles" },
-  { code: "share-good", group: "welcome", name: "좋은 건 함께", icon: Share2, tone: "green", image: "/badges/share-good.png", earnedAt: "2026.07.22", hint: "유익한 기사를 주변에 5번 공유해 보세요." },
-  { code: "push-lover", group: "welcome", name: "한경 알림 ON", icon: Bell, tone: "green", hint: "한경 푸시 알림을 통해 앱에 3번 접속해 보세요." },
+  { code: "share-good", group: "welcome", name: "좋은 건 함께", icon: Share2, tone: "green", image: "/badges/share-good.png", earnedAt: "2026.07.22", hint: "유익한 기사를 주변에 5번 공유해 보세요.", earnedMessage: "나만 알기 아까운 양질의 뉴스를 주변에 기꺼이 나누어 주셨군요! 좋은 정보를 발견하고 이를 타인과 공유하는 당신은 우리 사회의 훌륭한 '지식 전파자'입니다. 당신이 공유한 기사 한 줄이 누군가에게는 새로운 기회나 깊은 영감이 되었을 것입니다. 앞으로도 유익한 지식과 통찰을 널리 알리며 세상의 시야를 함께 넓혀주세요." },
+  { code: "push-lover", group: "welcome", name: "알림은 못 참지", icon: Bell, tone: "green", hint: "한경 푸시 알림을 통해 앱에 3번 접속해 보세요.", earnedMessage: "띵동! 날아오는 소식들을 놓치지 않고 발 빠르게 확인하셨군요. 정보가 무기가 되는 시대, 한경의 알림을 눈여겨보는 당신의 적극성이 돋보입니다. 앞으로도 세상의 가장 뜨거운 이슈와 중요한 트렌드를 가장 먼저 배달해 드릴게요. 알림 창을 열 때마다 당신의 인사이트도 한 단계 더 업그레이드될 것입니다!" },
 
   { code: "perfect-week", group: "explorer", name: "퍼펙트 위크", icon: CalendarDays, tone: "purple", hint: "7일 연속으로 한경을 방문해 보세요." },
   { code: "regular-debater", group: "explorer", name: "단골 토론가", icon: MessageCircle, tone: "purple", current: 12, target: 50, unit: "개", hint: "댓글을 50개 작성해 생각을 나눠보세요.", actionLabel: "기사 보러 가기", actionHref: "/recent-articles" },
@@ -325,7 +326,7 @@ export default function BadgesClient() {
               {selectedBadge.earnedAt ? (
                 <>
                   <time>{selectedBadge.earnedAt} 획득</time>
-                  <p>{selectedBadge.hint} 한경과 함께 쌓아온 활동이 또 하나의 소중한 기록으로 남았습니다.</p>
+                  <p>{selectedBadge.earnedMessage ?? `${selectedBadge.hint} 한경과 함께 쌓아온 활동이 또 하나의 소중한 기록으로 남았습니다.`}</p>
                 </>
               ) : (
                 <p>{selectedBadge.hint}</p>
