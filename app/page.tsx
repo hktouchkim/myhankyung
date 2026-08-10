@@ -721,7 +721,7 @@ const DEFAULT_COLLAPSED_MODULES: CollapsedModules = {
 };
 
 const COLLAPSED_MODULES_STORAGE_KEY = "myhankyung-watchlist-collapsed-modules";
-const ARTICLE_ANALYSIS_VISIBILITY_STORAGE_KEY = "myhankyung-watchlist-article-analysis-visible";
+const ARTICLE_ANALYSIS_VISIBILITY_STORAGE_KEY = "myhankyung-watchlist-ai-point-view-visible";
 
 function formatRate(rate: number) {
   return `${rate > 0 ? "+" : ""}${rate.toFixed(2)}%`;
@@ -791,7 +791,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const view = initialView;
   const [groups, setGroups] = useState<WatchGroup[]>(INITIAL_GROUPS);
   const [selectedGroupId, setSelectedGroupId] = useState(INITIAL_GROUPS[0].id);
-  const [showArticleAnalysis, setShowArticleAnalysis] = useState(false);
+  const [showArticleAnalysis, setShowArticleAnalysis] = useState(true);
   const [dialog, setDialog] = useState<"add" | "alerts" | "manage" | null>(null);
   const [toast, setToast] = useState("");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -1334,7 +1334,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       aria-pressed={showArticleAnalysis}
                       onClick={toggleArticleAnalysis}
                     >
-                      <span>종목별 분석</span>
+                      <span>AI 포인트뷰</span>
                       <span className="article-analysis-toggle-track" aria-hidden="true"><span /></span>
                     </button>
                     <CollapseButton

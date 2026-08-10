@@ -38,11 +38,12 @@ test("server-renders the My한경 관심종목 experience", async () => {
   assert.match(html, /report-grid/);
   assert.match(html, /class="module-title-link" href="https:\/\/markets\.hankyung\.com\/consensus"/);
   assert.equal((html.match(/class="article-card"/g) ?? []).length, 10);
-  assert.equal((html.match(/article-analysis-summary"/g) ?? []).length, 10);
-  assert.equal((html.match(/class="article-analysis-row"/g) ?? []).length, 0);
-  assert.match(html, /class="article-analysis-toggle "/);
-  assert.match(html, /aria-pressed="false"/);
-  assert.match(html, /aria-label="삼성전자 긍정, 삼성전자우 긍정, 삼성전기 부정"/);
+  assert.equal((html.match(/article-analysis-summary"/g) ?? []).length, 0);
+  assert.ok((html.match(/class="article-analysis-row"/g) ?? []).length >= 10);
+  assert.match(html, /AI 포인트뷰/);
+  assert.match(html, /article-analysis-toggle-active/);
+  assert.match(html, /aria-pressed="true"/);
+  assert.match(html, /aria-label="긍정 분석"/);
   assert.match(html, /🙂/);
   assert.match(html, /😐/);
   assert.match(html, /😞/);
