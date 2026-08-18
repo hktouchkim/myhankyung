@@ -237,7 +237,7 @@ export default function RecentArticlesClient() {
           <section className="watchlist-titlebar recent-page-titlebar">
             <div>
               <h1>최근 본 기사</h1>
-              <p>최근 3개월의 기사 기록과 나의 읽기 흐름을 확인해보세요.</p>
+              <p>최근 3개월간 읽은 기사와 나의 뉴스 소비 패턴을 확인해보세요.</p>
             </div>
             <span>2026.08.06 00:00 기준</span>
           </section>

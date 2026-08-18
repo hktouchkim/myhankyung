@@ -156,6 +156,8 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   assert.match(html, /AI 읽기 흐름 분석/);
   assert.match(html, /다방면 탐색형/);
   assert.match(html, /최근 본 기사 내역/);
+  assert.match(html, /최근 3개월간 읽은 기사와 나의 뉴스 소비 패턴을 확인해보세요\./);
+  assert.doesNotMatch(html, /최근 3개월의 기사 기록과 나의 읽기 흐름을 확인해보세요\./);
   assert.equal((html.match(/recent-article-item/g) ?? []).length, 20);
   assert.equal((html.match(/reading-donut-segment /g) ?? []).length, 7);
   assert.equal((html.match(/reading-time-column/g) ?? []).length, 6);
