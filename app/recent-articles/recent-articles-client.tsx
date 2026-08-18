@@ -244,10 +244,9 @@ export default function RecentArticlesClient() {
 
           <section className="recent-module reading-stats-module" aria-labelledby="reading-stats-title">
             <div className="recent-module-heading">
-              <h2 id="reading-stats-title">읽기 통계</h2>
+              <h2 id="reading-stats-title">기사 열람 현황</h2>
             </div>
             <div className="reading-category-section">
-              <h3>많이 읽은 분야</h3>
               <div className="reading-stats-layout">
                 <ReadingDonut />
                 <ol className="top-category-list" aria-label="가장 많이 본 분야 상위 5개">
@@ -264,10 +263,7 @@ export default function RecentArticlesClient() {
               </div>
             </div>
             <div className="reading-time-section">
-              <div className="reading-time-heading">
-                <h3>읽은 시간대</h3>
-                <span>4시간 단위</span>
-              </div>
+              <span className="reading-time-unit">4시간 단위</span>
               <div className="reading-time-chart" role="img" aria-label="4시간 단위 기사 열람 건수">
                 {READING_TIME_DATA.map((item) => (
                   <div className="reading-time-column" key={item.label} aria-label={`${item.label}시, ${item.name}, ${item.description}, ${item.count}건`}>

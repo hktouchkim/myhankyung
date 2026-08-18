@@ -2816,7 +2816,7 @@ p {
   display: grid;
   grid-template-columns: minmax(230px, 0.9fr) minmax(0, 1.45fr);
   gap: 28px;
-  margin-top: 15px;
+  margin-top: 0;
   align-items: stretch;
 }
 
@@ -2827,34 +2827,16 @@ p {
   background: #f7f8fa;
 }
 
-.reading-category-section > h3 {
-  margin: 0;
-  font-size: 14px;
-  letter-spacing: -0.035em;
-}
-
 .reading-time-section {
   margin-top: 20px;
   padding: 0 4px;
 }
 
-.reading-time-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.reading-time-heading h3 {
-  margin: 0;
-  color: #6f7580;
-  font-size: 12px;
-  letter-spacing: -0.035em;
-}
-
-.reading-time-heading span {
+.reading-time-unit {
+  display: block;
   color: #8a8f97;
   font-size: 10px;
+  text-align: right;
 }
 
 .reading-time-chart {

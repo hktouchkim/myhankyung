@@ -150,8 +150,7 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   const html = await response.text();
 
   assert.match(html, /<title>최근 본 기사 \| My한경<\/title>/i);
-  assert.match(html, /읽기 통계/);
-  assert.match(html, /많이 읽은 분야/);
+  assert.match(html, /기사 열람 현황/);
   assert.match(html, /관심 있게 본 기자/);
   assert.match(html, /AI 읽기 흐름 분석/);
   assert.match(html, /다방면 탐색형/);
@@ -161,7 +160,7 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   assert.equal((html.match(/recent-article-item/g) ?? []).length, 20);
   assert.equal((html.match(/reading-donut-segment /g) ?? []).length, 7);
   assert.equal((html.match(/reading-time-column/g) ?? []).length, 6);
-  assert.match(html, /읽은 시간대/);
+  assert.doesNotMatch(html, /읽기 통계|많이 읽은 분야|읽은 시간대/);
   assert.match(html, /22~02/);
   assert.match(html, /18~22/);
   assert.match(html, /취침 전 타임 \(올빼미 독자\)/);
