@@ -76,7 +76,7 @@ test("keeps the My한경 dashboard at the root URL", async () => {
   assert.match(html, /My 브리핑/);
   assert.match(html, /미국 증시/);
   assert.match(html, /2026년 8월 18일 오전 브리핑입니다/);
-  assert.match(html, /dashboard-recent-title-link/);
+  assert.match(html, /dashboard-recent-heading-link/);
   assert.match(html, /최근 본 기사/);
   assert.match(html, /최근 3개월/);
   assert.match(html, /많이 본 분야/);
@@ -93,6 +93,9 @@ test("keeps the My한경 dashboard at the root URL", async () => {
   assert.equal((html.match(/dashboard-badge-emblem-image/g) ?? []).length, 6);
   assert.equal((html.match(/nav-item-dot/g) ?? []).length, 3);
   assert.match(html, /href="\/badges\?badge=/);
+  assert.match(html, /class="title-with-icon dashboard-recent-heading-link" href="\/recent-articles"/);
+  assert.match(html, /aria-label="최근 본 기사 전체보기"/);
+  assert.doesNotMatch(html, /dashboard-heading|안녕하세요, 오늘의 관심 흐름을 정리했어요|MY HANKYUNG/);
   assert.doesNotMatch(html, /타임 브리핑/);
 });
 
@@ -191,7 +194,8 @@ test("keeps the My한경 dashboard modules in the requested order", async () => 
   assert.match(dashboardSource, /DASHBOARD_RECENT_ARTICLES\.map/);
   assert.match(dashboardSource, /dashboard-recent-stats/);
   assert.match(styles, /\.dashboard-recent-item strong\s*\{[^}]*text-overflow:\s*ellipsis;[^}]*white-space:\s*nowrap;/s);
-  assert.match(styles, /\.dashboard-recent-title-link\s*\{[^}]*width:\s*100%\s*!important;[^}]*justify-content:\s*space-between;/s);
+  assert.match(styles, /\.dashboard-recent-heading-link\s*\{[^}]*text-decoration:\s*none;/s);
+  assert.doesNotMatch(styles, /\.dashboard-heading(?:\s|,|\{)/);
   assert.doesNotMatch(dashboardSource, />보유 배지 전체보기</);
   assert.match(styles, /\.dashboard-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2,/s);
   assert.match(styles, /\.dashboard-watch-card\s*\{[^}]*grid-column:\s*auto;/s);

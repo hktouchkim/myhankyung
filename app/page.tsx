@@ -1803,13 +1803,6 @@ function Dashboard({
         <div><strong>한경 PREMIUM</strong><span>AI를 넘어서는 성공투자</span></div>
         <em>구독 중</em>
       </div>
-      <div className="dashboard-heading">
-        <div>
-          <p className="eyebrow">MY HANKYUNG</p>
-          <h1>안녕하세요, 오늘의 관심 흐름을 정리했어요.</h1>
-        </div>
-        <span>2026년 8월 3일 월요일</span>
-      </div>
       <div className="dashboard-grid">
         <article className="dashboard-card dashboard-my-briefing-card">
           <div className="dashboard-card-title">
@@ -1846,12 +1839,12 @@ function Dashboard({
 
         <article className="dashboard-card dashboard-recent-card">
           <div className="dashboard-card-title">
-            <button className="dashboard-recent-title-link" type="button" onClick={onOpenRecent}>
-              <span className="dashboard-recent-title-copy">
-                <Clock3 size={22} />
-                <h2>최근 본 기사</h2>
-              </span>
-              <ChevronRight size={19} aria-hidden="true" />
+            <a className="title-with-icon dashboard-recent-heading-link" href="/recent-articles">
+              <Clock3 size={22} />
+              <h2>최근 본 기사</h2>
+            </a>
+            <button type="button" onClick={onOpenRecent} aria-label="최근 본 기사 전체보기">
+              <ChevronRight size={20} />
             </button>
           </div>
           <dl className="dashboard-recent-stats" aria-label="최근 본 기사 요약 통계">
