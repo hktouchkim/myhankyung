@@ -1847,8 +1847,10 @@ function Dashboard({
         <article className="dashboard-card dashboard-recent-card">
           <div className="dashboard-card-title">
             <button className="dashboard-recent-title-link" type="button" onClick={onOpenRecent}>
-              <Clock3 size={22} />
-              <h2>최근 본 기사</h2>
+              <span className="dashboard-recent-title-copy">
+                <Clock3 size={22} />
+                <h2>최근 본 기사</h2>
+              </span>
               <ChevronRight size={19} aria-hidden="true" />
             </button>
           </div>
@@ -1900,9 +1902,9 @@ function Dashboard({
             <button type="button" aria-label="뉴스 스크랩 전체보기"><ChevronRight size={20} /></button>
           </div>
           <ul className="dashboard-news-list">
-            <li><strong>반도체 수출 다시 최고치…하반기 전망은</strong><small>오늘 11:20</small></li>
-            <li><strong>금융주 주주환원 정책 한눈에 보기</strong><small>어제 18:42</small></li>
-            <li><strong>전기차 캐즘 이후의 배터리 시장</strong><small>8월 1일</small></li>
+            <li><strong>반도체 수출 다시 최고치…하반기 전망은</strong><small>2026.08.18 09:29</small></li>
+            <li><strong>금융주 주주환원 정책 한눈에 보기</strong><small>2026.08.17 18:42</small></li>
+            <li><strong>전기차 캐즘 이후의 배터리 시장</strong><small>2026.08.16 13:05</small></li>
           </ul>
         </article>
 

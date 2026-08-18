@@ -86,6 +86,8 @@ test("keeps the My한경 dashboard at the root URL", async () => {
   assert.match(html, /보유 배지/);
   assert.match(html, /보유 배지<\/h2><span>8개<\/span>/);
   assert.match(html, /뉴스 스크랩/);
+  assert.match(html, /반도체 수출 다시 최고치…하반기 전망은<\/strong><small>2026\.08\.18 09:29<\/small>/);
+  assert.doesNotMatch(html, /오늘 11:20|어제 18:42|>8월 1일</);
   assert.match(html, /관심 기자/);
   assert.equal((html.match(/dashboard-badge-item/g) ?? []).length, 6);
   assert.equal((html.match(/dashboard-badge-emblem-image/g) ?? []).length, 6);
@@ -189,6 +191,7 @@ test("keeps the My한경 dashboard modules in the requested order", async () => 
   assert.match(dashboardSource, /DASHBOARD_RECENT_ARTICLES\.map/);
   assert.match(dashboardSource, /dashboard-recent-stats/);
   assert.match(styles, /\.dashboard-recent-item strong\s*\{[^}]*text-overflow:\s*ellipsis;[^}]*white-space:\s*nowrap;/s);
+  assert.match(styles, /\.dashboard-recent-title-link\s*\{[^}]*width:\s*100%\s*!important;[^}]*justify-content:\s*space-between;/s);
   assert.doesNotMatch(dashboardSource, />보유 배지 전체보기</);
   assert.match(styles, /\.dashboard-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2,/s);
   assert.match(styles, /\.dashboard-watch-card\s*\{[^}]*grid-column:\s*auto;/s);
