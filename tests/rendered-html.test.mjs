@@ -73,6 +73,11 @@ test("keeps the My한경 dashboard at the root URL", async () => {
   const html = await response.text();
 
   assert.match(html, /<title>My한경<\/title>/i);
+  assert.match(html, /My 브리핑/);
+  assert.match(html, /미국 증시/);
+  assert.match(html, /2026년 8월 18일 오전 브리핑입니다/);
+  assert.match(html, /dashboard-recent-title-link/);
+  assert.match(html, /최근 본 기사/);
   assert.match(html, /보유 배지/);
   assert.match(html, /보유 배지<\/h2><span>8개<\/span>/);
   assert.match(html, /뉴스 스크랩/);
@@ -161,16 +166,22 @@ test("keeps the My한경 dashboard modules in the requested order", async () => 
   const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
   const styles = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   const dashboardSource = source.slice(source.indexOf("function Dashboard("), source.indexOf("function CollapseButton("));
+  const briefingIndex = dashboardSource.indexOf("<h2>My 브리핑</h2>");
+  const recentIndex = dashboardSource.indexOf("<h2>최근 본 기사</h2>");
   const badgeIndex = dashboardSource.indexOf("보유 배지");
   const scrapIndex = dashboardSource.indexOf("뉴스 스크랩");
   const watchlistIndex = dashboardSource.indexOf("<h2>관심종목</h2>");
   const reporterIndex = dashboardSource.indexOf("관심 기자");
 
-  assert.ok(badgeIndex >= 0);
+  assert.ok(briefingIndex >= 0);
+  assert.ok(briefingIndex < recentIndex);
+  assert.ok(recentIndex < badgeIndex);
   assert.ok(badgeIndex < scrapIndex);
   assert.ok(scrapIndex < watchlistIndex);
   assert.ok(watchlistIndex < reporterIndex);
   assert.match(dashboardSource, /DASHBOARD_BADGES\.map/);
+  assert.match(dashboardSource, /onClick=\{onOpenRecent\}/);
+  assert.match(dashboardSource, /dashboard-recent-empty/);
   assert.doesNotMatch(dashboardSource, />보유 배지 전체보기</);
   assert.match(styles, /\.dashboard-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2,/s);
   assert.match(styles, /\.dashboard-watch-card\s*\{[^}]*grid-column:\s*auto;/s);

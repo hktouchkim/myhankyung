@@ -4,6 +4,7 @@ import {
   ArrowDown,
   ArrowUp,
   Award,
+  Banknote,
   BarChart3,
   Bell,
   Bookmark,
@@ -18,6 +19,7 @@ import {
   Home,
   LogOut,
   Menu,
+  MessageSquareText,
   Newspaper,
   Pencil,
   Plus,
@@ -1123,6 +1125,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
               selectedGroupId={selectedGroupId}
               onSelectGroup={chooseGroup}
               onOpenBadges={() => window.location.assign("/badges")}
+              onOpenRecent={() => window.location.assign("/recent-articles")}
               onOpenWatchlist={() => window.location.assign("/watchlist")}
             />
           ) : (
@@ -1745,12 +1748,14 @@ function Dashboard({
   selectedGroupId,
   onSelectGroup,
   onOpenBadges,
+  onOpenRecent,
   onOpenWatchlist,
 }: {
   groups: WatchGroup[];
   selectedGroupId: string;
   onSelectGroup: (groupId: string) => void;
   onOpenBadges: () => void;
+  onOpenRecent: () => void;
   onOpenWatchlist: () => void;
 }) {
   const selectedGroup = groups.find((group) => group.id === selectedGroupId) ?? groups[0];
@@ -1773,6 +1778,50 @@ function Dashboard({
         <span>2026년 8월 3일 월요일</span>
       </div>
       <div className="dashboard-grid">
+        <article className="dashboard-card dashboard-my-briefing-card">
+          <div className="dashboard-card-title">
+            <div className="title-with-icon">
+              <MessageSquareText size={22} />
+              <h2>My 브리핑</h2>
+              <span>1개</span>
+            </div>
+          </div>
+
+          <div className="dashboard-briefing-profile">
+            <span className="dashboard-briefing-emblem" aria-hidden="true">
+              <Banknote size={34} strokeWidth={1.7} />
+            </span>
+            <div>
+              <div className="dashboard-briefing-name">
+                <strong>미국 증시</strong>
+                <Settings size={20} strokeWidth={1.7} aria-hidden="true" />
+              </div>
+              <div className="dashboard-briefing-schedule">
+                <span>매일(월~일)</span>
+                <span>오전 08:00</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="dashboard-briefing-copy">
+            <p>2026년 8월 18일 오전 브리핑입니다.</p>
+            <p>
+              17일(현지시간) 뉴욕증시의 다우존스, S&amp;P500, 나스닥 등 3대 주요 지수는 미국과 이란 간의 임시 휴전 종료로 인한 중동 지정학적 긴장 고조 여파로 일제히 하락 마감했습니다. 양국 간 갈등이 심화되면서 브렌트유와 서부텍사스산원유(WTI) 등 국제 유가가 급등세로 전환했고, 이는 인플레이션 압력을 높여 미국 국채 금리 상승을 견인했습니다. 부진한 미국 소비 지표로 인해 경기 둔화 우려가 상존하는 가운데, 유가와 금리의 동반 상승이 투자 심리를 크게 위축시킨 것으로 분석됩니다.
+            </p>
+          </div>
+        </article>
+
+        <article className="dashboard-card dashboard-recent-card">
+          <div className="dashboard-card-title">
+            <button className="dashboard-recent-title-link" type="button" onClick={onOpenRecent}>
+              <Clock3 size={22} />
+              <h2>최근 본 기사</h2>
+              <ChevronRight size={19} aria-hidden="true" />
+            </button>
+          </div>
+          <div className="dashboard-recent-empty" aria-hidden="true" />
+        </article>
+
         <article className="dashboard-card dashboard-badge-card">
           <div className="dashboard-card-title">
             <div className="title-with-icon"><Award size={21} /><h2>보유 배지</h2><span>8개</span></div>

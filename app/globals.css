@@ -1375,44 +1375,92 @@ p {
   font-weight: 800;
 }
 
-.dashboard-briefing-card {
-  background: linear-gradient(145deg, #fff 0%, #f5f8fd 100%);
+.dashboard-my-briefing-card,
+.dashboard-recent-card {
+  min-height: 530px;
 }
 
-.dashboard-briefing-card > p {
-  margin: 44px 0 36px;
-  font-size: 21px;
-  font-weight: 750;
-  line-height: 1.6;
-  letter-spacing: -0.04em;
-}
-
-.briefing-bar {
-  height: 7px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: #e9edf4;
-}
-
-.briefing-bar span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--navy), #6981ae);
-}
-
-.briefing-legend {
+.dashboard-briefing-profile {
   display: flex;
-  margin-top: 9px;
-  justify-content: space-between;
-  color: var(--navy);
-  font-size: 12px;
-  font-weight: 700;
+  margin-top: 24px;
+  align-items: center;
+  gap: 18px;
 }
 
-.briefing-legend small {
-  color: var(--muted);
-  font-weight: 500;
+.dashboard-briefing-emblem {
+  display: flex;
+  width: 78px;
+  height: 78px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f3f4f6;
+}
+
+.dashboard-briefing-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dashboard-briefing-name strong {
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.dashboard-briefing-schedule {
+  display: flex;
+  margin-top: 11px;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.dashboard-briefing-schedule span {
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: #f3f3f4;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.dashboard-briefing-copy {
+  margin-top: 30px;
+}
+
+.dashboard-briefing-copy p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.72;
+  letter-spacing: -0.035em;
+}
+
+.dashboard-briefing-copy p + p {
+  margin-top: 23px;
+}
+
+.dashboard-recent-title-link {
+  display: inline-flex;
+  width: auto !important;
+  height: auto !important;
+  align-items: center;
+  gap: 9px;
+  border-radius: 8px !important;
+  text-align: left;
+}
+
+.dashboard-recent-title-link h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.dashboard-recent-title-link:hover h2 {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.dashboard-recent-empty {
+  min-height: 440px;
 }
 
 .dashboard-stock-list {
@@ -2600,9 +2648,17 @@ p {
     height: 58px;
   }
 
-  .dashboard-briefing-card > p {
-    margin: 30px 0;
-    font-size: 18px;
+  .dashboard-my-briefing-card,
+  .dashboard-recent-card {
+    min-height: auto;
+  }
+
+  .dashboard-briefing-copy p {
+    font-size: 14px;
+  }
+
+  .dashboard-recent-empty {
+    min-height: 210px;
   }
 
   .dialog-backdrop {
