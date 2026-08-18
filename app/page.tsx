@@ -707,6 +707,39 @@ const DASHBOARD_BADGES: { code: string; name: string; icon: LucideIcon; tone: st
   { code: "alice-invite", name: "ALICE Q의 초대", icon: Star, tone: "green", image: "/badges/alice-invite.png" },
 ];
 
+const DASHBOARD_RECENT_ARTICLES = [
+  {
+    title: "코스피, 외국인 순매수에 3%대 상승…반도체주 강세",
+    publishedAt: "2026.08.18 09:29",
+    url: "https://www.hankyung.com/article/2026080565876",
+  },
+  {
+    title: "반도체가 돌아왔다…삼성전자·SK하이닉스 동반 상승",
+    publishedAt: "2026.08.18 09:11",
+    url: "https://www.hankyung.com/article/2026080555766",
+  },
+  {
+    title: "코스피 6600선 회복…기관과 외국인 수급은",
+    publishedAt: "2026.08.18 08:47",
+    url: "https://www.hankyung.com/article/2026080554876",
+  },
+  {
+    title: "장중 변동성 커진 증시, 투자자가 확인할 세 가지",
+    publishedAt: "2026.08.17 18:20",
+    url: "https://www.hankyung.com/article/2026080444426",
+  },
+  {
+    title: "배당주 다시 주목…금융주 주주환원 경쟁 본격화",
+    publishedAt: "2026.08.17 16:05",
+    url: "https://www.hankyung.com/article/2026080443336",
+  },
+  {
+    title: "AI 데이터센터 투자 확대…관련 기업 실적 기대감 커져",
+    publishedAt: "2026.08.17 13:42",
+    url: "https://www.hankyung.com/article/202608070578i",
+  },
+];
+
 const DEFAULT_ALERTS: AlertSettings = {
   article: true,
   report: true,
@@ -1819,7 +1852,26 @@ function Dashboard({
               <ChevronRight size={19} aria-hidden="true" />
             </button>
           </div>
-          <div className="dashboard-recent-empty" aria-hidden="true" />
+          <dl className="dashboard-recent-stats" aria-label="최근 본 기사 요약 통계">
+            <div>
+              <dt>최근 3개월</dt>
+              <dd>32건</dd>
+            </div>
+            <div>
+              <dt>많이 본 분야</dt>
+              <dd>증권 25%</dd>
+            </div>
+          </dl>
+          <ul className="dashboard-recent-list" aria-label="최근 본 기사 목록">
+            {DASHBOARD_RECENT_ARTICLES.map((article) => (
+              <li className="dashboard-recent-item" key={`${article.url}-${article.publishedAt}`}>
+                <a href={article.url}>
+                  <strong>{article.title}</strong>
+                  <time dateTime={article.publishedAt.replace(" ", "T")}>{article.publishedAt}</time>
+                </a>
+              </li>
+            ))}
+          </ul>
         </article>
 
         <article className="dashboard-card dashboard-badge-card">
