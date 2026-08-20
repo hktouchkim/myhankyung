@@ -32,7 +32,6 @@ type RecentArticle = ArticleSeed & {
   id: string;
   lead: string;
   publishedAt: string;
-  viewedAt: string;
   url: string;
 };
 
@@ -124,7 +123,6 @@ const RECENT_ARTICLES: RecentArticle[] = ARTICLE_SEEDS.map((article, index) => (
   id: `recent-${index + 1}`,
   lead: `${article.title}와 관련한 핵심 변화와 배경을 짚었습니다. 주요 수치와 현장의 반응을 함께 살펴보며 앞으로의 흐름을 정리합니다.`,
   publishedAt: index < 4 ? `2026.08.06 ${String(10 - index).padStart(2, "0")}:${index % 2 ? "20" : "45"}` : `2026.08.${String(5 - Math.floor((index - 4) / 7)).padStart(2, "0")} ${String(18 - (index % 7)).padStart(2, "0")}:10`,
-  viewedAt: `2026.08.${index < 11 ? "06" : index < 22 ? "05" : "04"} ${String(11 - (index % 10)).padStart(2, "0")}:30`,
   url: ARTICLE_URLS[index % ARTICLE_URLS.length],
 }));
 
@@ -315,17 +313,15 @@ export default function RecentArticlesClient() {
                 <article className={`recent-article-item ${removingId === article.id ? "recent-article-removing" : ""}`} key={article.id}>
                   <a className={`recent-thumbnail recent-thumbnail-${article.section}`} href={article.url} aria-label={`${article.title} 기사 보기`}>
                     <Newspaper size={24} />
-                    <span>{article.section}</span>
                   </a>
                   <div className="recent-article-copy">
                     <div className="recent-article-meta">
-                      <span>{article.section}</span>
                       {article.premium ? <em>PREMIUM</em> : null}
                       <time>{article.publishedAt}</time>
                     </div>
                     <a href={article.url}><h3>{article.title}</h3></a>
                     <p>{article.lead}</p>
-                    <small>최근 열람 {article.viewedAt}{article.reporter ? ` · ${article.reporter} 기자` : ""}</small>
+                    {article.reporter ? <small>{article.reporter} 기자</small> : null}
                   </div>
                   <button className="recent-delete-button" type="button" onClick={() => removeArticle(article)} aria-label={`${article.title} 최근 본 기사에서 삭제`}>
                     <X size={18} />

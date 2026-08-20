@@ -3231,11 +3231,6 @@ p {
   content: "";
 }
 
-.recent-thumbnail span {
-  font-size: 10px;
-  font-weight: 800;
-}
-
 .recent-thumbnail-경제,
 .recent-thumbnail-정치 { background: linear-gradient(145deg, #eee4d8, #d5c1aa); color: #78532e; }
 .recent-thumbnail-산업 { background: linear-gradient(145deg, #dcebe2, #b8d4c2); color: #356746; }
@@ -3253,11 +3248,6 @@ p {
   gap: 7px;
   color: #777c84;
   font-size: 9px;
-}
-
-.recent-article-meta > span {
-  color: var(--navy);
-  font-weight: 800;
 }
 
 .recent-article-meta em {

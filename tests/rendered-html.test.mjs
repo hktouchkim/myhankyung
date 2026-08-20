@@ -148,6 +148,7 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   const response = await render("/recent-articles");
   assert.equal(response.status, 200);
   const html = await response.text();
+  const source = await readFile(new URL("../app/recent-articles/recent-articles-client.tsx", import.meta.url), "utf8");
 
   assert.match(html, /<title>최근 본 기사 \| My한경<\/title>/i);
   assert.match(html, /기사 열람 현황/);
@@ -171,6 +172,8 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   assert.equal((html.match(/nav-item-dot/g) ?? []).length, 3);
   assert.doesNotMatch(html, /MY CONTENT|매일 갱신|32\/30건|lucide-trash-2/);
   assert.doesNotMatch(html, /증권부|마켓인사이트|산업부|경제부|국제부|5명|lucide-chevron-right/);
+  assert.doesNotMatch(html, /최근 열람/);
+  assert.doesNotMatch(source, /viewedAt|<span>\{article\.section\}<\/span>/);
 });
 
 test("keeps the My한경 dashboard modules in the requested order", async () => {
