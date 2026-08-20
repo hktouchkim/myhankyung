@@ -170,7 +170,7 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   assert.match(html, /최근 3개월/);
   assert.match(html, /recent-delete-button/);
   assert.equal((html.match(/nav-item-dot/g) ?? []).length, 3);
-  assert.doesNotMatch(html, /MY CONTENT|매일 갱신|32\/30건|lucide-trash-2/);
+  assert.doesNotMatch(html, /MY CONTENT|매일 갱신|매일 자정 업데이트|2026\.08\.06 분석|32\/30건|lucide-trash-2/);
   assert.doesNotMatch(html, /증권부|마켓인사이트|산업부|경제부|국제부|5명|lucide-chevron-right/);
   assert.doesNotMatch(html, /최근 열람/);
   assert.doesNotMatch(source, /viewedAt|<span>\{article\.section\}<\/span>/);

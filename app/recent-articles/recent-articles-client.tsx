@@ -296,7 +296,6 @@ export default function RecentArticlesClient() {
               <div className="ai-reading-kicker"><Sparkles size={15} /><span>AI 읽기 흐름 분석</span></div>
               <h2 id="reading-ai-title">회원님은 <strong>다방면 탐색형</strong> 독자입니다.</h2>
               <p>최근 읽기 흐름을 보면 ‘다방면 탐색형’ 독자에 가깝습니다. 주요 경제 지표와 기업 동향을 따라가면서도 정치, 스포츠, 건강 정보까지 시선을 넓혀 사회 전반의 맥락을 입체적으로 살펴보는 경향이 두드러집니다. 특정 주제에 머무르기보다 여러 분야의 변화를 연결해 이해하려는 균형 잡힌 읽기 습관이 나타납니다.</p>
-              <small>2026.08.06 분석 · 매일 자정 업데이트</small>
             </div>
           </section>
 
