@@ -303,7 +303,6 @@ export default function RecentArticlesClient() {
             <div className="recent-module-heading recent-list-heading">
               <h2 id="recent-list-title">최근 본 기사 내역</h2>
               <div className="recent-list-meta">
-                <span className="recent-retention-chip" aria-label="기사 내역은 최대 3개월까지 확인할 수 있습니다.">최근 3개월</span>
                 <span className="module-count">{articles.length}건</span>
               </div>
             </div>
