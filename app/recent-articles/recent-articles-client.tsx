@@ -120,7 +120,7 @@ const RECENT_ARTICLES: RecentArticle[] = ARTICLE_SEEDS.map((article, index) => (
 
 function ReadingDonut() {
   const total = CATEGORY_DATA.reduce((sum, item) => sum + item.count, 0);
-  const [activeName, setActiveName] = useState<string | null>(CATEGORY_DATA[0].name);
+  const [activeName, setActiveName] = useState<string | null>(null);
   const active = CATEGORY_DATA.find((item) => item.name === activeName);
   const segments = CATEGORY_DATA.map((item, index) => ({
     ...item,
@@ -148,9 +148,9 @@ function ReadingDonut() {
                 tabIndex={0}
                 aria-label={`${item.name} ${item.count}건, ${item.share}%`}
                 onMouseEnter={() => setActiveName(item.name)}
-                onMouseLeave={() => setActiveName(CATEGORY_DATA[0].name)}
+                onMouseLeave={() => setActiveName(null)}
                 onFocus={() => setActiveName(item.name)}
-                onBlur={() => setActiveName(CATEGORY_DATA[0].name)}
+                onBlur={() => setActiveName(null)}
               />
             );
           })}

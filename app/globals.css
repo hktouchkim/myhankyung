@@ -3077,7 +3077,16 @@ p {
 .ai-character-wrap img {
   width: 84%;
   height: 84%;
+  filter: drop-shadow(0 11px 13px rgba(84, 66, 47, 0.12));
   object-fit: contain;
+  transform-origin: 50% 84%;
+  animation: fox-reading-float 4.8s ease-in-out infinite;
+}
+
+@keyframes fox-reading-float {
+  0%, 100% { transform: translateY(0) rotate(-0.8deg); }
+  45% { transform: translateY(-8px) rotate(1.3deg); }
+  72% { transform: translateY(-3px) rotate(-0.3deg); }
 }
 
 .ai-reading-copy {

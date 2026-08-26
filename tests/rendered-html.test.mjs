@@ -178,6 +178,12 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   assert.doesNotMatch(html, /최근 열람/);
   assert.doesNotMatch(source, /viewedAt|<span>\{article\.section\}<\/span>/);
   assert.ok(html.indexOf("AI 읽기 흐름 분석") < html.indexOf("기사 열람 현황"));
+  assert.match(source, /useState<string \| null>\(null\)/);
+  assert.match(source, /onMouseLeave=\{\(\) => setActiveName\(null\)\}/);
+
+  const styles = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(styles, /@keyframes fox-reading-float/);
+  assert.match(styles, /animation:\s*fox-reading-float 4\.8s ease-in-out infinite/);
 });
 
 test("keeps the My한경 dashboard modules in the requested order", async () => {
