@@ -18,7 +18,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 
 type ArticleSeed = {
   title: string;
@@ -57,12 +57,12 @@ const CATEGORY_DATA = [
 ];
 
 const READING_TIME_DATA = [
-  { label: "22~02", name: "심야 / 야간", description: "취침 전 타임 (올빼미 독자)", count: 2 },
-  { label: "02~06", name: "새벽", description: "심야 수면 / 취약 시간대", count: 7 },
-  { label: "06~10", name: "아침 / 출근", description: "얼리버드 & 출근길 뉴스러시", count: 10 },
-  { label: "10~14", name: "오전 / 점심", description: "업무 및 점심시간 핑거뉴스", count: 2 },
-  { label: "14~18", name: "오후", description: "오후 일과 & 리프레시", count: 2 },
-  { label: "18~22", name: "저녁 / 퇴근", description: "퇴근길 & 하루 정리", count: 0 },
+  { label: "22~02", startAngle: 330, name: "심야 / 야간", description: "취침 전 타임 (올빼미 독자)", count: 2 },
+  { label: "02~06", startAngle: 30, name: "새벽", description: "심야 수면 / 취약 시간대", count: 7 },
+  { label: "06~10", startAngle: 90, name: "아침 / 출근", description: "얼리버드 & 출근길 뉴스러시", count: 10 },
+  { label: "10~14", startAngle: 150, name: "오전 / 점심", description: "업무 및 점심시간 핑거뉴스", count: 2 },
+  { label: "14~18", startAngle: 210, name: "오후", description: "오후 일과 & 리프레시", count: 2 },
+  { label: "18~22", startAngle: 270, name: "저녁 / 퇴근", description: "퇴근길 & 하루 정리", count: 0 },
 ];
 
 const ARTICLE_SEEDS: ArticleSeed[] = [
@@ -270,12 +270,17 @@ export default function RecentArticlesClient() {
             <article className="recent-module reading-time-card" aria-labelledby="reading-time-title">
               <div className="recent-module-heading reading-time-heading">
                 <h2 id="reading-time-title">열람 시간</h2>
-                <span>4시간 단위</span>
               </div>
-              <div className="reading-time-chart" role="img" aria-label="4시간 단위 기사 열람 건수">
+              <div className="reading-time-chart" aria-label="시간대별 기사 열람 건수">
                 {READING_TIME_DATA.map((item) => (
                   <div className="reading-time-column" key={item.label} aria-label={`${item.label}시, ${item.name}, ${item.description}, ${item.count}건`}>
-                    <small>{item.label}</small>
+                    <span
+                      className="reading-time-clock"
+                      role="img"
+                      aria-label={`${item.label}시`}
+                      title={`${item.label}시`}
+                      style={{ "--time-start": `${item.startAngle}deg` } as CSSProperties}
+                    />
                     <span className="reading-time-bar-track" aria-hidden="true">
                       <i style={{ width: `${(item.count / peakReadingCount) * 100}%` }} />
                     </span>

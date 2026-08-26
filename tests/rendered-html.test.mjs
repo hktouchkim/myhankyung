@@ -163,6 +163,8 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   assert.equal((html.match(/recent-article-item/g) ?? []).length, 20);
   assert.equal((html.match(/reading-donut-segment /g) ?? []).length, 6);
   assert.equal((html.match(/reading-time-column/g) ?? []).length, 6);
+  assert.equal((html.match(/reading-time-clock/g) ?? []).length, 6);
+  assert.doesNotMatch(html, />4시간 단위</);
   assert.doesNotMatch(html, /읽기 통계|많이 읽은 분야|읽은 시간대/);
   assert.match(html, /22~02/);
   assert.match(html, /18~22/);
