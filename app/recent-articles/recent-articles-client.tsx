@@ -4,7 +4,6 @@ import {
   Award,
   BarChart3,
   Bookmark,
-  BrainCircuit,
   Clock3,
   Home,
   LogOut,
@@ -18,6 +17,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -49,30 +49,21 @@ const NAV_ITEMS: { label: string; icon: LucideIcon; href: string; active?: boole
 ];
 
 const CATEGORY_DATA = [
-  { name: "증권", count: 8, color: "#17366d" },
-  { name: "경제", count: 7, color: "#3568ad" },
-  { name: "산업", count: 5, color: "#6a8fc3" },
-  { name: "정치", count: 4, color: "#b27a48" },
-  { name: "국제", count: 3, color: "#6d8b77" },
-  { name: "라이프", count: 3, color: "#a16b86" },
-  { name: "스포츠", count: 2, color: "#8e94a1" },
+  { name: "증권", count: 10, share: 54, color: "#18366f" },
+  { name: "부동산", count: 8, share: 31, color: "#ff4f89" },
+  { name: "경제", count: 6, share: 20, color: "#6756ef" },
+  { name: "생활/문화", count: 5, share: 18, color: "#1499e9" },
+  { name: "연예", count: 3, share: 13, color: "#18c2cf" },
+  { name: "한경동영상", count: 2, share: 10, color: "#ccd3e0" },
 ];
 
 const READING_TIME_DATA = [
   { label: "22~02", name: "심야 / 야간", description: "취침 전 타임 (올빼미 독자)", count: 2 },
-  { label: "02~06", name: "새벽", description: "심야 수면 / 취약 시간대", count: 3 },
-  { label: "06~10", name: "아침 / 출근", description: "얼리버드 & 출근길 뉴스러시", count: 8 },
-  { label: "10~14", name: "오전 / 점심", description: "업무 및 점심시간 핑거뉴스", count: 7 },
-  { label: "14~18", name: "오후", description: "오후 일과 & 리프레시", count: 5 },
-  { label: "18~22", name: "저녁 / 퇴근", description: "퇴근길 & 하루 정리", count: 7 },
-];
-
-const REPORTERS = [
-  { id: "1021", name: "김연지", tone: "#dce8f7" },
-  { id: "1044", name: "한경우", tone: "#e9e2d8" },
-  { id: "1087", name: "강경주", tone: "#dceadf" },
-  { id: "1120", name: "노정동", tone: "#e6e0ef" },
-  { id: "1158", name: "신현보", tone: "#e8e8df" },
+  { label: "02~06", name: "새벽", description: "심야 수면 / 취약 시간대", count: 7 },
+  { label: "06~10", name: "아침 / 출근", description: "얼리버드 & 출근길 뉴스러시", count: 10 },
+  { label: "10~14", name: "오전 / 점심", description: "업무 및 점심시간 핑거뉴스", count: 2 },
+  { label: "14~18", name: "오후", description: "오후 일과 & 리프레시", count: 2 },
+  { label: "18~22", name: "저녁 / 퇴근", description: "퇴근길 & 하루 정리", count: 0 },
 ];
 
 const ARTICLE_SEEDS: ArticleSeed[] = [
@@ -108,6 +99,8 @@ const ARTICLE_SEEDS: ArticleSeed[] = [
   { section: "라이프", title: "걷기 운동, 속도보다 중요한 것은 꾸준함" },
   { section: "스포츠", title: "월드컵 예선 명단 발표…새 얼굴 대거 합류" },
   { section: "스포츠", title: "후반기 순위 경쟁 본격화…프로야구 관전 포인트" },
+  { section: "라이프", title: "새 드라마 첫 방송 화제…배우들의 새로운 변신" },
+  { section: "산업", title: "영상으로 보는 오늘의 경제 이슈 세 가지" },
 ];
 
 const ARTICLE_URLS = [
@@ -128,7 +121,7 @@ const RECENT_ARTICLES: RecentArticle[] = ARTICLE_SEEDS.map((article, index) => (
 
 function ReadingDonut() {
   const total = CATEGORY_DATA.reduce((sum, item) => sum + item.count, 0);
-  const [activeName, setActiveName] = useState<string | null>(null);
+  const [activeName, setActiveName] = useState<string | null>(CATEGORY_DATA[0].name);
   const active = CATEGORY_DATA.find((item) => item.name === activeName);
   const segments = CATEGORY_DATA.map((item, index) => ({
     ...item,
@@ -154,24 +147,23 @@ function ReadingDonut() {
                 strokeDasharray={`${item.percentage} ${100 - item.percentage}`}
                 strokeDashoffset={-item.offset}
                 tabIndex={0}
-                aria-label={`${item.name} ${item.count}건, ${item.percentage.toFixed(1)}%`}
+                aria-label={`${item.name} ${item.count}건, ${item.share}%`}
                 onMouseEnter={() => setActiveName(item.name)}
-                onMouseLeave={() => setActiveName(null)}
+                onMouseLeave={() => setActiveName(CATEGORY_DATA[0].name)}
                 onFocus={() => setActiveName(item.name)}
-                onBlur={() => setActiveName(null)}
+                onBlur={() => setActiveName(CATEGORY_DATA[0].name)}
               />
             );
           })}
         </svg>
         <div className="reading-donut-center" aria-live="polite">
           {active ? (
-            <><strong>{active.name}</strong><span>{active.count}건 · {((active.count / total) * 100).toFixed(1)}%</span></>
+            <><strong>{active.name}</strong><span>{active.count}건 · {active.share}%</span></>
           ) : (
             <><strong>{total}건</strong><span>총 열람 기사</span></>
           )}
         </div>
       </div>
-      <p>차트에 마우스를 올리면 분야별 상세 비중을 볼 수 있습니다.</p>
     </div>
   );
 }
@@ -184,7 +176,6 @@ export default function RecentArticlesClient() {
   const [toast, setToast] = useState("");
   const visibleArticles = useMemo(() => articles.slice(0, visibleCount), [articles, visibleCount]);
   const topCategories = CATEGORY_DATA.slice(0, 5);
-  const total = CATEGORY_DATA.reduce((sum, item) => sum + item.count, 0);
   const peakReadingCount = Math.max(...READING_TIME_DATA.map((item) => item.count));
 
   useEffect(() => {
@@ -240,11 +231,27 @@ export default function RecentArticlesClient() {
             <span>2026.08.06 00:00 기준</span>
           </section>
 
-          <section className="recent-module reading-stats-module" aria-labelledby="reading-stats-title">
-            <div className="recent-module-heading">
-              <h2 id="reading-stats-title">기사 열람 현황</h2>
+          <section className="recent-module reading-ai-module" aria-labelledby="reading-ai-title">
+            <div className="ai-reading-copy">
+              <div className="ai-reading-kicker"><Sparkles size={17} /><span>AI 읽기 흐름 분석</span></div>
+              <h2 id="reading-ai-title">회원님은 <strong>여우형 독자</strong>입니다.</h2>
+              <p>여우형 독자는 관심 분야를 넓게 탐색하면서도, 특정 대상의 구체적인 소식에 집중해 정보를 꼼꼼히 살피는 특성을 보입니다. 주로 오전 시간대를 활용해 정치와 연예 분야의 주요 소식을 두루 확인하고 계십니다.</p>
+              <div className="ai-interest-list" aria-label="주요 관심사">
+                <span>주요 관심사</span>
+                <strong>정치</strong>
+                <strong>연예</strong>
+              </div>
             </div>
-            <div className="reading-category-section">
+            <div className="ai-character-wrap" aria-hidden="true">
+              <Image src="/reading-fox.png" alt="" width={300} height={300} priority />
+            </div>
+          </section>
+
+          <section className="reading-insights-grid" aria-label="기사 열람 통계">
+            <article className="recent-module reading-category-card" aria-labelledby="reading-stats-title">
+              <div className="recent-module-heading">
+                <h2 id="reading-stats-title">기사 열람 현황</h2>
+              </div>
               <div className="reading-stats-layout">
                 <ReadingDonut />
                 <ol className="top-category-list" aria-label="가장 많이 본 분야 상위 5개">
@@ -254,49 +261,30 @@ export default function RecentArticlesClient() {
                       <i style={{ background: item.color }} aria-hidden="true" />
                       <strong>{item.name}</strong>
                       <span>{item.count}건</span>
-                      <em>{((item.count / total) * 100).toFixed(1)}%</em>
+                      <em>{item.share}%</em>
                     </li>
                   ))}
                 </ol>
               </div>
-            </div>
-            <div className="reading-time-section">
-              <span className="reading-time-unit">4시간 단위</span>
+            </article>
+
+            <article className="recent-module reading-time-card" aria-labelledby="reading-time-title">
+              <div className="recent-module-heading reading-time-heading">
+                <h2 id="reading-time-title">열람 시간</h2>
+                <span>4시간 단위</span>
+              </div>
               <div className="reading-time-chart" role="img" aria-label="4시간 단위 기사 열람 건수">
                 {READING_TIME_DATA.map((item) => (
                   <div className="reading-time-column" key={item.label} aria-label={`${item.label}시, ${item.name}, ${item.description}, ${item.count}건`}>
-                    <strong>{item.count}건</strong>
-                    <span className="reading-time-bar-track" aria-hidden="true">
-                      <i style={{ height: `${(item.count / peakReadingCount) * 100}%` }} />
-                    </span>
                     <small>{item.label}</small>
+                    <span className="reading-time-bar-track" aria-hidden="true">
+                      <i style={{ width: `${(item.count / peakReadingCount) * 100}%` }} />
+                    </span>
+                    <strong>{item.count}건</strong>
                   </div>
                 ))}
               </div>
-            </div>
-          </section>
-
-          <section className="recent-module reporter-module" aria-labelledby="favorite-reporters-title">
-            <div className="recent-module-heading">
-              <h2 id="favorite-reporters-title">관심 있게 본 기자</h2>
-            </div>
-            <div className="recent-reporter-list">
-              {REPORTERS.map((reporter) => (
-                <a key={reporter.id} className="recent-reporter-button" href="https://www.hankyung.com/reporter" aria-label={`${reporter.name} 기자 기사 모아보기`}>
-                  <span className="reporter-avatar" style={{ background: reporter.tone }}>{reporter.name.slice(0, 1)}</span>
-                  <strong>{reporter.name}</strong>
-                </a>
-              ))}
-            </div>
-          </section>
-
-          <section className="recent-module reading-ai-module" aria-labelledby="reading-ai-title">
-            <div className="ai-orbit" aria-hidden="true"><BrainCircuit size={28} /><span /></div>
-            <div className="ai-reading-copy">
-              <div className="ai-reading-kicker"><Sparkles size={15} /><span>AI 읽기 흐름 분석</span></div>
-              <h2 id="reading-ai-title">회원님은 <strong>다방면 탐색형</strong> 독자입니다.</h2>
-              <p>최근 읽기 흐름을 보면 ‘다방면 탐색형’ 독자에 가깝습니다. 주요 경제 지표와 기업 동향을 따라가면서도 정치, 스포츠, 건강 정보까지 시선을 넓혀 사회 전반의 맥락을 입체적으로 살펴보는 경향이 두드러집니다. 특정 주제에 머무르기보다 여러 분야의 변화를 연결해 이해하려는 균형 잡힌 읽기 습관이 나타납니다.</p>
-            </div>
+            </article>
           </section>
 
           <section className="recent-module recent-list-module" aria-labelledby="recent-list-title">
@@ -319,7 +307,6 @@ export default function RecentArticlesClient() {
                     </div>
                     <a href={article.url}><h3>{article.title}</h3></a>
                     <p>{article.lead}</p>
-                    {article.reporter ? <small>{article.reporter} 기자</small> : null}
                   </div>
                   <button className="recent-delete-button" type="button" onClick={() => removeArticle(article)} aria-label={`${article.title} 최근 본 기사에서 삭제`}>
                     <X size={18} />
