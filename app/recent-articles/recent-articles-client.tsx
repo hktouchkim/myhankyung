@@ -17,7 +17,6 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -243,7 +242,7 @@ export default function RecentArticlesClient() {
               </div>
             </div>
             <div className="ai-character-wrap" aria-hidden="true">
-              <Image src="/reading-fox.png" alt="" width={300} height={300} priority />
+              <img src="/reading-fox.png" alt="" width="300" height="300" />
             </div>
           </section>
 
