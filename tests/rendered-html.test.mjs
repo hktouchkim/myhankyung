@@ -80,8 +80,8 @@ test("keeps the My한경 dashboard at the root URL", async () => {
   assert.match(html, /dashboard-recent-heading-link/);
   assert.match(html, /최근 본 기사<\/h2><span>23(?:<!-- -->)?건<\/span>/);
   assert.match(html, /나의 읽기 유형/);
-  assert.match(html, /아직 분석 중이에요/);
-  assert.doesNotMatch(source, /건 더 읽으면 알 수 있어요/);
+  assert.match(html, /7(?:<!-- -->)?건 더 필요해요/);
+  assert.match(source, /건 더 필요해요/);
   assert.match(html, /많이 본 분야/);
   assert.match(html, /dashboard-mini-donut/);
   assert.match(html, /증권/);
