@@ -1862,7 +1862,7 @@ function Dashboard({
               <dd>
                 {DASHBOARD_RECENT_SUMMARY.count >= DASHBOARD_RECENT_SUMMARY.analysisThreshold
                   ? DASHBOARD_RECENT_SUMMARY.readingType
-                  : `${DASHBOARD_RECENT_SUMMARY.analysisThreshold - DASHBOARD_RECENT_SUMMARY.count}건 더 읽으면 알 수 있어요`}
+                  : "아직 분석 중이에요"}
               </dd>
             </div>
             <div>
