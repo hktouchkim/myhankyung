@@ -3309,13 +3309,15 @@ p {
   font-weight: 600;
 }
 
+@media (max-width: 1120px) {
+  .reading-insights-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 860px) {
   .recent-service-frame .site-body {
     width: min(100% - 28px, 760px);
-  }
-
-  .reading-insights-grid {
-    grid-template-columns: 1fr;
   }
 
   .reading-stats-layout {

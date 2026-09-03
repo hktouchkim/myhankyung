@@ -190,6 +190,8 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   const styles = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(styles, /@keyframes fox-reading-float/);
   assert.match(styles, /animation:\s*fox-reading-float 4\.8s ease-in-out infinite/);
+  assert.match(styles, /@media \(max-width: 1120px\)\s*\{\s*\.reading-insights-grid\s*\{\s*grid-template-columns:\s*1fr;/s);
+  assert.doesNotMatch(styles, /\.top-category-list[^{}]*\{[^}]*display:\s*none/s);
 });
 
 test("keeps the My한경 dashboard modules in the requested order", async () => {
