@@ -151,13 +151,15 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   const source = await readFile(new URL("../app/recent-articles/recent-articles-client.tsx", import.meta.url), "utf8");
 
   assert.match(html, /<title>최근 본 기사 \| My한경<\/title>/i);
-  assert.match(html, /기사 열람 현황/);
+  assert.match(html, /기사 열람 분야/);
   assert.doesNotMatch(html, /관심 있게 본 기자/);
   assert.match(html, /AI 읽기 흐름 분석/);
   assert.match(html, /여우형 독자/);
   assert.match(html, /reading-fox\.png/);
-  assert.match(html, /주요 관심사/);
-  assert.match(html, /최근 본 기사 내역/);
+  assert.doesNotMatch(html, /주요 관심사/);
+  assert.match(html, /기사 열람 시간/);
+  assert.match(html, /기사 열람 내역/);
+  assert.doesNotMatch(html, /\d+건/);
   assert.match(html, /최근 3개월간 읽은 기사와 나의 뉴스 소비 패턴을 확인해보세요\./);
   assert.doesNotMatch(html, /최근 3개월의 기사 기록과 나의 읽기 흐름을 확인해보세요\./);
   assert.equal((html.match(/recent-article-item/g) ?? []).length, 20);
@@ -179,7 +181,7 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   assert.doesNotMatch(html, />[^<]+ 기자<\/small>/);
   assert.doesNotMatch(html, /최근 열람/);
   assert.doesNotMatch(source, /viewedAt|<span>\{article\.section\}<\/span>/);
-  assert.ok(html.indexOf("AI 읽기 흐름 분석") < html.indexOf("기사 열람 현황"));
+  assert.ok(html.indexOf("AI 읽기 흐름 분석") < html.indexOf("기사 열람 분야"));
   assert.match(source, /useState<string \| null>\(null\)/);
   assert.match(source, /onMouseLeave=\{\(\) => setActiveName\(null\)\}/);
 

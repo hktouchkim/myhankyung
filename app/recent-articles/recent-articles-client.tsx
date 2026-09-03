@@ -48,12 +48,12 @@ const NAV_ITEMS: { label: string; icon: LucideIcon; href: string; active?: boole
 ];
 
 const CATEGORY_DATA = [
-  { name: "증권", count: 10, share: 54, color: "#18366f" },
-  { name: "부동산", count: 8, share: 31, color: "#ff4f89" },
-  { name: "경제", count: 6, share: 20, color: "#6756ef" },
-  { name: "생활/문화", count: 5, share: 18, color: "#1499e9" },
-  { name: "연예", count: 3, share: 13, color: "#18c2cf" },
-  { name: "한경동영상", count: 2, share: 10, color: "#ccd3e0" },
+  { name: "증권", count: 10, color: "#18366f" },
+  { name: "부동산", count: 8, color: "#ff4f89" },
+  { name: "경제", count: 6, color: "#6756ef" },
+  { name: "생활/문화", count: 5, color: "#1499e9" },
+  { name: "연예", count: 3, color: "#18c2cf" },
+  { name: "한경동영상", count: 2, color: "#ccd3e0" },
 ];
 
 const READING_TIME_DATA = [
@@ -146,7 +146,7 @@ function ReadingDonut() {
                 strokeDasharray={`${item.percentage} ${100 - item.percentage}`}
                 strokeDashoffset={-item.offset}
                 tabIndex={0}
-                aria-label={`${item.name} ${item.count}건, ${item.share}%`}
+                aria-label={`${item.name} ${Math.round(item.percentage)}%`}
                 onMouseEnter={() => setActiveName(item.name)}
                 onMouseLeave={() => setActiveName(null)}
                 onFocus={() => setActiveName(item.name)}
@@ -157,9 +157,9 @@ function ReadingDonut() {
         </svg>
         <div className="reading-donut-center" aria-live="polite">
           {active ? (
-            <><strong>{active.name}</strong><span>{active.count}건 · {active.share}%</span></>
+            <><strong>{active.name}</strong><span>{Math.round((active.count / total) * 100)}%</span></>
           ) : (
-            <><strong>{total}건</strong><span>총 열람 기사</span></>
+            <><strong>전체</strong><span>100%</span></>
           )}
         </div>
       </div>
@@ -175,6 +175,8 @@ export default function RecentArticlesClient() {
   const [toast, setToast] = useState("");
   const visibleArticles = useMemo(() => articles.slice(0, visibleCount), [articles, visibleCount]);
   const topCategories = CATEGORY_DATA.slice(0, 5);
+  const totalCategoryCount = CATEGORY_DATA.reduce((sum, item) => sum + item.count, 0);
+  const totalReadingTimeCount = READING_TIME_DATA.reduce((sum, item) => sum + item.count, 0);
   const peakReadingCount = Math.max(...READING_TIME_DATA.map((item) => item.count));
 
   useEffect(() => {
@@ -235,11 +237,6 @@ export default function RecentArticlesClient() {
               <div className="ai-reading-kicker"><Sparkles size={17} /><span>AI 읽기 흐름 분석</span></div>
               <h2 id="reading-ai-title">회원님은 <strong>여우형 독자</strong>입니다.</h2>
               <p>여우형 독자는 관심 분야를 넓게 탐색하면서도, 특정 대상의 구체적인 소식에 집중해 정보를 꼼꼼히 살피는 특성을 보입니다. 주로 오전 시간대를 활용해 정치와 연예 분야의 주요 소식을 두루 확인하고 계십니다.</p>
-              <div className="ai-interest-list" aria-label="주요 관심사">
-                <span>주요 관심사</span>
-                <strong>정치</strong>
-                <strong>연예</strong>
-              </div>
             </div>
             <div className="ai-character-wrap" aria-hidden="true">
               <img src="/reading-fox.png" alt="" width="300" height="300" />
@@ -249,7 +246,7 @@ export default function RecentArticlesClient() {
           <section className="reading-insights-grid" aria-label="기사 열람 통계">
             <article className="recent-module reading-category-card" aria-labelledby="reading-stats-title">
               <div className="recent-module-heading">
-                <h2 id="reading-stats-title">기사 열람 현황</h2>
+                <h2 id="reading-stats-title">기사 열람 분야</h2>
               </div>
               <div className="reading-stats-layout">
                 <ReadingDonut />
@@ -259,8 +256,7 @@ export default function RecentArticlesClient() {
                       <span className="category-rank">{index + 1}</span>
                       <i style={{ background: item.color }} aria-hidden="true" />
                       <strong>{item.name}</strong>
-                      <span>{item.count}건</span>
-                      <em>{item.share}%</em>
+                      <em>{Math.round((item.count / totalCategoryCount) * 100)}%</em>
                     </li>
                   ))}
                 </ol>
@@ -269,34 +265,35 @@ export default function RecentArticlesClient() {
 
             <article className="recent-module reading-time-card" aria-labelledby="reading-time-title">
               <div className="recent-module-heading reading-time-heading">
-                <h2 id="reading-time-title">열람 시간</h2>
+                <h2 id="reading-time-title">기사 열람 시간</h2>
               </div>
-              <div className="reading-time-chart" aria-label="시간대별 기사 열람 건수">
-                {READING_TIME_DATA.map((item) => (
-                  <div className="reading-time-column" key={item.label} aria-label={`${item.label}시, ${item.name}, ${item.description}, ${item.count}건`}>
-                    <span
-                      className="reading-time-clock"
-                      role="img"
-                      aria-label={`${item.label}시`}
-                      title={`${item.label}시`}
-                      style={{ "--time-start": `${item.startAngle}deg` } as CSSProperties}
-                    />
-                    <span className="reading-time-bar-track" aria-hidden="true">
-                      <i style={{ width: `${(item.count / peakReadingCount) * 100}%` }} />
-                    </span>
-                    <strong>{item.count}건</strong>
-                  </div>
-                ))}
+              <div className="reading-time-chart" aria-label="시간대별 기사 열람 비율">
+                {READING_TIME_DATA.map((item) => {
+                  const share = Math.round((item.count / totalReadingTimeCount) * 100);
+
+                  return (
+                    <div className="reading-time-column" key={item.label} aria-label={`${item.label}시, ${item.name}, ${item.description}, ${share}%`}>
+                      <span
+                        className="reading-time-clock"
+                        role="img"
+                        aria-label={`${item.label}시`}
+                        title={`${item.label}시`}
+                        style={{ "--time-start": `${item.startAngle}deg` } as CSSProperties}
+                      />
+                      <span className="reading-time-bar-track" aria-hidden="true">
+                        <i style={{ width: `${(item.count / peakReadingCount) * 100}%` }} />
+                      </span>
+                      <strong>{share}%</strong>
+                    </div>
+                  );
+                })}
               </div>
             </article>
           </section>
 
           <section className="recent-module recent-list-module" aria-labelledby="recent-list-title">
             <div className="recent-module-heading recent-list-heading">
-              <h2 id="recent-list-title">최근 본 기사 내역</h2>
-              <div className="recent-list-meta">
-                <span className="module-count">{articles.length}건</span>
-              </div>
+              <h2 id="recent-list-title">기사 열람 내역</h2>
             </div>
             <div className="recent-article-list">
               {visibleArticles.map((article) => (
