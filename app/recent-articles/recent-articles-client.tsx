@@ -53,7 +53,17 @@ const CATEGORY_DATA = [
   { name: "경제", count: 6, color: "#6756ef" },
   { name: "생활/문화", count: 5, color: "#1499e9" },
   { name: "연예", count: 3, color: "#18c2cf" },
-  { name: "기타", count: 2, color: "#ccd3e0" },
+  { name: "한경동영상", count: 2, color: "#ccd3e0" },
+];
+
+const CATEGORY_LEGEND_LIMIT = 5;
+const CATEGORY_SUMMARY_DATA = [
+  ...CATEGORY_DATA.slice(0, CATEGORY_LEGEND_LIMIT),
+  {
+    name: "기타",
+    count: CATEGORY_DATA.slice(CATEGORY_LEGEND_LIMIT).reduce((sum, item) => sum + item.count, 0),
+    color: "#ccd3e0",
+  },
 ];
 
 const READING_TIME_DATA = [
@@ -119,13 +129,13 @@ const RECENT_ARTICLES: RecentArticle[] = ARTICLE_SEEDS.map((article, index) => (
 }));
 
 function ReadingDonut() {
-  const total = CATEGORY_DATA.reduce((sum, item) => sum + item.count, 0);
+  const total = CATEGORY_SUMMARY_DATA.reduce((sum, item) => sum + item.count, 0);
   const [activeName, setActiveName] = useState<string | null>(null);
-  const active = CATEGORY_DATA.find((item) => item.name === activeName);
-  const segments = CATEGORY_DATA.map((item, index) => ({
+  const active = CATEGORY_SUMMARY_DATA.find((item) => item.name === activeName);
+  const segments = CATEGORY_SUMMARY_DATA.map((item, index) => ({
     ...item,
     percentage: (item.count / total) * 100,
-    offset: (CATEGORY_DATA.slice(0, index).reduce((sum, previous) => sum + previous.count, 0) / total) * 100,
+    offset: (CATEGORY_SUMMARY_DATA.slice(0, index).reduce((sum, previous) => sum + previous.count, 0) / total) * 100,
   }));
 
   return (
@@ -174,8 +184,8 @@ export default function RecentArticlesClient() {
   const [removingId, setRemovingId] = useState<string | null>(null);
   const [toast, setToast] = useState("");
   const visibleArticles = useMemo(() => articles.slice(0, visibleCount), [articles, visibleCount]);
-  const topCategories = CATEGORY_DATA.slice(0, 6);
-  const totalCategoryCount = CATEGORY_DATA.reduce((sum, item) => sum + item.count, 0);
+  const topCategories = CATEGORY_SUMMARY_DATA;
+  const totalCategoryCount = CATEGORY_SUMMARY_DATA.reduce((sum, item) => sum + item.count, 0);
   const totalReadingTimeCount = READING_TIME_DATA.reduce((sum, item) => sum + item.count, 0);
   const peakReadingCount = Math.max(...READING_TIME_DATA.map((item) => item.count));
 
@@ -251,9 +261,8 @@ export default function RecentArticlesClient() {
               <div className="reading-stats-layout">
                 <ReadingDonut />
                 <ol className="top-category-list" aria-label="가장 많이 본 분야 상위 6개">
-                  {topCategories.map((item, index) => (
+                  {topCategories.map((item) => (
                     <li key={item.name}>
-                      <span className="category-rank">{index + 1}</span>
                       <i style={{ background: item.color }} aria-hidden="true" />
                       <strong>{item.name}</strong>
                       <em className="category-share">{Math.round((item.count / totalCategoryCount) * 100)}%</em>

@@ -3063,19 +3063,13 @@ p {
   min-height: 39px;
   align-items: center;
   border-bottom: 1px solid #eeeeef;
-  grid-template-columns: 23px 9px minmax(0, 1fr) 43px;
+  grid-template-columns: 9px minmax(0, 1fr) 43px;
   gap: 7px;
   font-size: 14px;
 }
 
 .top-category-list li:last-child {
   border-bottom: 0;
-}
-
-.category-rank {
-  color: #969ba3;
-  font-size: 12px;
-  font-weight: 800;
 }
 
 .top-category-list i {

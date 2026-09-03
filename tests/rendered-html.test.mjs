@@ -166,7 +166,8 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   assert.match(html, /기사 열람 내역/);
   assert.match(html, /class="category-share">29(?:<!-- -->)?%/);
   assert.match(html, /가장 많이 본 분야 상위 6개/);
-  assert.match(html, />6<\/span><i[^>]+><\/i><strong>기타<\/strong>/);
+  assert.match(html, /<i[^>]+><\/i><strong>기타<\/strong>/);
+  assert.doesNotMatch(html, /category-rank/);
   assert.equal((html.match(/34(?:<!-- -->)?건/g) ?? []).length, 2);
   assert.match(source, /active\.count\}건 · \{Math\.round/);
   assert.match(html, /최근 3개월간 읽은 기사와 나의 뉴스 소비 패턴을 확인해보세요\./);
@@ -199,6 +200,7 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   assert.match(styles, /animation:\s*fox-reading-float 4\.8s ease-in-out infinite/);
   assert.match(styles, /\.ai-character-wrap\s*\{[^}]*width:\s*176px;[^}]*height:\s*176px;/s);
   assert.match(styles, /\.top-category-list li\s*\{[^}]*font-size:\s*14px;/s);
+  assert.doesNotMatch(styles, /\.category-rank/);
   assert.match(styles, /@media \(max-width: 1120px\)\s*\{\s*\.reading-insights-grid\s*\{\s*grid-template-columns:\s*1fr;/s);
   assert.doesNotMatch(styles, /\.top-category-list[^{}]*\{[^}]*display:\s*none/s);
 });
