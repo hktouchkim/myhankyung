@@ -1440,7 +1440,8 @@ p {
 }
 
 .dashboard-recent-stats > div {
-  padding: 11px 13px;
+  min-height: 78px;
+  padding: 13px;
   border-radius: 11px;
   background: #f5f6f8;
 }
@@ -1456,9 +1457,44 @@ p {
 }
 
 .dashboard-recent-stats dd {
-  margin-top: 2px;
+  margin-top: 7px;
   font-size: 15px;
   font-weight: 800;
+}
+
+.dashboard-top-category {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dashboard-top-category-share {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 7px;
+}
+
+.dashboard-top-category-share strong {
+  font: inherit;
+}
+
+.dashboard-mini-donut {
+  position: relative;
+  width: 27px;
+  height: 27px;
+  flex: 0 0 27px;
+  border-radius: 50%;
+  background: conic-gradient(#111 0 var(--dashboard-share), #d9dadd var(--dashboard-share) 100%);
+}
+
+.dashboard-mini-donut::after {
+  position: absolute;
+  inset: 4px;
+  border-radius: inherit;
+  background: #f5f6f8;
+  content: "";
 }
 
 .dashboard-recent-list {

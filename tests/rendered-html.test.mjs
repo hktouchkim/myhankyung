@@ -78,12 +78,14 @@ test("keeps the My한경 dashboard at the root URL", async () => {
   assert.match(html, /미국 증시/);
   assert.match(html, /2026년 8월 18일 오전 브리핑입니다/);
   assert.match(html, /dashboard-recent-heading-link/);
-  assert.match(html, /최근 본 기사<\/h2><span>32(?:<!-- -->)?건<\/span>/);
+  assert.match(html, /최근 본 기사<\/h2><span>23(?:<!-- -->)?건<\/span>/);
   assert.match(html, /나의 읽기 유형/);
-  assert.match(html, /여우형 독자/);
-  assert.match(source, /분석까지 \$\{DASHBOARD_RECENT_SUMMARY\.analysisThreshold - DASHBOARD_RECENT_SUMMARY\.count\}건 남았어요/);
+  assert.match(html, /7(?:<!-- -->)?건 더 읽으면 알 수 있어요/);
+  assert.match(source, /건 더 읽으면 알 수 있어요/);
   assert.match(html, /많이 본 분야/);
-  assert.match(html, /증권 25%/);
+  assert.match(html, /dashboard-mini-donut/);
+  assert.match(html, /증권/);
+  assert.match(html, /54(?:<!-- -->)?%/);
   assert.equal((html.match(/dashboard-recent-item/g) ?? []).length, 6);
   assert.match(html, /2026\.08\.18 09:29/);
   assert.match(html, /보유 배지/);

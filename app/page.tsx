@@ -35,7 +35,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 
 type Stock = {
   id: string;
@@ -741,10 +741,11 @@ const DASHBOARD_RECENT_ARTICLES = [
 ];
 
 const DASHBOARD_RECENT_SUMMARY = {
-  count: 32,
+  count: 23,
   analysisThreshold: 30,
   readingType: "여우형 독자",
-  topCategory: "증권 25%",
+  topCategory: "증권",
+  topCategoryShare: 54,
 };
 
 const DEFAULT_ALERTS: AlertSettings = {
@@ -1861,12 +1862,22 @@ function Dashboard({
               <dd>
                 {DASHBOARD_RECENT_SUMMARY.count >= DASHBOARD_RECENT_SUMMARY.analysisThreshold
                   ? DASHBOARD_RECENT_SUMMARY.readingType
-                  : `분석까지 ${DASHBOARD_RECENT_SUMMARY.analysisThreshold - DASHBOARD_RECENT_SUMMARY.count}건 남았어요`}
+                  : `${DASHBOARD_RECENT_SUMMARY.analysisThreshold - DASHBOARD_RECENT_SUMMARY.count}건 더 읽으면 알 수 있어요`}
               </dd>
             </div>
             <div>
               <dt>많이 본 분야</dt>
-              <dd>{DASHBOARD_RECENT_SUMMARY.topCategory}</dd>
+              <dd className="dashboard-top-category">
+                <span>{DASHBOARD_RECENT_SUMMARY.topCategory}</span>
+                <span className="dashboard-top-category-share" aria-label={`${DASHBOARD_RECENT_SUMMARY.topCategoryShare}%`}>
+                  <span
+                    className="dashboard-mini-donut"
+                    style={{ "--dashboard-share": `${DASHBOARD_RECENT_SUMMARY.topCategoryShare}%` } as CSSProperties}
+                    aria-hidden="true"
+                  />
+                  <strong>{DASHBOARD_RECENT_SUMMARY.topCategoryShare}%</strong>
+                </span>
+              </dd>
             </div>
           </dl>
           <ul className="dashboard-recent-list" aria-label="최근 본 기사 목록">
