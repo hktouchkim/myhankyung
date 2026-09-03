@@ -740,6 +740,13 @@ const DASHBOARD_RECENT_ARTICLES = [
   },
 ];
 
+const DASHBOARD_RECENT_SUMMARY = {
+  count: 32,
+  analysisThreshold: 30,
+  readingType: "여우형 독자",
+  topCategory: "증권 25%",
+};
+
 const DEFAULT_ALERTS: AlertSettings = {
   article: true,
   report: true,
@@ -1842,6 +1849,7 @@ function Dashboard({
             <a className="title-with-icon dashboard-recent-heading-link" href="/recent-articles">
               <Clock3 size={22} />
               <h2>최근 본 기사</h2>
+              <span>{DASHBOARD_RECENT_SUMMARY.count}건</span>
             </a>
             <button type="button" onClick={onOpenRecent} aria-label="최근 본 기사 전체보기">
               <ChevronRight size={20} />
@@ -1849,12 +1857,16 @@ function Dashboard({
           </div>
           <dl className="dashboard-recent-stats" aria-label="최근 본 기사 요약 통계">
             <div>
-              <dt>최근 3개월</dt>
-              <dd>32건</dd>
+              <dt>나의 읽기 유형</dt>
+              <dd>
+                {DASHBOARD_RECENT_SUMMARY.count >= DASHBOARD_RECENT_SUMMARY.analysisThreshold
+                  ? DASHBOARD_RECENT_SUMMARY.readingType
+                  : `분석까지 ${DASHBOARD_RECENT_SUMMARY.analysisThreshold - DASHBOARD_RECENT_SUMMARY.count}건 남았어요`}
+              </dd>
             </div>
             <div>
               <dt>많이 본 분야</dt>
-              <dd>증권 25%</dd>
+              <dd>{DASHBOARD_RECENT_SUMMARY.topCategory}</dd>
             </div>
           </dl>
           <ul className="dashboard-recent-list" aria-label="최근 본 기사 목록">
