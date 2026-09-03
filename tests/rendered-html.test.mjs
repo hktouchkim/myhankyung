@@ -159,7 +159,9 @@ test("server-renders the My한경 최근 본 기사 experience", async () => {
   assert.doesNotMatch(html, /주요 관심사/);
   assert.match(html, /기사 열람 시간/);
   assert.match(html, /기사 열람 내역/);
-  assert.doesNotMatch(html, /\d+건/);
+  assert.match(html, /class="category-share">29(?:<!-- -->)?%/);
+  assert.equal((html.match(/34(?:<!-- -->)?건/g) ?? []).length, 2);
+  assert.match(source, /active\.count\}건 · \{Math\.round/);
   assert.match(html, /최근 3개월간 읽은 기사와 나의 뉴스 소비 패턴을 확인해보세요\./);
   assert.doesNotMatch(html, /최근 3개월의 기사 기록과 나의 읽기 흐름을 확인해보세요\./);
   assert.equal((html.match(/recent-article-item/g) ?? []).length, 20);

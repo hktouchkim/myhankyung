@@ -157,9 +157,9 @@ function ReadingDonut() {
         </svg>
         <div className="reading-donut-center" aria-live="polite">
           {active ? (
-            <><strong>{active.name}</strong><span>{Math.round((active.count / total) * 100)}%</span></>
+            <><strong>{active.name}</strong><span>{active.count}건 · {Math.round((active.count / total) * 100)}%</span></>
           ) : (
-            <><strong>전체</strong><span>100%</span></>
+            <><strong>{total}건</strong><span>총 열람 기사</span></>
           )}
         </div>
       </div>
@@ -256,7 +256,7 @@ export default function RecentArticlesClient() {
                       <span className="category-rank">{index + 1}</span>
                       <i style={{ background: item.color }} aria-hidden="true" />
                       <strong>{item.name}</strong>
-                      <em>{Math.round((item.count / totalCategoryCount) * 100)}%</em>
+                      <em className="category-share">{Math.round((item.count / totalCategoryCount) * 100)}%</em>
                     </li>
                   ))}
                 </ol>
@@ -294,6 +294,9 @@ export default function RecentArticlesClient() {
           <section className="recent-module recent-list-module" aria-labelledby="recent-list-title">
             <div className="recent-module-heading recent-list-heading">
               <h2 id="recent-list-title">기사 열람 내역</h2>
+              <div className="recent-list-meta">
+                <span className="module-count">{articles.length}건</span>
+              </div>
             </div>
             <div className="recent-article-list">
               {visibleArticles.map((article) => (
