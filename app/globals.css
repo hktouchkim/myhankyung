@@ -3065,7 +3065,7 @@ p {
   border-bottom: 1px solid #eeeeef;
   grid-template-columns: 23px 9px minmax(0, 1fr) 43px;
   gap: 7px;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .top-category-list li:last-child {
@@ -3074,7 +3074,7 @@ p {
 
 .category-rank {
   color: #969ba3;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -3097,11 +3097,11 @@ p {
   position: relative;
   display: grid;
   overflow: hidden;
-  min-height: 276px;
-  padding: 41px 45px;
+  min-height: 232px;
+  padding: 30px 40px;
   align-items: center;
-  grid-template-columns: minmax(0, 1fr) 245px;
-  gap: 34px;
+  grid-template-columns: minmax(0, 1fr) 190px;
+  gap: 30px;
   border-color: #d9dce1;
   background: #fff;
 }
@@ -3122,8 +3122,8 @@ p {
   position: relative;
   z-index: 1;
   display: flex;
-  width: 224px;
-  height: 224px;
+  width: 176px;
+  height: 176px;
   align-items: center;
   justify-content: center;
   border: 1px solid #d7dbe4;
@@ -3381,8 +3381,8 @@ p {
   }
 
   .ai-character-wrap {
-    width: 170px;
-    height: 170px;
+    width: 150px;
+    height: 150px;
     margin: 0 auto;
     grid-row: 1;
   }
