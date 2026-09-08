@@ -2802,12 +2802,12 @@ p {
 }
 
 .recent-service-frame .site-body {
-  width: min(1232px, calc(100% - 48px));
-  grid-template-columns: 194px minmax(0, 1000px);
+  width: min(1082px, calc(100% - 48px));
+  grid-template-columns: 194px minmax(0, 850px);
 }
 
 .recent-main {
-  max-width: 1000px;
+  max-width: 850px;
 }
 
 .recent-page-titlebar {
