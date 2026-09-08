@@ -2858,15 +2858,15 @@ p {
 
 .reading-stats-layout {
   display: grid;
-  grid-template-columns: minmax(250px, 0.9fr) minmax(280px, 1.1fr);
-  gap: 22px;
-  margin-top: 22px;
-  align-items: stretch;
+  grid-template-columns: minmax(170px, 0.95fr) minmax(200px, 1.05fr);
+  gap: 16px;
+  margin-top: 20px;
+  align-items: center;
 }
 
 .reading-insights-grid {
   display: grid;
-  grid-template-columns: minmax(0, 2.08fr) minmax(255px, 0.92fr);
+  grid-template-columns: minmax(0, 1.8fr) minmax(255px, 1.2fr);
   gap: 14px;
   margin-bottom: 14px;
 }
@@ -2877,11 +2877,11 @@ p {
 }
 
 .reading-category-card {
-  padding: 30px 33px;
+  padding: 24px 20px;
 }
 
 .reading-time-card {
-  padding: 30px 31px;
+  padding: 24px 22px;
 }
 
 .reading-time-heading {
@@ -2973,8 +2973,8 @@ p {
 
 .reading-donut {
   position: relative;
-  width: 180px;
-  height: 180px;
+  width: 154px;
+  height: 154px;
 }
 
 .reading-donut svg {
@@ -2988,7 +2988,7 @@ p {
 .reading-donut-track,
 .reading-donut-segment {
   fill: none;
-  stroke-width: 24;
+  stroke-width: 20;
 }
 
 .reading-donut-track {
@@ -3002,7 +3002,7 @@ p {
 
 .reading-donut-segment:hover,
 .reading-donut-segment:focus {
-  stroke-width: 29;
+  stroke-width: 25;
   outline: none;
 }
 
@@ -3016,7 +3016,7 @@ p {
 
 .reading-donut-center {
   position: absolute;
-  inset: 45px;
+  inset: 38px;
   display: flex;
   align-items: center;
   flex-direction: column;
