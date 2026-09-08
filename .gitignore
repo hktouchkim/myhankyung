@@ -40,3 +40,9 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+
+# project specific temporary and intermediate data
+/bridge/
+/.artifact-work-festival/
+/.pnpm-store/
+.tmp_fetch_festival_api.mjs

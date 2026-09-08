@@ -3,24 +3,16 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function render(path = "/") {
-  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
-  const { default: worker } = await import(workerUrl.href);
+  const filePath = path === "/" 
+    ? new URL("../.next/server/app/index.html", import.meta.url)
+    : new URL(`../.next/server/app${path}.html`, import.meta.url);
 
-  return worker.fetch(
-    new Request(`http://localhost${path}`, {
-      headers: { accept: "text/html" },
-    }),
-    {
-      ASSETS: {
-        fetch: async () => new Response("Not found", { status: 404 }),
-      },
-    },
-    {
-      waitUntil() {},
-      passThroughOnException() {},
-    },
-  );
+  const html = await readFile(filePath, "utf8");
+  return {
+    status: 200,
+    headers: new Headers({ "content-type": "text/html; charset=utf-8" }),
+    text: async () => html,
+  };
 }
 
 test("server-renders the My한경 관심종목 experience", async () => {
