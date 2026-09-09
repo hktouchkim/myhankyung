@@ -1359,16 +1359,17 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
     showToast(`${stock.name}을(를) 관심종목에서 해제했습니다.`);
   };
 
-  const moveStockInSelectedGroup = (index: number, direction: "up" | "down") => {
+  const [draggedStockIndex, setDraggedStockIndex] = useState<number | null>(null);
+  const [dragOverStockIndex, setDragOverStockIndex] = useState<number | null>(null);
+
+  const reorderStocksInSelectedGroup = (fromIndex: number, toIndex: number) => {
+    if (fromIndex === toIndex) return;
     const targetGroup = groups.find((g) => g.id === selectedGroupId);
     if (!targetGroup) return;
-    const targetIndex = direction === "up" ? index - 1 : index + 1;
-    if (targetIndex < 0 || targetIndex >= targetGroup.stockIds.length) return;
 
     const nextStockIds = [...targetGroup.stockIds];
-    const temp = nextStockIds[index];
-    nextStockIds[index] = nextStockIds[targetIndex];
-    nextStockIds[targetIndex] = temp;
+    const [moved] = nextStockIds.splice(fromIndex, 1);
+    nextStockIds.splice(toIndex, 0, moved);
 
     setGroups((current) =>
       current.map((g) =>
@@ -1448,9 +1449,14 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                   <p>관심 있는 종목의 흐름과 한경의 기사·리포트를 한곳에서 확인하세요.</p>
                 </div>
                 <div className="page-actions">
-                  <button className="button action-control-button" type="button" onClick={openAlertsDialog}>
+                  <button
+                    className="button action-control-button icon-only-action-btn"
+                    type="button"
+                    onClick={openAlertsDialog}
+                    aria-label="알림 관리"
+                    title="알림 관리"
+                  >
                     <Bell size={18} />
-                    알림 관리
                   </button>
                 </div>
               </div>
@@ -1484,26 +1490,29 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 </div>
               </section>
 
-              {/* 종목 리스트 툴바 (개수 표시 + 동일 규격 액션 버튼들) */}
+              {/* 종목 리스트 툴바 (개수 표시 + 슬라이더 토글 스위치 + 종목추가) */}
               <div className="stock-list-toolbar">
                 <div className="stock-list-status">
                   <span className="stock-list-count">총 {selectedGroupStocks.length}개 종목</span>
                 </div>
                 <div className="stock-list-actions">
-                  <button
-                    type="button"
-                    className={`stock-toolbar-btn stock-ai-toggle-btn ${expandAllIssues ? "active" : ""}`}
-                    onClick={() => {
-                      const next = !expandAllIssues;
-                      setExpandAllIssues(next);
-                      setIssueOverrides({});
-                    }}
-                    aria-label={`AI 포인트 뷰 일괄 ${expandAllIssues ? "접기" : "펼치기"}`}
-                    title={`AI 포인트 뷰 일괄 ${expandAllIssues ? "접기" : "펼치기"}`}
-                  >
-                    <Sparkles size={15} className="sparkle-icon" />
-                    <span>AI 포인트 뷰</span>
-                  </button>
+                  <label className="ai-point-toggle-control" title="모든 종목의 AI 포인트 뷰 및 리포트 일괄 켜기/끄기">
+                    <input
+                      type="checkbox"
+                      checked={expandAllIssues}
+                      onChange={(e) => {
+                        const next = e.target.checked;
+                        setExpandAllIssues(next);
+                        setIssueOverrides({});
+                      }}
+                      aria-label="AI 포인트 뷰 일괄 표시 토글"
+                    />
+                    <span className="ai-point-toggle-slider" />
+                    <span className="ai-point-toggle-label">
+                      <Sparkles size={14} className="sparkle-icon" />
+                      AI 포인트 뷰
+                    </span>
+                  </label>
                   <button
                     className="stock-toolbar-btn stock-add-btn"
                     type="button"
@@ -1523,11 +1532,11 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       <table className="stock-market-table" aria-label={`${selectedGroup.name} 종목 시세표`}>
                         <thead>
                           <tr>
+                            <th scope="col" className="col-drag" aria-label="순서 이동"><span className="sr-only">순서</span></th>
                             <th scope="col" className="col-stock-name">종목명</th>
                             <th scope="col" className="col-price">현재가</th>
                             <th scope="col" className="col-change">등락폭</th>
                             <th scope="col" className="col-rate">등락률</th>
-                            <th scope="col" className="col-order">순서</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1541,6 +1550,9 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             const displayPrice = stock.currency === "USD" ? stock.price : `${stock.price}원`;
                             const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
 
+                            const isDragging = draggedStockIndex === index;
+                            const isDragOver = dragOverStockIndex === index;
+
                             const toggleRow = () => {
                               if (hasSubContent) {
                                 setIssueOverrides((prev) => ({
@@ -1553,10 +1565,49 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             return (
                               <React.Fragment key={stock.id}>
                                 <tr
-                                  className={`stock-clickable-row ${isExpanded ? "stock-row-expanded" : ""}`}
+                                  className={`stock-clickable-row ${isExpanded ? "stock-row-expanded" : ""} ${isDragging ? "stock-row-dragging" : ""} ${isDragOver ? "stock-row-dragover" : ""}`}
                                   onClick={toggleRow}
+                                  draggable
+                                  onDragStart={(e) => {
+                                    setDraggedStockIndex(index);
+                                    e.dataTransfer.effectAllowed = "move";
+                                    e.dataTransfer.setData("text/plain", `${index}`);
+                                  }}
+                                  onDragOver={(e) => {
+                                    e.preventDefault();
+                                    e.dataTransfer.dropEffect = "move";
+                                    if (dragOverStockIndex !== index) {
+                                      setDragOverStockIndex(index);
+                                    }
+                                  }}
+                                  onDragLeave={() => {
+                                    if (dragOverStockIndex === index) {
+                                      setDragOverStockIndex(null);
+                                    }
+                                  }}
+                                  onDrop={(e) => {
+                                    e.preventDefault();
+                                    if (draggedStockIndex !== null && draggedStockIndex !== index) {
+                                      reorderStocksInSelectedGroup(draggedStockIndex, index);
+                                    }
+                                    setDraggedStockIndex(null);
+                                    setDragOverStockIndex(null);
+                                  }}
+                                  onDragEnd={() => {
+                                    setDraggedStockIndex(null);
+                                    setDragOverStockIndex(null);
+                                  }}
                                   title={hasSubContent ? `${stock.name} 상세 정보 ${isExpanded ? "접기" : "펼치기"}` : undefined}
                                 >
+                                  <td className="col-drag-cell">
+                                    <div
+                                      className="stock-drag-handle"
+                                      title="드래그하여 순서 변경"
+                                      aria-label={`${stock.name} 드래그하여 순서 변경`}
+                                    >
+                                      <GripVertical size={16} />
+                                    </div>
+                                  </td>
                                   <td>
                                     <div className="stock-table-name-cell">
                                       <button
@@ -1605,30 +1656,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                     {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : "−"} {displayChange}
                                   </td>
                                   <td className={`stock-number-${direction}`}>{formatRate(stock.rate)}</td>
-                                  <td className="col-order-cell">
-                                    <div className="stock-order-actions" onClick={(e) => e.stopPropagation()}>
-                                      <button
-                                        type="button"
-                                        className="stock-order-btn"
-                                        disabled={index === 0}
-                                        onClick={() => moveStockInSelectedGroup(index, "up")}
-                                        aria-label={`${stock.name} 위로 이동`}
-                                        title="위로 이동"
-                                      >
-                                        <ChevronUp size={14} />
-                                      </button>
-                                      <button
-                                        type="button"
-                                        className="stock-order-btn"
-                                        disabled={index === selectedGroupStocks.length - 1}
-                                        onClick={() => moveStockInSelectedGroup(index, "down")}
-                                        aria-label={`${stock.name} 아래로 이동`}
-                                        title="아래로 이동"
-                                      >
-                                        <ChevronDown size={14} />
-                                      </button>
-                                    </div>
-                                  </td>
                                 </tr>
                                 {isExpanded ? (
                                   <tr className="stock-market-table-card-row">
@@ -1729,6 +1756,9 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         const isExpanded = hasSubContent && (issueOverrides[stock.id] ?? expandAllIssues);
                         const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
 
+                        const isDragging = draggedStockIndex === index;
+                        const isDragOver = dragOverStockIndex === index;
+
                         const toggleCard = () => {
                           if (hasSubContent) {
                             setIssueOverrides((prev) => ({
@@ -1741,11 +1771,48 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         return (
                           <article
                             key={stock.id}
-                            className={`stock-mobile-card stock-mobile-clickable ${isExpanded ? "stock-mobile-card-expanded" : ""}`}
+                            className={`stock-mobile-card stock-mobile-clickable ${isExpanded ? "stock-mobile-card-expanded" : ""} ${isDragging ? "stock-row-dragging" : ""} ${isDragOver ? "stock-row-dragover" : ""}`}
                             onClick={toggleCard}
+                            draggable
+                            onDragStart={(e) => {
+                              setDraggedStockIndex(index);
+                              e.dataTransfer.effectAllowed = "move";
+                              e.dataTransfer.setData("text/plain", `${index}`);
+                            }}
+                            onDragOver={(e) => {
+                              e.preventDefault();
+                              e.dataTransfer.dropEffect = "move";
+                              if (dragOverStockIndex !== index) {
+                                setDragOverStockIndex(index);
+                              }
+                            }}
+                            onDragLeave={() => {
+                              if (dragOverStockIndex === index) {
+                                setDragOverStockIndex(null);
+                              }
+                            }}
+                            onDrop={(e) => {
+                              e.preventDefault();
+                              if (draggedStockIndex !== null && draggedStockIndex !== index) {
+                                reorderStocksInSelectedGroup(draggedStockIndex, index);
+                              }
+                              setDraggedStockIndex(null);
+                              setDragOverStockIndex(null);
+                            }}
+                            onDragEnd={() => {
+                              setDraggedStockIndex(null);
+                              setDragOverStockIndex(null);
+                            }}
                           >
                             <div className="stock-mobile-heading">
                               <div className="stock-identity">
+                                <div
+                                  className="stock-drag-handle stock-drag-handle-mobile"
+                                  title="드래그하여 순서 변경"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <GripVertical size={16} />
+                                </div>
                                 <button
                                   type="button"
                                   className="stock-favorite-toggle-button active"
@@ -1786,29 +1853,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                   </span>
                                 </div>
                               </div>
-                              <div className="stock-mobile-actions" onClick={(e) => e.stopPropagation()}>
-                                <div className="stock-order-actions-mobile">
-                                  <button
-                                    type="button"
-                                    className="stock-order-btn"
-                                    disabled={index === 0}
-                                    onClick={() => moveStockInSelectedGroup(index, "up")}
-                                    aria-label={`${stock.name} 위로 이동`}
-                                    title="위로 이동"
-                                  >
-                                    <ChevronUp size={16} />
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="stock-order-btn"
-                                    disabled={index === selectedGroupStocks.length - 1}
-                                    onClick={() => moveStockInSelectedGroup(index, "down")}
-                                    aria-label={`${stock.name} 아래로 이동`}
-                                    title="아래로 이동"
-                                  >
-                                    <ChevronDown size={16} />
-                                  </button>
-                                </div>
+                              <div className="stock-mobile-actions">
                                 <Movement stock={stock} />
                               </div>
                             </div>

@@ -728,10 +728,99 @@ p {
   font-weight: 700;
 }
 
+/* 아이콘 전용 액션 버튼 (알림 관리 등) */
+.button.action-control-button.icon-only-action-btn {
+  width: 42px;
+  min-width: 42px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* AI 포인트 뷰 정통 토글 스위치 */
+.ai-point-toggle-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  padding: 5px 12px 5px 6px;
+  border-radius: 9999px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  transition: all 140ms ease;
+}
+
+.ai-point-toggle-control:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.ai-point-toggle-control input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ai-point-toggle-slider {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+  background-color: #94a3b8;
+  border-radius: 9999px;
+  transition: background-color 160ms ease;
+  flex-shrink: 0;
+}
+
+.ai-point-toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  transition: transform 160ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.ai-point-toggle-control input:checked + .ai-point-toggle-slider {
+  background-color: #0f2c59;
+}
+
+.ai-point-toggle-control input:checked + .ai-point-toggle-slider::before {
+  transform: translateX(14px);
+}
+
+.ai-point-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.ai-point-toggle-label .sparkle-icon {
+  color: #f59e0b;
+}
+
+.stock-market-table th.col-drag,
+.stock-market-table td.col-drag-cell {
+  width: 32px;
+  min-width: 32px;
+  padding: 13px 4px 13px 10px;
+  text-align: center;
+}
+
 /* 열 너비 재조정 (지표간 거리 좁혀 가독성 극대화) */
 .stock-market-table th.col-stock-name,
-.stock-market-table td:first-child {
-  width: 38%;
+.stock-market-table td:nth-child(2) {
+  width: 44%;
   text-align: left;
 }
 
@@ -746,14 +835,7 @@ p {
 }
 
 .stock-market-table th.col-rate {
-  width: 15%;
-}
-
-.stock-market-table th.col-order,
-.stock-market-table td.col-order-cell {
-  width: 8%;
-  text-align: center;
-  padding: 8px 4px;
+  width: 17%;
 }
 
 .stock-market-table td {
@@ -761,51 +843,39 @@ p {
   font-size: 14px;
 }
 
-/* 순서 변경 버튼 */
-.stock-order-actions {
+/* 드래그 앤 드롭 핸들 및 상태 스타일 */
+.stock-drag-handle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-}
-
-.stock-order-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border: 1px solid #e2e8f0;
+  color: #94a3b8;
+  cursor: grab;
+  padding: 4px;
   border-radius: 4px;
-  background: #ffffff;
-  color: #64748b;
-  cursor: pointer;
-  transition: all 120ms ease;
-  padding: 0;
+  transition: color 120ms ease, background 120ms ease;
 }
 
-.stock-order-btn:hover:not(:disabled) {
-  background: #f1f5f9;
+.stock-drag-handle:active {
+  cursor: grabbing;
+}
+
+.stock-drag-handle:hover {
   color: #0f2c59;
-  border-color: #cbd5e1;
+  background: #f1f5f9;
 }
 
-.stock-order-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  background: #f8fafc;
+.stock-drag-handle-mobile {
+  margin-right: 4px;
 }
 
-.stock-order-actions-mobile {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-right: 6px;
+.stock-row-dragging {
+  opacity: 0.45;
+  background: #f1f5f9 !important;
 }
 
-.stock-order-actions-mobile .stock-order-btn {
-  width: 28px;
-  height: 28px;
+.stock-row-dragover {
+  border-top: 2px solid #0f2c59 !important;
+  background: #f8fafc !important;
 }
 
 /* 행 클릭 인터랙션 */
