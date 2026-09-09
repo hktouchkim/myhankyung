@@ -512,61 +512,47 @@ p {
   font-size: 14px;
 }
 
-/* 관심그룹 전용 모듈 카드 (컨테이너) */
+/* 관심종목 모듈 패딩 제거 및 클린 래퍼화 */
+.stock-list-panel {
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  margin-top: 0 !important;
+}
+
+/* 관심그룹 전용 모듈 카드 (공간 절약형 클린 디자인) */
 .group-module-card {
-  margin-bottom: 20px;
-  padding: 16px 20px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
   border: 1px solid var(--line-soft);
-  border-radius: 14px;
+  border-radius: 12px;
   background: #ffffff;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
 }
 
-.group-module-header {
+.group-module-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  gap: 12px;
 }
 
-.group-module-title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.group-module-badge {
-  font-size: 14px;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.01em;
-}
-
-.group-module-count {
-  font-size: 12px;
-  font-weight: 600;
-  color: #64748b;
-  background: #f1f5f9;
-  padding: 2px 7px;
-  border-radius: 10px;
-}
-
-.group-manage-btn {
+.group-manage-icon-btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 5px 11px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #475569;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 8px;
   background: #f8fafc;
   border: 1px solid #cbd5e1;
-  border-radius: 6px;
+  color: #475569;
   cursor: pointer;
   transition: all 120ms ease;
 }
 
-.group-manage-btn:hover {
+.group-manage-icon-btn:hover {
   background: #f1f5f9;
   color: #0f172a;
   border-color: #94a3b8;
@@ -575,7 +561,7 @@ p {
 .group-tabs {
   display: flex;
   min-width: 0;
-  width: 100%;
+  flex: 1;
   max-height: 94px;
   flex-wrap: wrap;
   align-content: flex-start;
@@ -586,11 +572,11 @@ p {
 
 .group-tab {
   display: inline-flex;
-  min-height: 38px;
-  padding: 0 14px;
+  min-height: 36px;
+  padding: 0 12px;
   flex: 0 0 auto;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   border: 1px solid #e2e8f0;
   border-radius: 999px;
   background: #f8fafc;
@@ -608,9 +594,9 @@ p {
 
 .group-tab em {
   display: flex;
-  min-width: 19px;
-  height: 19px;
-  padding: 0 5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
@@ -631,13 +617,13 @@ p {
   color: #fff !important;
 }
 
-/* 종목 리스트 툴바 (스위치 + 종목추가) */
+/* 종목 리스트 툴바 (개수 표시 + 동일 규격 액션 버튼들) */
 .stock-list-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
-  padding: 0 4px;
+  margin-bottom: 10px;
+  padding: 0 2px;
   flex-wrap: wrap;
   gap: 12px;
 }
@@ -645,45 +631,71 @@ p {
 .stock-list-status {
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.stock-list-current-group {
-  font-size: 16px;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.02em;
+  gap: 6px;
 }
 
 .stock-list-count {
-  font-size: 13px;
-  font-weight: 600;
-  color: #64748b;
+  font-size: 14px;
+  font-weight: 700;
+  color: #475569;
 }
 
 .stock-list-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
-.stock-add-btn {
+/* 툴바 버튼 규격 통일 (동일 높이, 동일 패딩, 동일 폰트) */
+.stock-toolbar-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 8px 14px;
+  height: 34px;
+  padding: 0 12px;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 700;
+  cursor: pointer;
+  transition: all 140ms ease;
+  white-space: nowrap;
+}
+
+.stock-ai-toggle-btn {
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+}
+
+.stock-ai-toggle-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.stock-ai-toggle-btn .sparkle-icon {
+  color: #f59e0b;
+}
+
+.stock-ai-toggle-btn.active {
   background: #0f2c59;
   color: #ffffff;
-  border: none;
-  cursor: pointer;
-  transition: background 140ms ease;
+  border-color: #0f2c59;
+}
+
+.stock-ai-toggle-btn.active .sparkle-icon {
+  color: #fbbf24;
+}
+
+.stock-add-btn {
+  background: #0f2c59;
+  color: #ffffff;
+  border: 1px solid #0f2c59;
 }
 
 .stock-add-btn:hover {
   background: #1b3d75;
+  border-color: #1b3d75;
 }
 
 .stock-market-table-wrap {
@@ -703,7 +715,7 @@ p {
 
 .stock-market-table th,
 .stock-market-table td {
-  padding: 14px 12px;
+  padding: 13px 12px;
   border-bottom: 1px solid var(--line-soft);
   text-align: right;
   white-space: nowrap;
@@ -716,29 +728,84 @@ p {
   font-weight: 700;
 }
 
+/* 열 너비 재조정 (지표간 거리 좁혀 가독성 극대화) */
 .stock-market-table th.col-stock-name,
 .stock-market-table td:first-child {
-  width: 50%;
+  width: 38%;
   text-align: left;
 }
 
 .stock-market-table th.col-price,
 .stock-market-table td.col-price-val {
-  width: 18%;
+  width: 22%;
   font-weight: 700;
 }
 
 .stock-market-table th.col-change {
-  width: 16%;
+  width: 17%;
 }
 
 .stock-market-table th.col-rate {
-  width: 16%;
+  width: 15%;
+}
+
+.stock-market-table th.col-order,
+.stock-market-table td.col-order-cell {
+  width: 8%;
+  text-align: center;
+  padding: 8px 4px;
 }
 
 .stock-market-table td {
   color: #31343a;
   font-size: 14px;
+}
+
+/* 순서 변경 버튼 */
+.stock-order-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.stock-order-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 120ms ease;
+  padding: 0;
+}
+
+.stock-order-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #0f2c59;
+  border-color: #cbd5e1;
+}
+
+.stock-order-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: #f8fafc;
+}
+
+.stock-order-actions-mobile {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 6px;
+}
+
+.stock-order-actions-mobile .stock-order-btn {
+  width: 28px;
+  height: 28px;
 }
 
 /* 행 클릭 인터랙션 */

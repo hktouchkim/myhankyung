@@ -1359,6 +1359,24 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
     showToast(`${stock.name}을(를) 관심종목에서 해제했습니다.`);
   };
 
+  const moveStockInSelectedGroup = (index: number, direction: "up" | "down") => {
+    const targetGroup = groups.find((g) => g.id === selectedGroupId);
+    if (!targetGroup) return;
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= targetGroup.stockIds.length) return;
+
+    const nextStockIds = [...targetGroup.stockIds];
+    const temp = nextStockIds[index];
+    nextStockIds[index] = nextStockIds[targetIndex];
+    nextStockIds[targetIndex] = temp;
+
+    setGroups((current) =>
+      current.map((g) =>
+        g.id === selectedGroupId ? { ...g, stockIds: nextStockIds } : g,
+      ),
+    );
+  };
+
   const handleNav = (id: string) => {
     setMobileNavOpen(false);
     if (id === "home") window.location.assign("/");
@@ -1439,62 +1457,59 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
 
               {/* 관심그룹 모듈 카드 */}
               <section className="group-module-card" aria-label="관심그룹 관리">
-                <div className="group-module-header">
-                  <div className="group-module-title-wrap">
-                    <span className="group-module-badge">관심그룹</span>
-                    <span className="group-module-count">{groups.length}/5</span>
+                <div className="group-module-row">
+                  <div className="group-tabs" role="group" aria-label="관심그룹 선택">
+                    {groups.map((group) => (
+                      <button
+                        key={group.id}
+                        type="button"
+                        aria-pressed={group.id === selectedGroup.id}
+                        className={`group-tab ${group.id === selectedGroup.id ? "group-tab-active" : ""}`}
+                        onClick={() => chooseGroup(group.id)}
+                      >
+                        <span>{group.name}</span>
+                        <em>{group.stockIds.length}</em>
+                      </button>
+                    ))}
                   </div>
                   <button
-                    className="button action-control-button group-manage-btn"
+                    className="group-manage-icon-btn"
                     type="button"
                     onClick={openManageDialog}
-                    aria-label="관심그룹 편집 대화상자 열기"
+                    aria-label="관심그룹 편집"
+                    title="관심그룹 편집"
                   >
-                    <Settings size={15} />
-                    <span>그룹편집</span>
+                    <Settings size={18} />
                   </button>
-                </div>
-                <div className="group-tabs" role="group" aria-label="관심그룹 선택">
-                  {groups.map((group) => (
-                    <button
-                      key={group.id}
-                      type="button"
-                      aria-pressed={group.id === selectedGroup.id}
-                      className={`group-tab ${group.id === selectedGroup.id ? "group-tab-active" : ""}`}
-                      onClick={() => chooseGroup(group.id)}
-                    >
-                      <span>{group.name}</span>
-                      <em>{group.stockIds.length}</em>
-                    </button>
-                  ))}
                 </div>
               </section>
 
-              {/* 종목 리스트 툴바 (스위치 + 종목추가) */}
+              {/* 종목 리스트 툴바 (개수 표시 + 동일 규격 액션 버튼들) */}
               <div className="stock-list-toolbar">
                 <div className="stock-list-status">
-                  <span className="stock-list-current-group">{selectedGroup.name}</span>
                   <span className="stock-list-count">총 {selectedGroupStocks.length}개 종목</span>
                 </div>
                 <div className="stock-list-actions">
-                  <label className="ai-point-switch-control" title="모든 종목의 AI 포인트 뷰 및 리포트 일괄 켜기/끄기">
-                    <input
-                      type="checkbox"
-                      checked={expandAllIssues}
-                      onChange={(e) => {
-                        const next = e.target.checked;
-                        setExpandAllIssues(next);
-                        setIssueOverrides({});
-                      }}
-                      aria-label="상세 정보 일괄 표시 전환"
-                    />
-                    <span className="ai-point-switch-slider" />
-                    <span className="ai-point-switch-text">
-                      <Sparkles size={14} className="sparkle-icon" />
-                      AI 포인트 뷰
-                    </span>
-                  </label>
-                  <button className="button button-primary stock-add-btn" type="button" onClick={openAddDialog} aria-label="현재 그룹에 종목 추가">
+                  <button
+                    type="button"
+                    className={`stock-toolbar-btn stock-ai-toggle-btn ${expandAllIssues ? "active" : ""}`}
+                    onClick={() => {
+                      const next = !expandAllIssues;
+                      setExpandAllIssues(next);
+                      setIssueOverrides({});
+                    }}
+                    aria-label={`AI 포인트 뷰 일괄 ${expandAllIssues ? "접기" : "펼치기"}`}
+                    title={`AI 포인트 뷰 일괄 ${expandAllIssues ? "접기" : "펼치기"}`}
+                  >
+                    <Sparkles size={15} className="sparkle-icon" />
+                    <span>AI 포인트 뷰</span>
+                  </button>
+                  <button
+                    className="stock-toolbar-btn stock-add-btn"
+                    type="button"
+                    onClick={openAddDialog}
+                    aria-label="현재 그룹에 종목 추가"
+                  >
                     <Plus size={16} />
                     <span>종목추가</span>
                   </button>
@@ -1512,10 +1527,11 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             <th scope="col" className="col-price">현재가</th>
                             <th scope="col" className="col-change">등락폭</th>
                             <th scope="col" className="col-rate">등락률</th>
+                            <th scope="col" className="col-order">순서</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {selectedGroupStocks.map((stock) => {
+                          {selectedGroupStocks.map((stock, index) => {
                             const direction = stock.rate > 0 ? "up" : stock.rate < 0 ? "down" : "flat";
                             const detailUrl = getStockDetailUrl(stock);
                             const issues = (stock.issues || []).slice(0, 5);
@@ -1589,10 +1605,34 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                     {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : "−"} {displayChange}
                                   </td>
                                   <td className={`stock-number-${direction}`}>{formatRate(stock.rate)}</td>
+                                  <td className="col-order-cell">
+                                    <div className="stock-order-actions" onClick={(e) => e.stopPropagation()}>
+                                      <button
+                                        type="button"
+                                        className="stock-order-btn"
+                                        disabled={index === 0}
+                                        onClick={() => moveStockInSelectedGroup(index, "up")}
+                                        aria-label={`${stock.name} 위로 이동`}
+                                        title="위로 이동"
+                                      >
+                                        <ChevronUp size={14} />
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="stock-order-btn"
+                                        disabled={index === selectedGroupStocks.length - 1}
+                                        onClick={() => moveStockInSelectedGroup(index, "down")}
+                                        aria-label={`${stock.name} 아래로 이동`}
+                                        title="아래로 이동"
+                                      >
+                                        <ChevronDown size={14} />
+                                      </button>
+                                    </div>
+                                  </td>
                                 </tr>
                                 {isExpanded ? (
                                   <tr className="stock-market-table-card-row">
-                                    <td colSpan={4}>
+                                    <td colSpan={5}>
                                       <div className="stock-intelligence-container">
                                         <div className="stock-intelligence-grid">
                                           {/* 좌측: AI 포인트 뷰 블록 */}
@@ -1680,7 +1720,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                     </div>
 
                     <div className="stock-mobile-list" aria-label={`${selectedGroup.name} 모바일 종목 목록`}>
-                      {selectedGroupStocks.map((stock) => {
+                      {selectedGroupStocks.map((stock, index) => {
                         const direction = stock.rate > 0 ? "up" : stock.rate < 0 ? "down" : "flat";
                         const detailUrl = getStockDetailUrl(stock);
                         const issues = (stock.issues || []).slice(0, 5);
@@ -1746,7 +1786,29 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                   </span>
                                 </div>
                               </div>
-                              <div className="stock-mobile-actions">
+                              <div className="stock-mobile-actions" onClick={(e) => e.stopPropagation()}>
+                                <div className="stock-order-actions-mobile">
+                                  <button
+                                    type="button"
+                                    className="stock-order-btn"
+                                    disabled={index === 0}
+                                    onClick={() => moveStockInSelectedGroup(index, "up")}
+                                    aria-label={`${stock.name} 위로 이동`}
+                                    title="위로 이동"
+                                  >
+                                    <ChevronUp size={16} />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="stock-order-btn"
+                                    disabled={index === selectedGroupStocks.length - 1}
+                                    onClick={() => moveStockInSelectedGroup(index, "down")}
+                                    aria-label={`${stock.name} 아래로 이동`}
+                                    title="아래로 이동"
+                                  >
+                                    <ChevronDown size={16} />
+                                  </button>
+                                </div>
                                 <Movement stock={stock} />
                               </div>
                             </div>
