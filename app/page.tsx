@@ -1082,6 +1082,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const [selectedAddStockId, setSelectedAddStockId] = useState<string | null>(null);
   const [addTargetGroupIds, setAddTargetGroupIds] = useState<string[]>([INITIAL_GROUPS[0].id]);
   const [expandAllIssues, setExpandAllIssues] = useState(true);
+  const [issueOverrides, setIssueOverrides] = useState<Record<string, boolean>>({});
 
   const [newGroupName, setNewGroupName] = useState("");
   const [editingGroupId, setEditingGroupId] = useState<string | null>(null);
@@ -1465,15 +1466,23 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 <div className="module-heading">
                   <h2 id="stock-list-title">관심종목 ({selectedGroupStocks.length}/30)</h2>
                   <div className="module-heading-actions">
-                    <button
-                      className="button action-control-button"
-                      type="button"
-                      onClick={() => setExpandAllIssues((prev) => !prev)}
-                      aria-label={`AI 핵심이슈 일괄 ${expandAllIssues ? "접기" : "펼치기"}`}
-                    >
-                      <Sparkles size={16} />
-                      <span>AI 이슈 {expandAllIssues ? "접기" : "펼치기"}</span>
-                    </button>
+                    <label className="ai-point-switch-control" title="모든 종목의 AI 포인트 뷰 일괄 켜기/끄기">
+                      <input
+                        type="checkbox"
+                        checked={expandAllIssues}
+                        onChange={(e) => {
+                          const next = e.target.checked;
+                          setExpandAllIssues(next);
+                          setIssueOverrides({});
+                        }}
+                        aria-label="AI 포인트 뷰 일괄 표시 전환"
+                      />
+                      <span className="ai-point-switch-slider" />
+                      <span className="ai-point-switch-text">
+                        <Sparkles size={14} className="sparkle-icon" />
+                        AI 포인트 뷰
+                      </span>
+                    </label>
                     <button className="button action-control-button" type="button" onClick={openAddDialog} aria-label="현재 그룹에 종목 추가">
                       <Plus size={18} />
                       <span>종목추가</span>
@@ -1505,6 +1514,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             const detailUrl = getStockDetailUrl(stock);
                             const issues = (stock.issues || []).slice(0, 5);
                             const hasIssues = issues.length > 0;
+                            const isExpanded = hasIssues && (issueOverrides[stock.id] ?? expandAllIssues);
                             const displayPrice = stock.currency === "USD" ? stock.price : `${stock.price}원`;
                             const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
                             const displayHigh = stock.currency === "USD" ? stock.high : `${stock.high}원`;
@@ -1512,7 +1522,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
 
                             return (
                               <React.Fragment key={stock.id}>
-                                <tr>
+                                <tr className={isExpanded ? "stock-row-expanded" : undefined}>
                                   <td>
                                     <div className="stock-table-name-cell">
                                       <button
@@ -1525,9 +1535,27 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                         <Star size={16} className="star-icon-filled" />
                                       </button>
                                       <div className="stock-table-name">
-                                        <a href={detailUrl} target="_blank" rel="noopener noreferrer" aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}>
-                                          {stock.name}
-                                        </a>
+                                        <div className="stock-name-row">
+                                          <a href={detailUrl} target="_blank" rel="noopener noreferrer" aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}>
+                                            {stock.name}
+                                          </a>
+                                          {hasIssues ? (
+                                            <button
+                                              type="button"
+                                              className={`stock-issue-toggle-btn ${isExpanded ? "is-open" : ""}`}
+                                              onClick={() =>
+                                                setIssueOverrides((prev) => ({
+                                                  ...prev,
+                                                  [stock.id]: !isExpanded,
+                                                }))
+                                              }
+                                              aria-label={`${stock.name} AI 포인트 뷰 ${isExpanded ? "접기" : "펼치기"}`}
+                                              title={`AI 포인트 뷰 ${isExpanded ? "접기" : "펼치기"}`}
+                                            >
+                                              <ChevronDown size={14} />
+                                            </button>
+                                          ) : null}
+                                        </div>
                                         <span>
                                           {stock.code} · {stock.market}
                                           {stock.marketType === "OVERSEAS" ? (
@@ -1545,13 +1573,13 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                   <td>{displayHigh}</td>
                                   <td>{displayLow}</td>
                                 </tr>
-                                {hasIssues && expandAllIssues ? (
+                                {isExpanded ? (
                                   <tr className="stock-market-table-card-row">
                                     <td colSpan={6}>
                                       <div className="stock-intelligence-container">
                                         <div className="stock-intelligence-header">
                                           <Sparkles size={13} />
-                                          <span>AI 핵심 이슈 ({issues.length}건)</span>
+                                          <span>AI 포인트 뷰 ({issues.length}건)</span>
                                         </div>
                                         <div className="stock-intelligence-list">
                                           {issues.map((issue) => (
@@ -1597,12 +1625,13 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         const detailUrl = getStockDetailUrl(stock);
                         const issues = (stock.issues || []).slice(0, 5);
                         const hasIssues = issues.length > 0;
+                        const isExpanded = hasIssues && (issueOverrides[stock.id] ?? expandAllIssues);
                         const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
                         const displayHigh = stock.currency === "USD" ? stock.high : `${stock.high}원`;
                         const displayLow = stock.currency === "USD" ? stock.low : `${stock.low}원`;
 
                         return (
-                          <article key={stock.id} className="stock-mobile-card">
+                          <article key={stock.id} className={`stock-mobile-card ${isExpanded ? "stock-mobile-card-expanded" : ""}`}>
                             <div className="stock-mobile-heading">
                               <div className="stock-identity">
                                 <button
@@ -1615,9 +1644,27 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                   <Star size={18} className="star-icon-filled" />
                                 </button>
                                 <div>
-                                  <a href={detailUrl} target="_blank" rel="noopener noreferrer" aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}>
-                                    {stock.name}
-                                  </a>
+                                  <div className="stock-name-row">
+                                    <a href={detailUrl} target="_blank" rel="noopener noreferrer" aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}>
+                                      {stock.name}
+                                    </a>
+                                    {hasIssues ? (
+                                      <button
+                                        type="button"
+                                        className={`stock-issue-toggle-btn ${isExpanded ? "is-open" : ""}`}
+                                        onClick={() =>
+                                          setIssueOverrides((prev) => ({
+                                            ...prev,
+                                            [stock.id]: !isExpanded,
+                                          }))
+                                        }
+                                        aria-label={`${stock.name} AI 포인트 뷰 ${isExpanded ? "접기" : "펼치기"}`}
+                                        title={`AI 포인트 뷰 ${isExpanded ? "접기" : "펼치기"}`}
+                                      >
+                                        <ChevronDown size={14} />
+                                      </button>
+                                    ) : null}
+                                  </div>
                                   <span>
                                     {stock.code} · {stock.market}
                                     {stock.marketType === "OVERSEAS" ? (
@@ -1646,11 +1693,11 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                 <dd>{displayLow}</dd>
                               </div>
                             </dl>
-                            {hasIssues && expandAllIssues ? (
+                            {isExpanded ? (
                               <div className="stock-mobile-intelligence">
                                 <div className="stock-intelligence-header">
                                   <Sparkles size={13} />
-                                  <span>AI 핵심 이슈 ({issues.length}건)</span>
+                                  <span>AI 포인트 뷰 ({issues.length}건)</span>
                                 </div>
                                 <div className="stock-intelligence-list">
                                   {issues.map((issue) => (
