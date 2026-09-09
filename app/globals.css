@@ -635,6 +635,38 @@ p {
   margin-top: 10px;
 }
 
+.stock-table-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stock-favorite-toggle-button {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #ffb800;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+  padding: 0;
+}
+
+.stock-favorite-toggle-button:hover {
+  background: rgba(255, 184, 0, 0.12);
+  transform: scale(1.12);
+}
+
+.stock-favorite-toggle-button .star-icon-filled {
+  fill: #ffb800;
+  color: #ffb800;
+}
+
 .stock-table-name a,
 .stock-table-name span {
   display: block;

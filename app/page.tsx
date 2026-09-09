@@ -1081,6 +1081,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedAddStockId, setSelectedAddStockId] = useState<string | null>(null);
   const [addTargetGroupIds, setAddTargetGroupIds] = useState<string[]>([INITIAL_GROUPS[0].id]);
+  const [expandAllIssues, setExpandAllIssues] = useState(true);
 
   const [newGroupName, setNewGroupName] = useState("");
   const [editingGroupId, setEditingGroupId] = useState<string | null>(null);
@@ -1354,7 +1355,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
           : group,
       ),
     );
-    showToast(`${stock.name}를 현재 그룹에서 삭제했습니다.`);
+    showToast(`${stock.name}을(를) 관심종목에서 해제했습니다.`);
   };
 
   const handleNav = (id: string) => {
@@ -1464,6 +1465,15 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 <div className="module-heading">
                   <h2 id="stock-list-title">관심종목 ({selectedGroupStocks.length}/30)</h2>
                   <div className="module-heading-actions">
+                    <button
+                      className="button action-control-button"
+                      type="button"
+                      onClick={() => setExpandAllIssues((prev) => !prev)}
+                      aria-label={`AI 핵심이슈 일괄 ${expandAllIssues ? "접기" : "펼치기"}`}
+                    >
+                      <Sparkles size={16} />
+                      <span>AI 이슈 {expandAllIssues ? "접기" : "펼치기"}</span>
+                    </button>
                     <button className="button action-control-button" type="button" onClick={openAddDialog} aria-label="현재 그룹에 종목 추가">
                       <Plus size={18} />
                       <span>종목추가</span>
@@ -1487,7 +1497,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             <th scope="col">등락률</th>
                             <th scope="col">고가</th>
                             <th scope="col">저가</th>
-                            <th className="stock-action-column" scope="col" aria-label="종목 삭제" />
                           </tr>
                         </thead>
                         <tbody>
@@ -1505,16 +1514,27 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               <React.Fragment key={stock.id}>
                                 <tr>
                                   <td>
-                                    <div className="stock-table-name">
-                                      <a href={detailUrl} target="_blank" rel="noopener noreferrer" aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}>
-                                        {stock.name}
-                                      </a>
-                                      <span>
-                                        {stock.code} · {stock.market}
-                                        {stock.marketType === "OVERSEAS" ? (
-                                          <span className="market-tag market-tag-overseas">해외</span>
-                                        ) : null}
-                                      </span>
+                                    <div className="stock-table-name-cell">
+                                      <button
+                                        type="button"
+                                        className="stock-favorite-toggle-button active"
+                                        onClick={() => removeStockFromSelectedGroup(stock)}
+                                        aria-label={`${stock.name} 관심종목 해제`}
+                                        title="관심종목 해제"
+                                      >
+                                        <Star size={16} className="star-icon-filled" />
+                                      </button>
+                                      <div className="stock-table-name">
+                                        <a href={detailUrl} target="_blank" rel="noopener noreferrer" aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}>
+                                          {stock.name}
+                                        </a>
+                                        <span>
+                                          {stock.code} · {stock.market}
+                                          {stock.marketType === "OVERSEAS" ? (
+                                            <span className="market-tag market-tag-overseas">해외</span>
+                                          ) : null}
+                                        </span>
+                                      </div>
                                     </div>
                                   </td>
                                   <td>{displayPrice}</td>
@@ -1524,20 +1544,10 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                   <td className={`stock-number-${direction}`}>{formatRate(stock.rate)}</td>
                                   <td>{displayHigh}</td>
                                   <td>{displayLow}</td>
-                                  <td className="stock-action-column">
-                                    <button
-                                      className="stock-remove-button"
-                                      type="button"
-                                      onClick={() => removeStockFromSelectedGroup(stock)}
-                                      aria-label={`${stock.name} 현재 그룹에서 삭제`}
-                                    >
-                                      <X size={16} />
-                                    </button>
-                                  </td>
                                 </tr>
-                                {hasIssues ? (
+                                {hasIssues && expandAllIssues ? (
                                   <tr className="stock-market-table-card-row">
-                                    <td colSpan={7}>
+                                    <td colSpan={6}>
                                       <div className="stock-intelligence-container">
                                         <div className="stock-intelligence-header">
                                           <Sparkles size={13} />
@@ -1595,7 +1605,15 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                           <article key={stock.id} className="stock-mobile-card">
                             <div className="stock-mobile-heading">
                               <div className="stock-identity">
-                                <div className="stock-mark">{stock.name.slice(0, 1)}</div>
+                                <button
+                                  type="button"
+                                  className="stock-favorite-toggle-button active"
+                                  onClick={() => removeStockFromSelectedGroup(stock)}
+                                  aria-label={`${stock.name} 관심종목 해제`}
+                                  title="관심종목 해제"
+                                >
+                                  <Star size={18} className="star-icon-filled" />
+                                </button>
                                 <div>
                                   <a href={detailUrl} target="_blank" rel="noopener noreferrer" aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}>
                                     {stock.name}
@@ -1610,14 +1628,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               </div>
                               <div className="stock-mobile-actions">
                                 <Movement stock={stock} />
-                                <button
-                                  className="stock-remove-button"
-                                  type="button"
-                                  onClick={() => removeStockFromSelectedGroup(stock)}
-                                  aria-label={`${stock.name} 현재 그룹에서 삭제`}
-                                >
-                                  <X size={16} />
-                                </button>
                               </div>
                             </div>
                             <dl className="stock-mobile-details">
@@ -1636,7 +1646,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                 <dd>{displayLow}</dd>
                               </div>
                             </dl>
-                            {hasIssues ? (
+                            {hasIssues && expandAllIssues ? (
                               <div className="stock-mobile-intelligence">
                                 <div className="stock-intelligence-header">
                                   <Sparkles size={13} />
