@@ -4378,27 +4378,29 @@ p {
 
 /* 관심종목 인텔리전스 AI 포인트 뷰 서브카드 연관 디자인 */
 .stock-row-expanded td {
-  background: #f8fafc;
-  border-bottom-color: transparent !important;
+  background: #ffffff;
+  border-bottom: 0 !important;
 }
 
 .stock-market-table-card-row td {
-  background: #f8fafc;
-  padding-top: 0;
-  padding-bottom: 12px;
+  background: #ffffff;
+  padding-top: 2px;
+  padding-bottom: 14px;
 }
 
 .stock-intelligence-container {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 10px 14px 12px 16px;
+  padding: 10px 14px 12px 14px;
   margin-left: 28px;
   margin-right: 12px;
   border-left: 3px solid #0f2c59;
+  border-top: 1px solid #edf0f5;
+  border-right: 1px solid #edf0f5;
+  border-bottom: 1px solid #edf0f5;
   border-radius: 0 8px 8px 0;
   background: #ffffff;
-  box-shadow: 0 1px 4px rgba(15, 44, 89, 0.05);
 }
 
 .stock-intelligence-header {
@@ -4427,9 +4429,9 @@ p {
   justify-content: space-between;
   gap: 12px;
   padding: 8px 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e5e9f0;
   border-radius: 7px;
-  background: #fbfcfd;
+  background: #ffffff;
   transition: all 140ms ease;
 }
 
@@ -4509,14 +4511,14 @@ p {
 
 .stock-mobile-card-expanded {
   border-left: 3px solid #0f2c59 !important;
-  background: #fbfcfd;
+  background: #ffffff;
 }
 
 .stock-mobile-intelligence {
   margin-top: 12px;
   padding: 10px 12px;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #edf0f5;
   border-left: 3px solid #0f2c59;
   border-radius: 6px;
 }
@@ -4525,7 +4527,7 @@ p {
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 .stock-mobile-intelligence .stock-issue-left {
