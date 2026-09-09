@@ -32,10 +32,20 @@ import {
   UserRound,
   WalletCards,
   X,
+  ExternalLink,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import React, { Fragment, useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
+
+type StockIssue = {
+  id: string;
+  sentiment: "호재" | "악재";
+  comment: string;
+  articleUrl: string;
+  publishedAt: string;
+};
 
 type Stock = {
   id: string;
@@ -49,6 +59,10 @@ type Stock = {
   volume: string;
   high: string;
   low: string;
+  marketType?: "DOMESTIC" | "OVERSEAS";
+  currency?: "KRW" | "USD";
+  ticker?: string;
+  issues?: StockIssue[];
 };
 
 type WatchGroup = {
@@ -118,6 +132,8 @@ const STOCKS: Stock[] = [
     name: "삼성전자",
     code: "005930",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "87,400",
     change: "1,400",
     rate: 1.62,
@@ -125,12 +141,37 @@ const STOCKS: Stock[] = [
     volume: "17,480,321",
     high: "88,100",
     low: "85,700",
+    issues: [
+      {
+        id: "issue-005930-1",
+        sentiment: "호재",
+        comment: "차세대 파운드리 2나노 공정 수율 개선으로 글로벌 빅테크 수주 가능성 확대",
+        articleUrl: "https://www.hankyung.com/article/2026080349201",
+        publishedAt: "2026.08.03 09:18",
+      },
+      {
+        id: "issue-005930-2",
+        sentiment: "호재",
+        comment: "미국 테일러 공장 보조금 지급 확정 및 세액공제 수혜로 투자비 부담 완화",
+        articleUrl: "https://www.hankyung.com/article/2026080162201",
+        publishedAt: "2026.08.01 16:22",
+      },
+      {
+        id: "issue-005930-3",
+        sentiment: "악재",
+        comment: "레거시 메모리 가격 상승 탄력 둔화 전망에 따른 하반기 마진 우려 제기",
+        articleUrl: "https://www.hankyung.com/article/2026080214101",
+        publishedAt: "2026.08.02 14:10",
+      },
+    ],
   },
   {
     id: "005935",
     name: "삼성전자우",
     code: "005935",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "67,800",
     change: "700",
     rate: 1.04,
@@ -138,12 +179,23 @@ const STOCKS: Stock[] = [
     volume: "3,324,180",
     high: "68,200",
     low: "66,700",
+    issues: [
+      {
+        id: "issue-005935-1",
+        sentiment: "호재",
+        comment: "본주 대비 할인율 축소 기대와 안정적 고배당 수익률 부각",
+        articleUrl: "https://www.hankyung.com/article/2026080511201",
+        publishedAt: "2026.08.05 11:20",
+      },
+    ],
   },
   {
     id: "009150",
     name: "삼성전기",
     code: "009150",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "164,800",
     change: "2,100",
     rate: 1.29,
@@ -157,6 +209,8 @@ const STOCKS: Stock[] = [
     name: "삼성SDI",
     code: "006400",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "198,700",
     change: "4,300",
     rate: -2.12,
@@ -164,12 +218,23 @@ const STOCKS: Stock[] = [
     volume: "968,840",
     high: "203,500",
     low: "197,900",
+    issues: [
+      {
+        id: "issue-006400-1",
+        sentiment: "악재",
+        comment: "유럽 전기차 수요 정체와 설비 가동률 저하로 3분기 실적 눈높이 하향",
+        articleUrl: "https://www.hankyung.com/article/2026080345001",
+        publishedAt: "2026.08.03 08:30",
+      },
+    ],
   },
   {
     id: "032830",
     name: "삼성생명",
     code: "032830",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "137,600",
     change: "2,900",
     rate: 2.15,
@@ -177,12 +242,23 @@ const STOCKS: Stock[] = [
     volume: "608,221",
     high: "138,900",
     low: "134,200",
+    issues: [
+      {
+        id: "issue-032830-1",
+        sentiment: "호재",
+        comment: "자본비율 개선에 따른 주주환원 배당 여력 확대 정책 공식화",
+        articleUrl: "https://www.hankyung.com/article/2026080216501",
+        publishedAt: "2026.08.02 16:50",
+      },
+    ],
   },
   {
     id: "028260",
     name: "삼성물산",
     code: "028260",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "188,400",
     change: "1,500",
     rate: 0.80,
@@ -196,6 +272,8 @@ const STOCKS: Stock[] = [
     name: "삼성중공업",
     code: "010140",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "17,230",
     change: "420",
     rate: 2.50,
@@ -203,12 +281,23 @@ const STOCKS: Stock[] = [
     volume: "18,442,670",
     high: "17,410",
     low: "16,780",
+    issues: [
+      {
+        id: "issue-010140-1",
+        sentiment: "호재",
+        comment: "친환경 LNG 운반선 4척 1조 2천억 규모 신규 건조 수주 계약 체결",
+        articleUrl: "https://www.hankyung.com/article/2026080374001",
+        publishedAt: "2026.08.03 07:40",
+      },
+    ],
   },
   {
     id: "207940",
     name: "삼성바이오로직스",
     code: "207940",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "1,042,000",
     change: "18,000",
     rate: 1.76,
@@ -216,12 +305,23 @@ const STOCKS: Stock[] = [
     volume: "147,092",
     high: "1,051,000",
     low: "1,018,000",
+    issues: [
+      {
+        id: "issue-207940-1",
+        sentiment: "호재",
+        comment: "글로벌 제약사와 1조 5,000억원 규모 초대형 위탁생산(CDMO) 추가 계약 체결",
+        articleUrl: "https://www.hankyung.com/article/2026080381001",
+        publishedAt: "2026.08.03 08:10",
+      },
+    ],
   },
   {
     id: "000660",
     name: "SK하이닉스",
     code: "000660",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "291,000",
     change: "21,100",
     rate: 7.82,
@@ -229,12 +329,30 @@ const STOCKS: Stock[] = [
     volume: "9,978,244",
     high: "294,500",
     low: "271,000",
+    issues: [
+      {
+        id: "issue-000660-1",
+        sentiment: "호재",
+        comment: "차세대 HBM4 16단 샘플 공급 조기 성공으로 글로벌 독점적 지위 견고화",
+        articleUrl: "https://www.hankyung.com/article/2026080310421",
+        publishedAt: "2026.08.03 10:42",
+      },
+      {
+        id: "issue-000660-2",
+        sentiment: "악재",
+        comment: "단기 급등에 따른 차익실현 매물 및 반도체 피크아웃 경계론 일부 제기",
+        articleUrl: "https://www.hankyung.com/article/2026080214102",
+        publishedAt: "2026.08.02 14:10",
+      },
+    ],
   },
   {
     id: "042700",
     name: "한미반도체",
     code: "042700",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "126,400",
     change: "3,900",
     rate: 3.18,
@@ -242,12 +360,23 @@ const STOCKS: Stock[] = [
     volume: "3,405,921",
     high: "128,900",
     low: "121,600",
+    issues: [
+      {
+        id: "issue-042700-1",
+        sentiment: "호재",
+        comment: "2.5D 패키징용 듀얼 TC 본더 신규 수주 사이클 진입으로 하반기 실적 호조 전망",
+        articleUrl: "https://www.hankyung.com/article/2026080217351",
+        publishedAt: "2026.08.02 17:35",
+      },
+    ],
   },
   {
     id: "005380",
     name: "현대차",
     code: "005380",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "286,500",
     change: "3,600",
     rate: -1.24,
@@ -261,6 +390,8 @@ const STOCKS: Stock[] = [
     name: "LG에너지솔루션",
     code: "373220",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "405,500",
     change: "9,000",
     rate: -2.18,
@@ -268,12 +399,23 @@ const STOCKS: Stock[] = [
     volume: "913,420",
     high: "414,000",
     low: "403,500",
+    issues: [
+      {
+        id: "issue-373220-1",
+        sentiment: "악재",
+        comment: "글로벌 완성차의 배터리 재고 조정 장기화로 분기 매출 가이던스 보수적 조정",
+        articleUrl: "https://www.hankyung.com/article/2026080382001",
+        publishedAt: "2026.08.03 08:20",
+      },
+    ],
   },
   {
     id: "086520",
     name: "에코프로",
     code: "086520",
     market: "KOSDAQ",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "71,400",
     change: "3,460",
     rate: -4.62,
@@ -281,12 +423,23 @@ const STOCKS: Stock[] = [
     volume: "4,012,558",
     high: "74,900",
     low: "70,800",
+    issues: [
+      {
+        id: "issue-086520-1",
+        sentiment: "악재",
+        comment: "리튬 및 원자재 판가 하락으로 인한 양극재 재고자산 평가손실 확대",
+        articleUrl: "https://www.hankyung.com/article/2026080382002",
+        publishedAt: "2026.08.03 08:20",
+      },
+    ],
   },
   {
     id: "105560",
     name: "KB금융",
     code: "105560",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "103,800",
     change: "2,300",
     rate: 2.27,
@@ -294,12 +447,23 @@ const STOCKS: Stock[] = [
     volume: "3,455,110",
     high: "104,900",
     low: "101,600",
+    issues: [
+      {
+        id: "issue-105560-1",
+        sentiment: "호재",
+        comment: "분기 배당 확대와 연간 자사주 매입 소각 1조원 돌파 발표로 밸류업 선도",
+        articleUrl: "https://www.hankyung.com/article/2026080211041",
+        publishedAt: "2026.08.02 11:04",
+      },
+    ],
   },
   {
     id: "055550",
     name: "신한지주",
     code: "055550",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "65,100",
     change: "680",
     rate: 1.05,
@@ -307,38 +471,98 @@ const STOCKS: Stock[] = [
     volume: "2,748,903",
     high: "65,800",
     low: "64,200",
+    issues: [
+      {
+        id: "issue-055550-1",
+        sentiment: "호재",
+        comment: "CET1 비율 13% 안착으로 하반기 특별 주주환원 기대감 지속",
+        articleUrl: "https://www.hankyung.com/article/2026080211042",
+        publishedAt: "2026.08.02 11:04",
+      },
+    ],
   },
   {
     id: "TSLA",
     name: "테슬라",
-    code: "TSLA-US",
-    market: "NASDAQ",
-    price: "337.35",
-    change: "13.51",
+    code: "TSLA",
+    ticker: "TSLA",
+    market: "나스닥",
+    marketType: "OVERSEAS",
+    currency: "USD",
+    price: "$337.35",
+    change: "$13.51",
     rate: -3.85,
     turnover: "4,928,314",
     volume: "112,484,930",
-    high: "349.20",
-    low: "332.10",
+    high: "$349.20",
+    low: "$332.10",
+    issues: [
+      {
+        id: "issue-tsla-1",
+        sentiment: "악재",
+        comment: "전기차 할인 경쟁 심화로 2분기 자동차 부문 마진율 추가 압박",
+        articleUrl: "https://www.hankyung.com/article/2026080373201",
+        publishedAt: "2026.08.03 07:32",
+      },
+    ],
   },
   {
     id: "NVDA",
     name: "엔비디아",
-    code: "NVDA-US",
-    market: "NASDAQ",
-    price: "182.71",
-    change: "4.36",
+    code: "NVDA",
+    ticker: "NVDA",
+    market: "나스닥",
+    marketType: "OVERSEAS",
+    currency: "USD",
+    price: "$182.71",
+    change: "$4.36",
     rate: 2.45,
     turnover: "9,815,220",
     volume: "192,338,440",
-    high: "184.90",
-    low: "178.44",
+    high: "$184.90",
+    low: "$178.44",
+    issues: [
+      {
+        id: "issue-nvda-1",
+        sentiment: "호재",
+        comment: "빅테크 AI 인프라 자본지출 상향으로 블랙웰 GPU 수요 공급초과 지속",
+        articleUrl: "https://www.hankyung.com/article/2026080705781",
+        publishedAt: "2026.08.07 13:42",
+      },
+    ],
+  },
+  {
+    id: "CRM",
+    name: "세일즈포스",
+    code: "CRM",
+    ticker: "CRM",
+    market: "뉴욕",
+    marketType: "OVERSEAS",
+    currency: "USD",
+    price: "$248.50",
+    change: "$3.20",
+    rate: 1.30,
+    turnover: "1,248,600",
+    volume: "18,920,400",
+    high: "$251.20",
+    low: "$246.30",
+    issues: [
+      {
+        id: "issue-crm-1",
+        sentiment: "호재",
+        comment: "생성형 AI '에이전트포스(Agentforce)' 도입 기업 급증으로 구독형 ARR 가파른 증가세",
+        articleUrl: "https://www.hankyung.com/globalmarket/equities/americas/crm",
+        publishedAt: "2026.08.04 15:30",
+      },
+    ],
   },
   {
     id: "035420",
     name: "NAVER",
     code: "035420",
     market: "KOSPI",
+    marketType: "DOMESTIC",
+    currency: "KRW",
     price: "254,000",
     change: "2,500",
     rate: 0.99,
@@ -359,6 +583,11 @@ const INITIAL_GROUPS: WatchGroup[] = [
     id: "group-chip",
     name: "국내 반도체",
     stockIds: ["005930", "000660", "042700"],
+  },
+  {
+    id: "group-global",
+    name: "글로벌 테크",
+    stockIds: ["TSLA", "NVDA", "CRM"],
   },
   {
     id: "group-battery",
@@ -766,6 +995,14 @@ const DEFAULT_COLLAPSED_MODULES: CollapsedModules = {
 const COLLAPSED_MODULES_STORAGE_KEY = "myhankyung-watchlist-collapsed-modules";
 const ARTICLE_ANALYSIS_VISIBILITY_STORAGE_KEY = "myhankyung-watchlist-ai-point-view-visible";
 
+function getStockDetailUrl(stock: Stock) {
+  if (stock.marketType === "OVERSEAS") {
+    const ticker = (stock.ticker || stock.code).replace(/-US$/i, "").toLowerCase();
+    return `https://www.hankyung.com/globalmarket/equities/americas/${encodeURIComponent(ticker)}`;
+  }
+  return `https://markets.hankyung.com/stock/${encodeURIComponent(stock.code)}`;
+}
+
 function formatRate(rate: number) {
   return `${rate > 0 ? "+" : ""}${rate.toFixed(2)}%`;
 }
@@ -782,9 +1019,10 @@ function visibleArticleAnalyses(article: Article, groupStockIds: string[]) {
 
 function Movement({ stock, compact = false }: { stock: Stock; compact?: boolean }) {
   const direction = stock.rate > 0 ? "up" : stock.rate < 0 ? "down" : "flat";
+  const displayPrice = stock.currency === "USD" ? stock.price : `${stock.price}원`;
   return (
     <div className={`movement movement-${direction} ${compact ? "movement-compact" : ""}`}>
-      <strong>{stock.price}</strong>
+      <strong>{displayPrice}</strong>
       <span>
         {stock.rate > 0 ? <TrendingUp size={14} /> : stock.rate < 0 ? <TrendingDown size={14} /> : null}
         {formatRate(stock.rate)}
@@ -1032,11 +1270,16 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
 
   const addStock = () => {
     if (!selectedAddStock) return;
+    let limitExceeded = false;
     setGroups((currentGroups) =>
       currentGroups.map((group) => {
         const shouldInclude = addTargetGroupIds.includes(group.id);
         const alreadyIncluded = group.stockIds.includes(selectedAddStock.id);
         if (shouldInclude && !alreadyIncluded) {
+          if (group.stockIds.length >= 30) {
+            limitExceeded = true;
+            return group;
+          }
           return { ...group, stockIds: [...group.stockIds, selectedAddStock.id] };
         }
         if (!shouldInclude && alreadyIncluded) {
@@ -1046,10 +1289,18 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
       }),
     );
     setDialog(null);
-    showToast(`${selectedAddStock.name}의 관심그룹을 저장했습니다.`);
+    if (limitExceeded) {
+      showToast("일부 그룹의 종목 한도(30개)를 초과하여 제외되었습니다.");
+    } else {
+      showToast(`${selectedAddStock.name}의 관심그룹을 저장했습니다.`);
+    }
   };
 
   const addGroup = () => {
+    if (groups.length >= 5) {
+      showToast("관심그룹은 최대 5개까지 만들 수 있습니다.");
+      return;
+    }
     const name = newGroupName.trim().slice(0, 10);
     if (!name) return;
     const id = `group-${Date.now()}`;
@@ -1191,6 +1442,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
               <section className="group-filter-panel" aria-labelledby="group-filter-title">
                 <div className="module-heading">
                   <h2 id="group-filter-title">관심그룹</h2>
+                  <div className="group-limit-badge">{groups.length}/5개 그룹</div>
                 </div>
                 <div className="group-tabs" role="group" aria-label="관심그룹 선택">
                   {groups.map((group) => (
@@ -1208,46 +1460,9 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 </div>
               </section>
 
-              <section className="timeline-panel" aria-labelledby="timeline-title">
-                <div className="module-heading">
-                  <h2 id="timeline-title">타임 브리핑</h2>
-                  <CollapseButton
-                    label="타임 브리핑"
-                    collapsed={collapsedModules.timeline}
-                    onToggle={() => toggleModule("timeline")}
-                  />
-                </div>
-                {!collapsedModules.timeline && timelineItems.length ? (
-                  <ol className="timeline-list">
-                    {timelineItems.map((item, index) => (
-                      <li
-                        key={`${item.date}-${item.time}`}
-                        className={`timeline-item ${index === 0 ? "timeline-item-current" : ""} ${item.time === "09:30" ? "timeline-item-day-end" : ""}`}
-                      >
-                        <div className="timeline-when">
-                          <time>
-                            {item.time === "09:30" ? `${TIMELINE_DATE_LABELS[item.date] ?? item.date} ${item.time}` : item.time}
-                          </time>
-                        </div>
-                        <span className="timeline-rail" aria-hidden="true" />
-                        <div className="timeline-copy">
-                          <strong>{item.title}</strong>
-                          <p>{item.description}</p>
-                          {item.note ? <small>{item.note}</small> : null}
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                ) : !collapsedModules.timeline ? (
-                  <div className="timeline-empty">
-                    <p>타임 브리핑은 관심종목이 3개 이상 등록되면 제공됩니다.</p>
-                  </div>
-                ) : null}
-              </section>
-
               <section className="stock-list-panel" aria-labelledby="stock-list-title">
                 <div className="module-heading">
-                  <h2 id="stock-list-title">관심종목</h2>
+                  <h2 id="stock-list-title">관심종목 ({selectedGroupStocks.length}/30)</h2>
                   <div className="module-heading-actions">
                     <button className="button action-control-button" type="button" onClick={openAddDialog} aria-label="현재 그룹에 종목 추가">
                       <Plus size={18} />
@@ -1278,34 +1493,88 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         <tbody>
                           {selectedGroupStocks.map((stock) => {
                             const direction = stock.rate > 0 ? "up" : stock.rate < 0 ? "down" : "flat";
+                            const detailUrl = getStockDetailUrl(stock);
+                            const issues = (stock.issues || []).slice(0, 5);
+                            const hasIssues = issues.length > 0;
+                            const displayPrice = stock.currency === "USD" ? stock.price : `${stock.price}원`;
+                            const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
+                            const displayHigh = stock.currency === "USD" ? stock.high : `${stock.high}원`;
+                            const displayLow = stock.currency === "USD" ? stock.low : `${stock.low}원`;
+
                             return (
-                              <tr key={stock.id}>
-                                <td>
-                                  <div className="stock-table-name">
-                                    <a href={`https://markets.hankyung.com/stock/${encodeURIComponent(stock.id)}`} aria-label={`${stock.name} 종목 상세 페이지로 이동`}>
-                                      {stock.name}
-                                    </a>
-                                    <span>{stock.code} · {stock.market}</span>
-                                  </div>
-                                </td>
-                                <td>{stock.price}</td>
-                                <td className={`stock-number-${direction}`}>
-                                  {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : "−"} {stock.change}
-                                </td>
-                                <td className={`stock-number-${direction}`}>{formatRate(stock.rate)}</td>
-                                <td>{stock.high}</td>
-                                <td>{stock.low}</td>
-                                <td className="stock-action-column">
-                                  <button
-                                    className="stock-remove-button"
-                                    type="button"
-                                    onClick={() => removeStockFromSelectedGroup(stock)}
-                                    aria-label={`${stock.name} 현재 그룹에서 삭제`}
-                                  >
-                                    <X size={16} />
-                                  </button>
-                                </td>
-                              </tr>
+                              <React.Fragment key={stock.id}>
+                                <tr>
+                                  <td>
+                                    <div className="stock-table-name">
+                                      <a href={detailUrl} target="_blank" rel="noopener noreferrer" aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}>
+                                        {stock.name}
+                                      </a>
+                                      <span>
+                                        {stock.code} · {stock.market}
+                                        {stock.marketType === "OVERSEAS" ? (
+                                          <span className="market-tag market-tag-overseas">해외</span>
+                                        ) : null}
+                                      </span>
+                                    </div>
+                                  </td>
+                                  <td>{displayPrice}</td>
+                                  <td className={`stock-number-${direction}`}>
+                                    {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : "−"} {displayChange}
+                                  </td>
+                                  <td className={`stock-number-${direction}`}>{formatRate(stock.rate)}</td>
+                                  <td>{displayHigh}</td>
+                                  <td>{displayLow}</td>
+                                  <td className="stock-action-column">
+                                    <button
+                                      className="stock-remove-button"
+                                      type="button"
+                                      onClick={() => removeStockFromSelectedGroup(stock)}
+                                      aria-label={`${stock.name} 현재 그룹에서 삭제`}
+                                    >
+                                      <X size={16} />
+                                    </button>
+                                  </td>
+                                </tr>
+                                {hasIssues ? (
+                                  <tr className="stock-market-table-card-row">
+                                    <td colSpan={7}>
+                                      <div className="stock-intelligence-container">
+                                        <div className="stock-intelligence-header">
+                                          <Sparkles size={13} />
+                                          <span>AI 핵심 이슈 ({issues.length}건)</span>
+                                        </div>
+                                        <div className="stock-intelligence-list">
+                                          {issues.map((issue) => (
+                                            <div
+                                              key={issue.id}
+                                              className={`stock-issue-card ${issue.sentiment === "호재" ? "stock-issue-positive" : "stock-issue-negative"}`}
+                                            >
+                                              <div className="stock-issue-left">
+                                                <span
+                                                  className={`stock-issue-badge ${issue.sentiment === "호재" ? "badge-positive" : "badge-negative"}`}
+                                                >
+                                                  {issue.sentiment}
+                                                </span>
+                                                <span className="stock-issue-comment">{issue.comment}</span>
+                                              </div>
+                                              <a
+                                                href={issue.articleUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="stock-issue-link"
+                                                aria-label="관련 한경 기사 새 창 보기"
+                                              >
+                                                <span>기사 보기</span>
+                                                <ExternalLink size={12} />
+                                              </a>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ) : null}
+                              </React.Fragment>
                             );
                           })}
                         </tbody>
@@ -1315,16 +1584,28 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                     <div className="stock-mobile-list" aria-label={`${selectedGroup.name} 모바일 종목 목록`}>
                       {selectedGroupStocks.map((stock) => {
                         const direction = stock.rate > 0 ? "up" : stock.rate < 0 ? "down" : "flat";
+                        const detailUrl = getStockDetailUrl(stock);
+                        const issues = (stock.issues || []).slice(0, 5);
+                        const hasIssues = issues.length > 0;
+                        const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
+                        const displayHigh = stock.currency === "USD" ? stock.high : `${stock.high}원`;
+                        const displayLow = stock.currency === "USD" ? stock.low : `${stock.low}원`;
+
                         return (
                           <article key={stock.id} className="stock-mobile-card">
                             <div className="stock-mobile-heading">
                               <div className="stock-identity">
                                 <div className="stock-mark">{stock.name.slice(0, 1)}</div>
                                 <div>
-                                  <a href={`https://markets.hankyung.com/stock/${encodeURIComponent(stock.id)}`} aria-label={`${stock.name} 종목 상세 페이지로 이동`}>
+                                  <a href={detailUrl} target="_blank" rel="noopener noreferrer" aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}>
                                     {stock.name}
                                   </a>
-                                  <span>{stock.code} · {stock.market}</span>
+                                  <span>
+                                    {stock.code} · {stock.market}
+                                    {stock.marketType === "OVERSEAS" ? (
+                                      <span className="market-tag market-tag-overseas">해외</span>
+                                    ) : null}
+                                  </span>
                                 </div>
                               </div>
                               <div className="stock-mobile-actions">
@@ -1343,18 +1624,53 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               <div>
                                 <dt>등락폭</dt>
                                 <dd className={`stock-number-${direction}`}>
-                                  {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : "−"} {stock.change}
+                                  {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : "−"} {displayChange}
                                 </dd>
                               </div>
                               <div>
                                 <dt>고가</dt>
-                                <dd>{stock.high}</dd>
+                                <dd>{displayHigh}</dd>
                               </div>
                               <div>
                                 <dt>저가</dt>
-                                <dd>{stock.low}</dd>
+                                <dd>{displayLow}</dd>
                               </div>
                             </dl>
+                            {hasIssues ? (
+                              <div className="stock-mobile-intelligence">
+                                <div className="stock-intelligence-header">
+                                  <Sparkles size={13} />
+                                  <span>AI 핵심 이슈 ({issues.length}건)</span>
+                                </div>
+                                <div className="stock-intelligence-list">
+                                  {issues.map((issue) => (
+                                    <div
+                                      key={issue.id}
+                                      className={`stock-issue-card ${issue.sentiment === "호재" ? "stock-issue-positive" : "stock-issue-negative"}`}
+                                    >
+                                      <div className="stock-issue-left">
+                                        <span
+                                          className={`stock-issue-badge ${issue.sentiment === "호재" ? "badge-positive" : "badge-negative"}`}
+                                        >
+                                          {issue.sentiment}
+                                        </span>
+                                        <span className="stock-issue-comment">{issue.comment}</span>
+                                      </div>
+                                      <a
+                                        href={issue.articleUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="stock-issue-link"
+                                        aria-label="관련 한경 기사 새 창 보기"
+                                      >
+                                        <span>기사 보기</span>
+                                        <ExternalLink size={12} />
+                                      </a>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : null}
                           </article>
                         );
                       })}
@@ -1369,59 +1685,16 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 ) : null}
               </section>
 
-              <section className="content-panel content-panel-separate" aria-labelledby="articles-title">
-                <div className="module-heading content-module-heading">
-                  <h2 id="articles-title">관련기사</h2>
-                  <div className="module-heading-actions">
-                    <button
-                      className={`article-analysis-toggle ${showArticleAnalysis ? "article-analysis-toggle-active" : ""}`}
-                      type="button"
-                      aria-pressed={showArticleAnalysis}
-                      onClick={toggleArticleAnalysis}
-                    >
-                      <span>AI 포인트뷰</span>
-                      <span className="article-analysis-toggle-track" aria-hidden="true"><span /></span>
-                    </button>
-                    <CollapseButton
-                      label="관련기사"
-                      collapsed={collapsedModules.articles}
-                      onToggle={() => toggleModule("articles")}
-                    />
-                  </div>
-                </div>
-                {!collapsedModules.articles ? (
-                  <div className="article-list">
-                    {filteredArticles.length ? (
-                      filteredArticles.map((article) => (
-                        <ArticleCard
-                          key={article.id}
-                          article={article}
-                          analyses={visibleArticleAnalyses(article, selectedGroup.stockIds)}
-                          showAnalysis={showArticleAnalysis}
-                          onOpen={() => {
-                            if (article.url) {
-                              window.location.assign(article.url);
-                              return;
-                            }
-                            setPreview({ type: "article", item: article });
-                          }}
-                        />
-                      ))
-                    ) : (
-                      <ContentEmpty type="기사" />
-                    )}
-                  </div>
-                ) : null}
-              </section>
-
               <section className="content-panel content-panel-separate" aria-labelledby="reports-title">
                 <div className="module-heading content-module-heading">
                   <a
                     className="module-title-link"
                     href="https://markets.hankyung.com/consensus"
-                    aria-label="리포트 전체보기"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="리포트 전체보기 (한경 컨센서스 새 창 이동)"
                   >
-                    <h2 id="reports-title">리포트</h2>
+                    <h2 id="reports-title">증권사 리포트</h2>
                     <ChevronRight size={19} aria-hidden="true" />
                   </a>
                   <div className="module-heading-actions">
@@ -1567,27 +1840,20 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
       {dialog === "alerts" ? (
         <AppDialog
           title="알림 설정"
-          description="필요한 소식만 선택해 받아보세요. 각 알림은 따로 끌 수 있습니다."
+          description="관심종목에 중요한 소식이 발생하면 푸시 알림으로 신속하게 알려드립니다. (24시간 실시간 발송)"
           onClose={() => setDialog(null)}
         >
           <div className="dialog-body notification-list">
             <AlertRow
-              title="관련 기사"
-              description="관심종목과 직접 관련된 새 기사가 등록되면 알려드려요."
+              title="AI 핵심 이슈 (호재·악재)"
+              description="관심종목에 호재 또는 악재 뉴스가 감지되면 실시간 분석 코멘트와 함께 알려드립니다."
               checked={alertDraft.article}
               onChange={(checked) => setAlertDraft((current) => ({ ...current, article: checked }))}
-              icon={<Newspaper size={20} />}
+              icon={<Sparkles size={20} />}
             />
             <AlertRow
-              title="신규 리포트"
-              description="관심종목을 다룬 증권사 리포트가 발행되면 알려드려요."
-              checked={alertDraft.report}
-              onChange={(checked) => setAlertDraft((current) => ({ ...current, report: checked }))}
-              icon={<FileText size={20} />}
-            />
-            <AlertRow
-              title="주가 변동률"
-              description="관심종목이 설정한 등락률에 도달하면 알려드려요."
+              title="주가 급등락 변동폭"
+              description="관심종목이 설정한 급등락률에 도달하면 신속하게 알려드립니다."
               checked={alertDraft.movement}
               onChange={(checked) => setAlertDraft((current) => ({ ...current, movement: checked }))}
               icon={<TrendingUp size={20} />}
@@ -1604,18 +1870,18 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                     }))
                   }
                 >
-                  <option value="3">±3%</option>
-                  <option value="5">±5%</option>
-                  <option value="10">±10%</option>
+                  <option value="3">±3% 이상</option>
+                  <option value="5">±5% 이상</option>
+                  <option value="10">±10% 이상</option>
                 </select>
               </label>
             </AlertRow>
             <AlertRow
-              title="타임 브리핑"
-              description="선택한 관심그룹의 09:30·13:30·16:00 브리핑이 생성되면 알려드려요."
-              checked={alertDraft.timeline}
-              onChange={(checked) => setAlertDraft((current) => ({ ...current, timeline: checked }))}
-              icon={<Clock3 size={20} />}
+              title="증권사 리포트 발간"
+              description="관심종목을 다룬 신규 목표주가 및 투자의견 리포트가 발행되면 알려드립니다."
+              checked={alertDraft.report}
+              onChange={(checked) => setAlertDraft((current) => ({ ...current, report: checked }))}
+              icon={<FileText size={20} />}
             />
           </div>
           <div className="dialog-actions">
@@ -1637,7 +1903,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
       {dialog === "manage" ? (
         <AppDialog
           title="관심그룹 관리"
-          description="관심그룹을 추가하고 이름과 순서를 관리합니다."
+          description="관심그룹은 최대 5개까지 생성 가능하며 최소 1개 이상 유지됩니다. (이름 최대 15자)"
           onClose={() => setDialog(null)}
         >
           <div className="manage-layout">
@@ -1653,7 +1919,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       {editingGroupId === group.id ? (
                         <input
                           value={editingGroupName}
-                          maxLength={10}
+                          maxLength={15}
                           onClick={(event) => event.stopPropagation()}
                           onChange={(event) => setEditingGroupName(event.target.value)}
                           onKeyDown={(event) => {
@@ -1690,15 +1956,21 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
               <div className="new-group-form">
                 <input
                   value={newGroupName}
-                  maxLength={10}
+                  maxLength={15}
+                  disabled={groups.length >= 5}
                   onChange={(event) => setNewGroupName(event.target.value)}
                   onKeyDown={(event) => {
                     if (event.key === "Enter") addGroup();
                   }}
-                  placeholder="새 그룹 이름"
+                  placeholder={groups.length >= 5 ? "그룹은 최대 5개까지 생성 가능합니다" : "새 그룹 이름 (최대 15자)"}
                   aria-label="새 그룹 이름"
                 />
-                <button type="button" onClick={addGroup} disabled={!newGroupName.trim()} aria-label="새 그룹 추가">
+                <button
+                  type="button"
+                  onClick={addGroup}
+                  disabled={!newGroupName.trim() || groups.length >= 5}
+                  aria-label="새 그룹 추가"
+                >
                   <Plus size={18} />
                 </button>
               </div>
@@ -1707,9 +1979,9 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 <div className="delete-confirmation" role="alert">
                   <strong>‘{pendingDeleteGroup.name}’ 그룹을 삭제할까요?</strong>
                   <p>
-                    이 그룹에만 있는 {pendingDeleteOnlyCount}개 종목은 관심종목에서도 삭제됩니다.
+                    이 그룹에만 있는 {pendingDeleteOnlyCount}개 종목은 관심종목에서도 함께 삭제됩니다.
                     {pendingDeleteGroup.stockIds.length - pendingDeleteOnlyCount > 0
-                      ? ` 다른 그룹에도 있는 ${pendingDeleteGroup.stockIds.length - pendingDeleteOnlyCount}개 종목은 해당 그룹에 남습니다.`
+                      ? ` 다른 그룹에도 있는 ${pendingDeleteGroup.stockIds.length - pendingDeleteOnlyCount}개 종목은 해당 그룹에 유지됩니다.`
                       : ""}
                   </p>
                   <div>
@@ -1721,8 +1993,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
             </section>
           </div>
           <div className="dialog-actions manage-dialog-actions">
-            <p>그룹은 항상 1개 이상 유지됩니다.</p>
-            <button className="button button-primary" type="button" onClick={() => setDialog(null)}>저장</button>
+            <p>현재 그룹 {groups.length}/5개 (최소 1개 유지)</p>
+            <button className="button button-primary" type="button" onClick={() => setDialog(null)}>완료</button>
           </div>
         </AppDialog>
       ) : null}

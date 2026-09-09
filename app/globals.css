@@ -4237,3 +4237,158 @@ p {
     padding: 7px 2px 0;
   }
 }
+
+/* 관심종목 인텔리전스 호재·악재 및 관리 신규 스타일 */
+.stock-market-table-card-row td {
+  background: #fbfcfd;
+}
+
+.stock-intelligence-container {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 6px 4px 14px 14px;
+}
+
+.stock-intelligence-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.stock-intelligence-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stock-issue-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 12px;
+  border: 1px solid #e8ecf2;
+  border-radius: 9px;
+  background: #ffffff;
+  transition: all 140ms ease;
+}
+
+.stock-issue-card:hover {
+  border-color: #ccd5e3;
+  box-shadow: 0 2px 8px rgba(18, 34, 62, 0.05);
+}
+
+.stock-issue-positive {
+  border-left: 3px solid #168760;
+}
+
+.stock-issue-negative {
+  border-left: 3px solid #d52b1e;
+}
+
+.stock-issue-left {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+}
+
+.stock-issue-badge {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.badge-positive {
+  background: #e7f7ef;
+  color: #137754;
+}
+
+.badge-negative {
+  background: #fdeeee;
+  color: #c5271b;
+}
+
+.stock-issue-comment {
+  overflow: hidden;
+  color: #2b2e34;
+  font-size: 13px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stock-issue-link {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 9px;
+  border: 1px solid #d7dbe2;
+  border-radius: 6px;
+  background: #f9fafb;
+  color: #3b404a;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 120ms ease;
+  white-space: nowrap;
+}
+
+.stock-issue-link:hover {
+  border-color: #aeb5c2;
+  background: #ffffff;
+  color: var(--navy);
+}
+
+.stock-mobile-intelligence {
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px dashed #e4e7ec;
+}
+
+.stock-mobile-intelligence .stock-issue-card {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.stock-mobile-intelligence .stock-issue-left {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.stock-mobile-intelligence .stock-issue-comment {
+  white-space: normal;
+}
+
+.stock-mobile-intelligence .stock-issue-link {
+  align-self: flex-end;
+}
+
+.market-tag {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #eef2f8;
+  color: #4b5563;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.market-tag-overseas {
+  background: #e9edf8;
+  color: #1e3a8a;
+}
