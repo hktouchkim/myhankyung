@@ -517,56 +517,32 @@ p {
   margin-bottom: 17px;
 }
 
+.watchlist-control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.watchlist-control-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
 .group-tabs {
   display: flex;
   min-width: 0;
-  width: 100%;
+  flex: 1 1 500px;
   max-height: 94px;
   flex-wrap: wrap;
   align-content: flex-start;
   gap: 8px;
   overflow-y: auto;
   scrollbar-width: thin;
-}
-
-.group-tab {
-  display: inline-flex;
-  min-height: 43px;
-  padding: 0 15px;
-  flex: 0 0 auto;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid #d9dade;
-  border-radius: 999px;
-  background: #fff;
-  color: #34383e;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.group-tab em {
-  display: flex;
-  min-width: 21px;
-  height: 21px;
-  padding: 0 6px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  background: #f1f1f2;
-  color: #6d7178;
-  font-size: 11px;
-  font-style: normal;
-}
-
-.group-tab-active {
-  border-color: #111318;
-  background: #111318;
-  color: #fff;
-}
-
-.group-tab-active em {
-  background: #35383e;
-  color: #fff;
 }
 
 .stock-market-table-wrap {
@@ -578,7 +554,7 @@ p {
 
 .stock-market-table {
   width: 100%;
-  min-width: 680px;
+  min-width: 580px;
   border-collapse: collapse;
   table-layout: fixed;
   font-variant-numeric: tabular-nums;
@@ -586,7 +562,7 @@ p {
 
 .stock-market-table th,
 .stock-market-table td {
-  padding: 14px 10px;
+  padding: 14px 12px;
   border-bottom: 1px solid var(--line-soft);
   text-align: right;
   white-space: nowrap;
@@ -599,10 +575,24 @@ p {
   font-weight: 700;
 }
 
-.stock-market-table th:first-child,
+.stock-market-table th.col-stock-name,
 .stock-market-table td:first-child {
-  width: 170px;
+  width: 50%;
   text-align: left;
+}
+
+.stock-market-table th.col-price,
+.stock-market-table td.col-price-val {
+  width: 18%;
+  font-weight: 700;
+}
+
+.stock-market-table th.col-change {
+  width: 16%;
+}
+
+.stock-market-table th.col-rate {
+  width: 16%;
 }
 
 .stock-market-table td {
@@ -4477,41 +4467,130 @@ p {
   color: #c5271b;
 }
 
-.stock-issue-comment {
+.stock-issue-comment-link {
   overflow: hidden;
   color: #2b2e34;
   font-size: 13px;
   line-height: 1.4;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
 }
 
-.stock-issue-link {
-  display: inline-flex;
-  flex: 0 0 auto;
+.stock-issue-comment-link:hover {
+  color: var(--navy);
+  text-decoration: underline;
+}
+
+/* 종목 통합 증권사 리포트 인라인 스타일 */
+.stock-reports-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #e8ecf2;
+}
+
+.stock-reports-header {
+  display: flex;
   align-items: center;
-  gap: 3px;
-  padding: 4px 9px;
-  border: 1px solid #d7dbe2;
-  border-radius: 6px;
-  background: #f9fafb;
-  color: #3b404a;
+  gap: 6px;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.stock-reports-header svg {
+  color: #2563eb;
+}
+
+.stock-reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stock-report-inline-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e5e9f0;
+  border-radius: 7px;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 140ms ease;
+}
+
+.stock-report-inline-item:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  box-shadow: 0 2px 6px rgba(18, 34, 62, 0.04);
+}
+
+.stock-report-inline-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.stock-report-firm {
   font-size: 11px;
+  font-weight: 700;
+  color: #0f2c59;
+  background: #eef2f8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.stock-report-title {
+  font-size: 13px;
   font-weight: 600;
-  text-decoration: none;
-  transition: all 120ms ease;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.stock-issue-link:hover {
-  border-color: #aeb5c2;
-  background: #ffffff;
-  color: var(--navy);
+.stock-report-date {
+  font-size: 11px;
+  color: #8c95a3;
+  flex-shrink: 0;
+}
+
+.stock-report-inline-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #4b5563;
+  flex-shrink: 0;
+}
+
+.stock-report-inline-badge strong {
+  color: #0f2c59;
+  font-weight: 700;
 }
 
 .stock-mobile-card-expanded {
   border-left: 3px solid #0f2c59 !important;
   background: #ffffff;
+}
+
+.stock-mobile-details-compact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
 
 .stock-mobile-intelligence {
@@ -4536,12 +4615,23 @@ p {
   gap: 5px;
 }
 
-.stock-mobile-intelligence .stock-issue-comment {
+.stock-mobile-intelligence .stock-issue-comment-link {
   white-space: normal;
 }
 
-.stock-mobile-intelligence .stock-issue-link {
-  align-self: flex-end;
+.stock-mobile-intelligence .stock-report-inline-item {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.stock-mobile-intelligence .stock-report-inline-main {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stock-mobile-intelligence .stock-report-title {
+  white-space: normal;
 }
 
 .market-tag {

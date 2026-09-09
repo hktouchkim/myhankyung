@@ -1441,11 +1441,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 </div>
               </div>
 
-              <section className="group-filter-panel" aria-labelledby="group-filter-title">
-                <div className="module-heading">
-                  <h2 id="group-filter-title">관심그룹</h2>
-                  <div className="group-limit-badge">{groups.length}/5개 그룹</div>
-                </div>
+              {/* 관심그룹 탭 및 통합 컨트롤 바 (모듈 타이틀 일체 제거) */}
+              <div className="watchlist-control-bar">
                 <div className="group-tabs" role="group" aria-label="관심그룹 선택">
                   {groups.map((group) => (
                     <button
@@ -1460,52 +1457,42 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                     </button>
                   ))}
                 </div>
-              </section>
-
-              <section className="stock-list-panel" aria-labelledby="stock-list-title">
-                <div className="module-heading">
-                  <h2 id="stock-list-title">관심종목 ({selectedGroupStocks.length}/30)</h2>
-                  <div className="module-heading-actions">
-                    <label className="ai-point-switch-control" title="모든 종목의 AI 포인트 뷰 일괄 켜기/끄기">
-                      <input
-                        type="checkbox"
-                        checked={expandAllIssues}
-                        onChange={(e) => {
-                          const next = e.target.checked;
-                          setExpandAllIssues(next);
-                          setIssueOverrides({});
-                        }}
-                        aria-label="AI 포인트 뷰 일괄 표시 전환"
-                      />
-                      <span className="ai-point-switch-slider" />
-                      <span className="ai-point-switch-text">
-                        <Sparkles size={14} className="sparkle-icon" />
-                        AI 포인트 뷰
-                      </span>
-                    </label>
-                    <button className="button action-control-button" type="button" onClick={openAddDialog} aria-label="현재 그룹에 종목 추가">
-                      <Plus size={18} />
-                      <span>종목추가</span>
-                    </button>
-                    <CollapseButton
-                      label="관심종목"
-                      collapsed={collapsedModules.stocks}
-                      onToggle={() => toggleModule("stocks")}
+                <div className="watchlist-control-actions">
+                  <label className="ai-point-switch-control" title="모든 종목의 AI 포인트 뷰 일괄 켜기/끄기">
+                    <input
+                      type="checkbox"
+                      checked={expandAllIssues}
+                      onChange={(e) => {
+                        const next = e.target.checked;
+                        setExpandAllIssues(next);
+                        setIssueOverrides({});
+                      }}
+                      aria-label="AI 포인트 뷰 일괄 표시 전환"
                     />
-                  </div>
+                    <span className="ai-point-switch-slider" />
+                    <span className="ai-point-switch-text">
+                      <Sparkles size={14} className="sparkle-icon" />
+                      AI 포인트 뷰
+                    </span>
+                  </label>
+                  <button className="button action-control-button" type="button" onClick={openAddDialog} aria-label="현재 그룹에 종목 추가">
+                    <Plus size={18} />
+                    <span>종목추가</span>
+                  </button>
                 </div>
-                {!collapsedModules.stocks && selectedGroupStocks.length ? (
+              </div>
+
+              <section className="stock-list-panel" aria-label={`${selectedGroup.name} 종목 목록`}>
+                {selectedGroupStocks.length ? (
                   <>
                     <div className="stock-market-table-wrap">
                       <table className="stock-market-table" aria-label={`${selectedGroup.name} 종목 시세표`}>
                         <thead>
                           <tr>
-                            <th scope="col">종목명</th>
-                            <th scope="col">현재가</th>
-                            <th scope="col">등락폭</th>
-                            <th scope="col">등락률</th>
-                            <th scope="col">고가</th>
-                            <th scope="col">저가</th>
+                            <th scope="col" className="col-stock-name">종목명</th>
+                            <th scope="col" className="col-price">현재가</th>
+                            <th scope="col" className="col-change">등락폭</th>
+                            <th scope="col" className="col-rate">등락률</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1513,12 +1500,11 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             const direction = stock.rate > 0 ? "up" : stock.rate < 0 ? "down" : "flat";
                             const detailUrl = getStockDetailUrl(stock);
                             const issues = (stock.issues || []).slice(0, 5);
-                            const hasIssues = issues.length > 0;
-                            const isExpanded = hasIssues && (issueOverrides[stock.id] ?? expandAllIssues);
+                            const stockReports = REPORTS.filter((r) => r.stockId === stock.id).slice(0, 3);
+                            const hasSubContent = issues.length > 0 || stockReports.length > 0;
+                            const isExpanded = hasSubContent && (issueOverrides[stock.id] ?? expandAllIssues);
                             const displayPrice = stock.currency === "USD" ? stock.price : `${stock.price}원`;
                             const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
-                            const displayHigh = stock.currency === "USD" ? stock.high : `${stock.high}원`;
-                            const displayLow = stock.currency === "USD" ? stock.low : `${stock.low}원`;
 
                             return (
                               <React.Fragment key={stock.id}>
@@ -1539,7 +1525,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                           <a href={detailUrl} target="_blank" rel="noopener noreferrer" aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}>
                                             {stock.name}
                                           </a>
-                                          {hasIssues ? (
+                                          {hasSubContent ? (
                                             <button
                                               type="button"
                                               className={`stock-issue-toggle-btn ${isExpanded ? "is-open" : ""}`}
@@ -1549,8 +1535,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                                   [stock.id]: !isExpanded,
                                                 }))
                                               }
-                                              aria-label={`${stock.name} AI 포인트 뷰 ${isExpanded ? "접기" : "펼치기"}`}
-                                              title={`AI 포인트 뷰 ${isExpanded ? "접기" : "펼치기"}`}
+                                              aria-label={`${stock.name} 상세 정보 ${isExpanded ? "접기" : "펼치기"}`}
+                                              title={`상세 정보 ${isExpanded ? "접기" : "펼치기"}`}
                                             >
                                               <ChevronDown size={14} />
                                             </button>
@@ -1565,49 +1551,78 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                       </div>
                                     </div>
                                   </td>
-                                  <td>{displayPrice}</td>
+                                  <td className="col-price-val">{displayPrice}</td>
                                   <td className={`stock-number-${direction}`}>
                                     {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : "−"} {displayChange}
                                   </td>
                                   <td className={`stock-number-${direction}`}>{formatRate(stock.rate)}</td>
-                                  <td>{displayHigh}</td>
-                                  <td>{displayLow}</td>
                                 </tr>
                                 {isExpanded ? (
                                   <tr className="stock-market-table-card-row">
-                                    <td colSpan={6}>
+                                    <td colSpan={4}>
                                       <div className="stock-intelligence-container">
-                                        <div className="stock-intelligence-header">
-                                          <Sparkles size={13} />
-                                          <span>AI 포인트 뷰 ({issues.length}건)</span>
-                                        </div>
-                                        <div className="stock-intelligence-list">
-                                          {issues.map((issue) => (
-                                            <div
-                                              key={issue.id}
-                                              className={`stock-issue-card ${issue.sentiment === "호재" ? "stock-issue-positive" : "stock-issue-negative"}`}
-                                            >
-                                              <div className="stock-issue-left">
-                                                <span
-                                                  className={`stock-issue-badge ${issue.sentiment === "호재" ? "badge-positive" : "badge-negative"}`}
-                                                >
-                                                  {issue.sentiment}
-                                                </span>
-                                                <span className="stock-issue-comment">{issue.comment}</span>
-                                              </div>
-                                              <a
-                                                href={issue.articleUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="stock-issue-link"
-                                                aria-label="관련 한경 기사 새 창 보기"
-                                              >
-                                                <span>기사 보기</span>
-                                                <ExternalLink size={12} />
-                                              </a>
+                                        {issues.length > 0 ? (
+                                          <div className="stock-intelligence-section">
+                                            <div className="stock-intelligence-header">
+                                              <Sparkles size={13} />
+                                              <span>AI 포인트 뷰 ({issues.length}건)</span>
                                             </div>
-                                          ))}
-                                        </div>
+                                            <div className="stock-intelligence-list">
+                                              {issues.map((issue) => (
+                                                <div
+                                                  key={issue.id}
+                                                  className={`stock-issue-card ${issue.sentiment === "호재" ? "stock-issue-positive" : "stock-issue-negative"}`}
+                                                >
+                                                  <div className="stock-issue-left">
+                                                    <span
+                                                      className={`stock-issue-badge ${issue.sentiment === "호재" ? "badge-positive" : "badge-negative"}`}
+                                                    >
+                                                      {issue.sentiment}
+                                                    </span>
+                                                    <a
+                                                      href={issue.articleUrl}
+                                                      target="_blank"
+                                                      rel="noopener noreferrer"
+                                                      className="stock-issue-comment-link"
+                                                      aria-label={`${issue.comment} 관련 한경 기사 새 창 보기`}
+                                                    >
+                                                      {issue.comment}
+                                                    </a>
+                                                  </div>
+                                                </div>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        ) : null}
+
+                                        {stockReports.length > 0 ? (
+                                          <div className="stock-reports-section">
+                                            <div className="stock-reports-header">
+                                              <FileText size={13} />
+                                              <span>증권사 리포트 ({stockReports.length}건)</span>
+                                            </div>
+                                            <div className="stock-reports-list">
+                                              {stockReports.map((report) => (
+                                                <button
+                                                  key={report.id}
+                                                  type="button"
+                                                  className="stock-report-inline-item"
+                                                  onClick={() => setPreview({ type: "report", item: report })}
+                                                >
+                                                  <div className="stock-report-inline-main">
+                                                    <span className="stock-report-firm">{report.firm}</span>
+                                                    <strong className="stock-report-title">{report.title}</strong>
+                                                    <span className="stock-report-date">{report.date}</span>
+                                                  </div>
+                                                  <div className="stock-report-inline-badge">
+                                                    <span>투자의견 <strong>{report.opinion}</strong></span>
+                                                    <span>목표가 <strong>{report.target}</strong></span>
+                                                  </div>
+                                                </button>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        ) : null}
                                       </div>
                                     </td>
                                   </tr>
@@ -1624,11 +1639,10 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         const direction = stock.rate > 0 ? "up" : stock.rate < 0 ? "down" : "flat";
                         const detailUrl = getStockDetailUrl(stock);
                         const issues = (stock.issues || []).slice(0, 5);
-                        const hasIssues = issues.length > 0;
-                        const isExpanded = hasIssues && (issueOverrides[stock.id] ?? expandAllIssues);
+                        const stockReports = REPORTS.filter((r) => r.stockId === stock.id).slice(0, 3);
+                        const hasSubContent = issues.length > 0 || stockReports.length > 0;
+                        const isExpanded = hasSubContent && (issueOverrides[stock.id] ?? expandAllIssues);
                         const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
-                        const displayHigh = stock.currency === "USD" ? stock.high : `${stock.high}원`;
-                        const displayLow = stock.currency === "USD" ? stock.low : `${stock.low}원`;
 
                         return (
                           <article key={stock.id} className={`stock-mobile-card ${isExpanded ? "stock-mobile-card-expanded" : ""}`}>
@@ -1648,7 +1662,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                     <a href={detailUrl} target="_blank" rel="noopener noreferrer" aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}>
                                       {stock.name}
                                     </a>
-                                    {hasIssues ? (
+                                    {hasSubContent ? (
                                       <button
                                         type="button"
                                         className={`stock-issue-toggle-btn ${isExpanded ? "is-open" : ""}`}
@@ -1658,8 +1672,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                             [stock.id]: !isExpanded,
                                           }))
                                         }
-                                        aria-label={`${stock.name} AI 포인트 뷰 ${isExpanded ? "접기" : "펼치기"}`}
-                                        title={`AI 포인트 뷰 ${isExpanded ? "접기" : "펼치기"}`}
+                                        aria-label={`${stock.name} 상세 정보 ${isExpanded ? "접기" : "펼치기"}`}
+                                        title={`상세 정보 ${isExpanded ? "접기" : "펼치기"}`}
                                       >
                                         <ChevronDown size={14} />
                                       </button>
@@ -1677,7 +1691,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                 <Movement stock={stock} />
                               </div>
                             </div>
-                            <dl className="stock-mobile-details">
+                            <dl className="stock-mobile-details stock-mobile-details-compact">
                               <div>
                                 <dt>등락폭</dt>
                                 <dd className={`stock-number-${direction}`}>
@@ -1685,47 +1699,74 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                 </dd>
                               </div>
                               <div>
-                                <dt>고가</dt>
-                                <dd>{displayHigh}</dd>
-                              </div>
-                              <div>
-                                <dt>저가</dt>
-                                <dd>{displayLow}</dd>
+                                <dt>등락률</dt>
+                                <dd className={`stock-number-${direction}`}>{formatRate(stock.rate)}</dd>
                               </div>
                             </dl>
                             {isExpanded ? (
                               <div className="stock-mobile-intelligence">
-                                <div className="stock-intelligence-header">
-                                  <Sparkles size={13} />
-                                  <span>AI 포인트 뷰 ({issues.length}건)</span>
-                                </div>
-                                <div className="stock-intelligence-list">
-                                  {issues.map((issue) => (
-                                    <div
-                                      key={issue.id}
-                                      className={`stock-issue-card ${issue.sentiment === "호재" ? "stock-issue-positive" : "stock-issue-negative"}`}
-                                    >
-                                      <div className="stock-issue-left">
-                                        <span
-                                          className={`stock-issue-badge ${issue.sentiment === "호재" ? "badge-positive" : "badge-negative"}`}
-                                        >
-                                          {issue.sentiment}
-                                        </span>
-                                        <span className="stock-issue-comment">{issue.comment}</span>
-                                      </div>
-                                      <a
-                                        href={issue.articleUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="stock-issue-link"
-                                        aria-label="관련 한경 기사 새 창 보기"
-                                      >
-                                        <span>기사 보기</span>
-                                        <ExternalLink size={12} />
-                                      </a>
+                                {issues.length > 0 ? (
+                                  <div className="stock-intelligence-section">
+                                    <div className="stock-intelligence-header">
+                                      <Sparkles size={13} />
+                                      <span>AI 포인트 뷰 ({issues.length}건)</span>
                                     </div>
-                                  ))}
-                                </div>
+                                    <div className="stock-intelligence-list">
+                                      {issues.map((issue) => (
+                                        <div
+                                          key={issue.id}
+                                          className={`stock-issue-card ${issue.sentiment === "호재" ? "stock-issue-positive" : "stock-issue-negative"}`}
+                                        >
+                                          <div className="stock-issue-left">
+                                            <span
+                                              className={`stock-issue-badge ${issue.sentiment === "호재" ? "badge-positive" : "badge-negative"}`}
+                                            >
+                                              {issue.sentiment}
+                                            </span>
+                                            <a
+                                              href={issue.articleUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="stock-issue-comment-link"
+                                              aria-label={`${issue.comment} 관련 한경 기사 새 창 보기`}
+                                            >
+                                              {issue.comment}
+                                            </a>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ) : null}
+
+                                {stockReports.length > 0 ? (
+                                  <div className="stock-reports-section" style={{ marginTop: issues.length > 0 ? "10px" : "0" }}>
+                                    <div className="stock-reports-header">
+                                      <FileText size={13} />
+                                      <span>증권사 리포트 ({stockReports.length}건)</span>
+                                    </div>
+                                    <div className="stock-reports-list">
+                                      {stockReports.map((report) => (
+                                        <button
+                                          key={report.id}
+                                          type="button"
+                                          className="stock-report-inline-item"
+                                          onClick={() => setPreview({ type: "report", item: report })}
+                                        >
+                                          <div className="stock-report-inline-main">
+                                            <span className="stock-report-firm">{report.firm}</span>
+                                            <strong className="stock-report-title">{report.title}</strong>
+                                            <span className="stock-report-date">{report.date}</span>
+                                          </div>
+                                          <div className="stock-report-inline-badge">
+                                            <span>투자의견 <strong>{report.opinion}</strong></span>
+                                            <span>목표가 <strong>{report.target}</strong></span>
+                                          </div>
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ) : null}
                               </div>
                             ) : null}
                           </article>
@@ -1733,46 +1774,13 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       })}
                     </div>
                   </>
-                ) : !collapsedModules.stocks ? (
+                ) : (
                   <div className="empty-panel">
                     <Star size={26} />
                     <strong>아직 등록한 종목이 없습니다.</strong>
                     <p>이 그룹에서 보고 싶은 종목을 한 개씩 추가해보세요.</p>
                   </div>
-                ) : null}
-              </section>
-
-              <section className="content-panel content-panel-separate" aria-labelledby="reports-title">
-                <div className="module-heading content-module-heading">
-                  <a
-                    className="module-title-link"
-                    href="https://markets.hankyung.com/consensus"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="리포트 전체보기 (한경 컨센서스 새 창 이동)"
-                  >
-                    <h2 id="reports-title">증권사 리포트</h2>
-                    <ChevronRight size={19} aria-hidden="true" />
-                  </a>
-                  <div className="module-heading-actions">
-                    <CollapseButton
-                      label="리포트"
-                      collapsed={collapsedModules.reports}
-                      onToggle={() => toggleModule("reports")}
-                    />
-                  </div>
-                </div>
-                {!collapsedModules.reports ? (
-                  <div className="report-grid">
-                    {filteredReports.length ? (
-                      filteredReports.map((report) => (
-                        <ReportCard key={report.id} report={report} onOpen={() => setPreview({ type: "report", item: report })} />
-                      ))
-                    ) : (
-                      <ContentEmpty type="리포트" />
-                    )}
-                  </div>
-                ) : null}
+                )}
               </section>
             </section>
           )}
