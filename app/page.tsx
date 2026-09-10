@@ -2873,7 +2873,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                   );
                                 })}
 
-                                {/* 2. 리포트 항목: [리포트] 리포트명 - 증권사 / 매수 / 목표가 / 날짜 */}
+                                {/* 2. 리포트 항목: [리포트] 매수 / 리포트명 / 목표가 / 증권사명 ... (우측 끝에 작성일) */}
                                 {displayReports.map((report) => (
                                   <div key={report.id} className="stream-row stream-report-row">
                                     <span className="sentiment-tag tag-report">
@@ -2886,43 +2886,21 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                       className="stream-link stream-link-report"
                                       onClick={(e) => e.stopPropagation()}
                                     >
-                                      <span className="report-title-text">{report.title}</span>
-                                      <span className="report-dash">-</span>
-                                      <span className="report-firm-text">{report.firm}</span>
-                                      <span className="report-meta-sep">/</span>
                                       <span className={`report-opinion-text op-${report.opinion === "매수" ? "buy" : "hold"}`}>
                                         {report.opinion}
                                       </span>
-                                      <span className="report-meta-sep">/</span>
+                                      <span className="report-title-text">{report.title}</span>
                                       <span className="report-target-text">목표가 {report.target}</span>
-                                      {report.date ? (
-                                        <>
-                                          <span className="report-meta-sep">/</span>
-                                          <span className="report-date-text">{report.date}</span>
-                                        </>
-                                      ) : null}
+                                      <span className="report-firm-text">{report.firm}</span>
                                     </a>
+                                    {report.date ? (
+                                      <span className="stream-date">{report.date}</span>
+                                    ) : null}
                                   </div>
                                 ))}
 
                                 {issues.length === 0 && displayReports.length === 0 ? (
                                   <p className="sub-empty-text">등록된 인텔리전스 및 리포트가 없습니다.</p>
-                                ) : null}
-
-                                {/* 리포트 더보기 (한경 컨센서스) */}
-                                {totalReportsCount > 0 ? (
-                                  <div className="stream-footer">
-                                    <a
-                                      href="https://markets.hankyung.com/consensus"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="stream-more-btn"
-                                      onClick={(e) => e.stopPropagation()}
-                                    >
-                                      <span>리포트 더보기</span>
-                                      <ExternalLink size={11} />
-                                    </a>
-                                  </div>
                                 ) : null}
                               </div>
                             </div>
