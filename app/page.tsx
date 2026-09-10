@@ -1538,7 +1538,10 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       const direction = stock.rate > 0 ? "up" : stock.rate < 0 ? "down" : "flat";
                       const detailUrl = getStockDetailUrl(stock);
                       const issues = (stock.issues || []).slice(0, 5);
+                      const posIssuesCount = (stock.issues || []).filter((i) => i.sentiment === "호재").length;
+                      const negIssuesCount = (stock.issues || []).filter((i) => i.sentiment === "악재").length;
                       const stockReports = REPORTS.filter((r) => r.stockId === stock.id).slice(0, 3);
+                      const totalReportsCount = REPORTS.filter((r) => r.stockId === stock.id).length;
                       const hasSubContent = issues.length > 0 || stockReports.length > 0;
                       const isExpanded = hasSubContent && (issueOverrides[stock.id] ?? expandAllIssues);
                       const displayPrice = stock.currency === "USD" ? stock.price : `${stock.price}원`;
@@ -1644,18 +1647,36 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               </div>
                             </div>
 
+                            {/* 중앙: 현재가 및 등락폭, 등락률 (박스 없이 자연스러운 텍스트) */}
                             <div className="strip-col-center">
-                              {/* 시선 이동이 전혀 없는 일체형 시세 캡슐 */}
                               <div className="strip-price-capsule">
                                 <span className="price-number">{displayPrice}</span>
-                                <div className={`rate-pill rate-${direction}`}>
-                                  <span>{stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : ""}{formatRate(stock.rate)}</span>
-                                  <small>{displayChange}</small>
+                                <div className={`rate-plain rate-${direction}`}>
+                                  <span className="rate-percent">
+                                    {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : ""}{formatRate(stock.rate)}
+                                  </span>
+                                  <span className="rate-diff">
+                                    {stock.rate > 0 ? "+" : ""}{displayChange}
+                                  </span>
                                 </div>
                               </div>
                             </div>
 
+                            {/* 우측: 호재/악재 및 리포트 건수 요약 & 펼침 아이콘 */}
                             <div className="strip-col-right">
+                              <div className="strip-summary-meta">
+                                <span className="summary-item summary-pos">
+                                  호재 <strong>{posIssuesCount}</strong>
+                                </span>
+                                <span className="summary-divider">·</span>
+                                <span className="summary-item summary-neg">
+                                  악재 <strong>{negIssuesCount}</strong>
+                                </span>
+                                <span className="summary-divider">·</span>
+                                <span className="summary-item summary-report">
+                                  리포트 <strong>{totalReportsCount}</strong>
+                                </span>
+                              </div>
                               {hasSubContent ? (
                                 <span className={`strip-chevron ${isExpanded ? "open" : ""}`} aria-hidden="true">
                                   <ChevronDown size={16} />
