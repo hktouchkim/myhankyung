@@ -1493,28 +1493,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 </div>
               </section>
 
-              {/* 2. 한경 AI 시장 브리프 모듈 (최근 본 기사의 reading-ai-module과 완벽히 동일한 시각 언어) */}
-              <section className="recent-module watchlist-ai-module" aria-labelledby="watchlist-ai-title">
-                <div className="ai-reading-copy">
-                  <div className="ai-reading-kicker">
-                    <Sparkles size={17} className="sparkle-icon" />
-                    <span>한경 AI 마켓 인텔리전스</span>
-                  </div>
-                  <h2 id="watchlist-ai-title">
-                    현재 {selectedGroup.name} 그룹은 <strong>{selectedGroupStocks.filter(s => s.rate > 0).length >= selectedGroupStocks.length / 2 ? "상승 모멘텀 우위" : "선별적 관망세"}</strong>입니다.
-                  </h2>
-                  <p>
-                    {selectedGroup.name} 그룹 내 {selectedGroupStocks.length}개 종목 중 {selectedGroupStocks.filter(s => s.rate > 0).length}개 종목이 상승세를 보이고 있습니다.
-                    한경 증권 AI와 주요 애널리스트 리포트는 차세대 실적 턴어라운드와 글로벌 밸류체인 수주 모멘텀을 주시하고 있습니다.
-                  </p>
-                </div>
-                <div className="watchlist-ai-stat-badge" aria-hidden="true">
-                  <div className="ai-stat-ring">
-                    <strong>{selectedGroupStocks.length}</strong>
-                    <span>보유 종목</span>
-                  </div>
-                </div>
-              </section>
+
 
               {/* 3. 관심종목 통합 리스트 모듈 (.recent-module) */}
               <section className="recent-module watchlist-list-module" aria-labelledby="watchlist-list-title">
