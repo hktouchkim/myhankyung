@@ -2683,19 +2683,19 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         }
                       };
 
-                      // 0개인 항목은 제외하고 1개 이상인 항목만 구성
-                      const summaryItems: { label: string; count: number; className: string }[] = [];
+                      // 0개인 항목은 제외하고 1개 이상인 항목만 구성 (A안: 직관적인 표정 이모지 + 리포트 표기)
+                      const summaryItems: { id: string; icon?: string; label: string; count: number; className: string }[] = [];
                       if (posIssuesCount > 0) {
-                        summaryItems.push({ label: "호재", count: posIssuesCount, className: "badge-pos" });
+                        summaryItems.push({ id: "pos", icon: "🙂", label: "호재", count: posIssuesCount, className: "badge-pos" });
                       }
                       if (negIssuesCount > 0) {
-                        summaryItems.push({ label: "악재", count: negIssuesCount, className: "badge-neg" });
+                        summaryItems.push({ id: "neg", icon: "🙁", label: "악재", count: negIssuesCount, className: "badge-neg" });
                       }
                       if (neutralIssuesCount > 0) {
-                        summaryItems.push({ label: "중립", count: neutralIssuesCount, className: "badge-neutral" });
+                        summaryItems.push({ id: "neutral", icon: "😐", label: "중립", count: neutralIssuesCount, className: "badge-neutral" });
                       }
                       if (totalReportsCount > 0) {
-                        summaryItems.push({ label: "리포트", count: totalReportsCount, className: "badge-report" });
+                        summaryItems.push({ id: "report", label: "리포트", count: totalReportsCount, className: "badge-report" });
                       }
 
                       return (
@@ -2806,8 +2806,18 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               {summaryItems.length > 0 ? (
                                 <div className="strip-summary-meta">
                                   {summaryItems.map((item) => (
-                                    <span key={item.label} className={`summary-badge ${item.className}`}>
-                                      {item.label} <strong>{item.count}</strong>
+                                    <span
+                                      key={item.id}
+                                      className={`summary-badge ${item.className}`}
+                                      title={`${item.label} ${item.count}개`}
+                                      aria-label={`${item.label} ${item.count}개`}
+                                    >
+                                      {item.icon ? (
+                                        <span className="summary-badge-icon" aria-hidden="true">{item.icon}</span>
+                                      ) : (
+                                        <span className="summary-badge-text">{item.label}</span>
+                                      )}
+                                      <strong>{item.count}</strong>
                                     </span>
                                   ))}
                                 </div>

@@ -5303,15 +5303,32 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 7px;
+  height: 22px;
+  padding: 0 7px;
   border-radius: 9999px;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.summary-badge-icon {
+  font-size: 13px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+.summary-badge-text {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .summary-badge strong {
   font-weight: 800;
+  font-size: 11px;
+  line-height: 1;
 }
 
 /* 한국 주식 시장 관례 색상 적용 (호재: 빨강 / 악재: 파랑 / 보합·중립: 회색 / 리포트: 회색) */
