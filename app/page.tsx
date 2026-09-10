@@ -1740,19 +1740,18 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                   )}
                                 </div>
 
-                                {/* 우측: 리포트 (최대 1개 + 더보기 버튼) */}
+                                 {/* 우측: 리포트 (최대 1개, 카드 전체 클릭 시 컨센서스로 이동, '전문보기' 텍스트 제거) */}
                                 <div className="sub-column report-col">
                                   {displayReports.length > 0 ? (
                                     <div className="report-card-list">
                                       {displayReports.map((report) => (
-                                        <button
+                                        <a
                                           key={report.id}
-                                          type="button"
+                                          href="https://markets.hankyung.com/consensus/view/651320"
+                                          target="_blank"
+                                          rel="noopener noreferrer"
                                           className="report-feed-card"
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            setPreview({ type: "report", item: report });
-                                          }}
+                                          onClick={(e) => e.stopPropagation()}
                                         >
                                           <div className="report-card-head">
                                             <span className="firm-name">{report.firm}</span>
@@ -1766,9 +1765,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                           <div className="report-card-title">{report.title}</div>
                                           <div className="report-card-footer">
                                             <span className="report-date">{report.date}</span>
-                                            <span className="report-action">리포트 전문 보기 &gt;</span>
                                           </div>
-                                        </button>
+                                        </a>
                                       ))}
                                     </div>
                                   ) : (

@@ -5061,10 +5061,6 @@ p {
 
 .watchlist-item-wrapper.expanded {
   background: #ffffff;
-  border-radius: 12px;
-  margin: 6px 0;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
 .watchlist-item-wrapper.dragging {
@@ -5316,12 +5312,10 @@ p {
   flex-shrink: 0;
 }
 
-/* 5. 하위 인텔리전스 서브패널 (배경색 일체화: #ffffff 동일 유지) */
+/* 5. 하위 인텔리전스 서브패널 (박스 없이 자연스러운 인라인 펼침) */
 .watchlist-sub-panel {
-  padding: 14px 18px 18px;
+  padding: 4px 8px 18px 36px;
   background: #ffffff;
-  border-top: 1px solid #edf2f7;
-  border-radius: 0 0 12px 12px;
 }
 
 .watchlist-sub-grid {
@@ -5331,16 +5325,19 @@ p {
 }
 
 @media (max-width: 860px) {
+  .watchlist-sub-panel {
+    padding-left: 8px;
+  }
   .watchlist-sub-grid {
     grid-template-columns: 1fr;
   }
 }
 
 .sub-column {
-  background: #fafbfe;
-  border: 1px solid #eef2f6;
-  border-radius: 10px;
-  padding: 14px 16px;
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
