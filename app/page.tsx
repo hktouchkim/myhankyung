@@ -1656,10 +1656,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             </div>
 
                             <div className="strip-col-right">
-                              <span className="strip-turnover">
-                                <span className="label">거래대금</span>
-                                <span className="val">{stock.turnover ? `${stock.turnover}백만` : "-"}</span>
-                              </span>
                               {hasSubContent ? (
                                 <span className={`strip-chevron ${isExpanded ? "open" : ""}`} aria-hidden="true">
                                   <ChevronDown size={16} />
