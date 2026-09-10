@@ -2589,18 +2589,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                   <h1>관심종목</h1>
                   <p>관심 있는 종목의 실시간 흐름과 한경 AI 포인트 뷰·증권사 리포트를 확인하세요.</p>
                 </div>
-                <div className="watchlist-title-right">
-                  <button
-                    className="button action-control-button watchlist-alert-btn"
-                    type="button"
-                    onClick={openAlertsDialog}
-                    aria-label="알림 설정"
-                    title="알림 설정"
-                  >
-                    <Bell size={16} />
-                    <span>알림설정</span>
-                  </button>
-                </div>
               </div>
 
               {/* 1. 관심그룹 세그먼트 모듈 (.recent-module) */}
