@@ -1817,6 +1817,41 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
           onClose={() => setDialog(null)}
         >
           <div className="dialog-body add-stock-dialog">
+            {/* 1. 관심그룹 선택 (현재 그룹은 필수 포함/해제 불가) */}
+            <section className="add-dialog-section">
+              <div className="add-section-label">관심그룹</div>
+              <div className="add-group-checklist" aria-label="종목을 저장할 관심그룹">
+                {groups.map((group) => {
+                  const isCurrentGroup = group.id === selectedGroupId;
+                  const checked = addTargetGroupIds.includes(group.id);
+                  return (
+                    <label
+                      key={group.id}
+                      className={`add-group-option ${checked ? "add-group-option-checked" : ""} ${isCurrentGroup ? "add-group-option-current-disabled" : ""}`}
+                      title={isCurrentGroup ? "현재 활성화된 그룹은 반드시 포함됩니다." : undefined}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        disabled={isCurrentGroup}
+                        onChange={(event) => {
+                          setAddTargetGroupIds((current) =>
+                            event.target.checked
+                              ? Array.from(new Set([...current, group.id]))
+                              : current.filter((groupId) => groupId !== group.id),
+                          );
+                        }}
+                      />
+                      <span className="checkbox-mark">{checked ? <Check size={14} /> : null}</span>
+                      <strong>{group.name}</strong>
+                      {isCurrentGroup ? <small className="current-group-badge">현재 그룹 (필수)</small> : null}
+                    </label>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* 2. 종목 검색 */}
             <section className="add-dialog-section stock-search-section">
               <div className="add-section-label">종목 검색</div>
               <label className="search-field">
@@ -1881,34 +1916,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                   <span>검색어를 입력하면 종목 결과가 표시됩니다.</span>
                 </div>
               )}
-            </section>
-            <section className="add-dialog-section">
-              <div className="add-section-label">관심그룹</div>
-              <div className="add-group-checklist" aria-label="종목을 저장할 관심그룹">
-                {groups.map((group) => {
-                  const isCurrentGroup = group.id === selectedGroupId;
-                  const checked = addTargetGroupIds.includes(group.id);
-                  return (
-                    <label key={group.id} className={`add-group-option ${checked ? "add-group-option-checked" : ""}`}>
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        disabled={isCurrentGroup}
-                        onChange={(event) => {
-                          setAddTargetGroupIds((current) =>
-                            event.target.checked
-                              ? Array.from(new Set([...current, group.id]))
-                              : current.filter((groupId) => groupId !== group.id),
-                          );
-                        }}
-                      />
-                      <span className="checkbox-mark">{checked ? <Check size={14} /> : null}</span>
-                      <strong>{group.name}</strong>
-                      {isCurrentGroup ? <small>현재 그룹</small> : null}
-                    </label>
-                  );
-                })}
-              </div>
             </section>
           </div>
           <div className="dialog-actions">
