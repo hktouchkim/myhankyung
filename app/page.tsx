@@ -1697,96 +1697,84 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             </div>
                           </div>
 
-                          {/* 하위 펼침 인텔리전스 (타이틀 제거, 단일 리포트 + 더보기 링크) */}
+                          {/* 하위 펼침 인텔리전스 (포인트뷰 & 리포트를 한 묶음으로 세로 배열) */}
                           {isExpanded ? (
                             <div className="watchlist-sub-panel">
-                              <div className="watchlist-sub-grid">
-                                {/* 좌측: 포인트 뷰 목록 (제목 우측 끝에 날짜 인라인 배치, 새창 아이콘 제거) */}
-                                <div className="sub-column ai-point-col">
-                                  {issues.length > 0 ? (
-                                    <div className="ai-point-feed">
-                                      {issues.map((issue) => {
-                                        const sentimentClass =
-                                          issue.sentiment === "호재"
-                                            ? "tag-pos"
-                                            : issue.sentiment === "악재"
-                                            ? "tag-neg"
-                                            : "tag-neutral";
-                                        return (
-                                          <div key={issue.id} className="ai-point-feed-item">
-                                            <span className={`sentiment-tag ${sentimentClass}`}>
-                                              {issue.sentiment}
-                                            </span>
-                                            <div className="feed-inline-wrap">
-                                              <a
-                                                href={issue.articleUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="feed-link"
-                                                onClick={(e) => e.stopPropagation()}
-                                              >
-                                                {issue.comment}
-                                              </a>
-                                              {issue.publishedAt ? (
-                                                <span className="feed-date">{issue.publishedAt}</span>
-                                              ) : null}
-                                            </div>
-                                          </div>
-                                        );
-                                      })}
+                              <div className="watchlist-intelligence-stream">
+                                {/* 1. AI 포인트 뷰 항목들 */}
+                                {issues.map((issue) => {
+                                  const sentimentClass =
+                                    issue.sentiment === "호재"
+                                      ? "tag-pos"
+                                      : issue.sentiment === "악재"
+                                      ? "tag-neg"
+                                      : "tag-neutral";
+                                  return (
+                                    <div key={issue.id} className="stream-row stream-issue-row">
+                                      <span className={`sentiment-tag ${sentimentClass}`}>
+                                        {issue.sentiment}
+                                      </span>
+                                      <a
+                                        href={issue.articleUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="stream-link"
+                                        onClick={(e) => e.stopPropagation()}
+                                      >
+                                        {issue.comment}
+                                      </a>
+                                      {issue.publishedAt ? (
+                                        <span className="stream-date">{issue.publishedAt}</span>
+                                      ) : null}
                                     </div>
-                                  ) : (
-                                    <p className="sub-empty-text">등록된 AI 모멘텀 포인트가 없습니다.</p>
-                                  )}
-                                </div>
+                                  );
+                                })}
 
-                                 {/* 우측: 리포트 (최대 1개, 카드 전체 클릭 시 컨센서스로 이동, '전문보기' 텍스트 제거) */}
-                                <div className="sub-column report-col">
-                                  {displayReports.length > 0 ? (
-                                    <div className="report-card-list">
-                                      {displayReports.map((report) => (
-                                        <a
-                                          key={report.id}
-                                          href="https://markets.hankyung.com/consensus/view/651320"
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="report-feed-card"
-                                          onClick={(e) => e.stopPropagation()}
-                                        >
-                                          <div className="report-card-head">
-                                            <span className="firm-name">{report.firm}</span>
-                                            <div className="target-opinion-wrap">
-                                              <span className="target-num">목표가 <strong>{report.target}</strong></span>
-                                              <span className={`opinion-tag op-${report.opinion === "매수" ? "buy" : "hold"}`}>
-                                                {report.opinion}
-                                              </span>
-                                            </div>
-                                          </div>
-                                          <div className="report-card-title">{report.title}</div>
-                                          <div className="report-card-footer">
-                                            <span className="report-date">{report.date}</span>
-                                          </div>
-                                        </a>
-                                      ))}
+                                {/* 2. 리포트 항목: [리포트 배지] [제목] [증권사] [목표가] [투자의견] [날짜] */}
+                                {displayReports.map((report) => (
+                                  <div key={report.id} className="stream-row stream-report-row">
+                                    <span className="sentiment-tag tag-report">
+                                      리포트
+                                    </span>
+                                    <a
+                                      href="https://markets.hankyung.com/consensus/view/651320"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="stream-link"
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      {report.title}
+                                    </a>
+                                    <div className="report-meta-inline">
+                                      <span className="report-firm">{report.firm}</span>
+                                      <span className="report-target">목표가 <strong>{report.target}</strong></span>
+                                      <span className={`opinion-pill op-${report.opinion === "매수" ? "buy" : "hold"}`}>
+                                        {report.opinion}
+                                      </span>
+                                      <span className="stream-date">{report.date}</span>
                                     </div>
-                                  ) : (
-                                    <p className="sub-empty-text">최근 발간된 증권사 리포트가 없습니다.</p>
-                                  )}
+                                  </div>
+                                ))}
 
-                                  {/* 리포트 더보기 버튼 */}
-                                  <div className="report-more-wrapper">
+                                {issues.length === 0 && displayReports.length === 0 ? (
+                                  <p className="sub-empty-text">등록된 인텔리전스 및 리포트가 없습니다.</p>
+                                ) : null}
+
+                                {/* 리포트 더보기 (한경 컨센서스) */}
+                                {totalReportsCount > 0 ? (
+                                  <div className="stream-footer">
                                     <a
                                       href="https://markets.hankyung.com/consensus"
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="report-more-btn"
+                                      className="stream-more-btn"
                                       onClick={(e) => e.stopPropagation()}
                                     >
                                       <span>리포트 더보기</span>
-                                      <ExternalLink size={12} />
+                                      <ExternalLink size={11} />
                                     </a>
                                   </div>
-                                </div>
+                                ) : null}
                               </div>
                             </div>
                           ) : null}

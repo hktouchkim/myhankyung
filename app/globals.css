@@ -5312,57 +5312,41 @@ p {
   flex-shrink: 0;
 }
 
-/* 5. 하위 인텔리전스 서브패널 (박스 없이 자연스러운 인라인 펼침) */
+/* 5. 하위 인텔리전스 서브패널 (박스 없이 한 묶음으로 세로 스트림) */
 .watchlist-sub-panel {
-  padding: 4px 8px 18px 36px;
+  padding: 4px 8px 16px 44px;
   background: #ffffff;
-}
-
-.watchlist-sub-grid {
-  display: grid;
-  grid-template-columns: 1.25fr 1fr;
-  gap: 16px;
 }
 
 @media (max-width: 860px) {
   .watchlist-sub-panel {
-    padding-left: 8px;
-  }
-  .watchlist-sub-grid {
-    grid-template-columns: 1fr;
+    padding-left: 12px;
   }
 }
 
-.sub-column {
-  background: #f8fafc;
-  border: 1px solid #edf2f7;
-  border-radius: 8px;
-  padding: 12px 14px;
+.watchlist-intelligence-stream {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 8px;
 }
 
-/* AI 포인트 뷰 피드 */
-.ai-point-feed {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.ai-point-feed-item {
+.stream-row {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-height: 26px;
+  font-size: 12px;
 }
 
+/* 줄머리 감성/리포트 배지 공통 */
 .sentiment-tag {
   display: inline-block;
-  padding: 2px 6px;
+  padding: 2px 7px;
   border-radius: 4px;
   font-size: 10px;
   font-weight: 800;
   flex-shrink: 0;
+  letter-spacing: -0.01em;
 }
 
 .sentiment-tag.tag-pos {
@@ -5383,16 +5367,14 @@ p {
   border: 1px solid #e2e8f0;
 }
 
-.feed-inline-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex: 1;
-  min-width: 0;
+.sentiment-tag.tag-report {
+  background: #f1f5f9;
+  color: #0f2c59;
+  border: 1px solid #e2e8f0;
 }
 
-.feed-link {
+/* 기사/리포트 공통 제목 링크 */
+.stream-link {
   font-size: 12px;
   color: #1e293b;
   line-height: 1.4;
@@ -5404,153 +5386,89 @@ p {
   flex: 1;
 }
 
-.feed-link:hover {
+.stream-link:hover {
   color: #0f2c59;
   text-decoration: underline;
 }
 
-.feed-date {
+.stream-date {
   font-size: 11px;
   color: #94a3b8;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-/* 증권사 리서치 카드 목록 */
-.report-card-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.report-feed-card {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  width: 100%;
-  padding: 10px 12px;
-  background: #ffffff;
-  border: 1px solid #edf2f7;
-  border-radius: 8px;
-  cursor: pointer;
-  text-align: left;
-  transition: all 130ms ease;
-}
-
-.report-feed-card:hover {
-  background: #ffffff;
-  border-color: #cbd5e1;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-
-.report-card-head {
+/* 리포트 행 전용 인라인 메타 (증권사 · 목표가 · 투자의견 · 날짜) */
+.report-meta-inline {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
+  flex-shrink: 0;
+  font-size: 11px;
 }
 
-.firm-name {
-  font-size: 11px;
+.report-firm {
   font-weight: 700;
   color: #0f2c59;
-  background: #e2e8f0;
-  padding: 1px 5px;
+  background: #f1f5f9;
+  padding: 1px 6px;
   border-radius: 4px;
 }
 
-.target-opinion-wrap {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.target-num {
-  font-size: 11px;
+.report-target {
   color: #64748b;
 }
 
-.target-num strong {
+.report-target strong {
   color: #0f2c59;
   font-weight: 800;
 }
 
-.opinion-tag {
+.opinion-pill {
   font-size: 10px;
   font-weight: 800;
   padding: 1px 5px;
   border-radius: 4px;
 }
 
-.opinion-tag.op-buy {
+.opinion-pill.op-buy {
   background: #fef2f2;
   color: #dc2626;
   border: 1px solid #fee2e2;
 }
 
-.opinion-tag.op-hold {
+.opinion-pill.op-hold {
   background: #f1f5f9;
   color: #475569;
 }
 
-.report-card-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: #1e293b;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.report-card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 10px;
-  margin-top: 2px;
-}
-
-.report-date {
-  color: #94a3b8;
-}
-
-.report-action {
-  color: #2563eb;
-  font-weight: 600;
-}
-
-/* 리포트 더보기 버튼 */
-.report-more-wrapper {
-  margin-top: 10px;
+/* 하단 더보기 링크 */
+.stream-footer {
   display: flex;
   justify-content: flex-end;
+  padding-top: 4px;
 }
 
-.report-more-btn {
+.stream-more-btn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   font-size: 11px;
   font-weight: 600;
-  color: #475569;
-  padding: 4px 10px;
-  border-radius: 6px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  color: #64748b;
   text-decoration: none;
-  transition: all 130ms ease;
+  transition: color 130ms ease;
 }
 
-.report-more-btn:hover {
-  background: #f1f5f9;
+.stream-more-btn:hover {
   color: #0f2c59;
-  border-color: #cbd5e1;
+  text-decoration: underline;
 }
 
 .sub-empty-text {
   font-size: 12px;
   color: #94a3b8;
-  text-align: center;
-  margin: 14px 0;
+  padding: 6px 0;
 }
 
 /* 반응형 모바일 최적화 */
