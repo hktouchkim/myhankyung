@@ -2834,7 +2834,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                           {isExpanded ? (
                             <div className="watchlist-sub-panel">
                               <div className="watchlist-intelligence-stream">
-                                {/* 1. AI 포인트 뷰 항목들 (이모지 매칭) */}
+                                {/* 1. AI 포인트 뷰 항목들 (글자 없이 아이콘 이모지만으로 표시) */}
                                 {issues.map((issue) => {
                                   const sentimentClass =
                                     issue.sentiment === "호재"
@@ -2850,9 +2850,12 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                       : "😐";
                                   return (
                                     <div key={issue.id} className="stream-row stream-issue-row">
-                                      <span className={`sentiment-tag ${sentimentClass}`}>
+                                      <span
+                                        className={`sentiment-tag ${sentimentClass} sentiment-tag-icon-only`}
+                                        title={issue.sentiment}
+                                        aria-label={issue.sentiment}
+                                      >
                                         <span className="tag-emoji" aria-hidden="true">{emoji}</span>
-                                        <span>{issue.sentiment}</span>
                                       </span>
                                       <a
                                         href={issue.articleUrl}
@@ -2870,7 +2873,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                   );
                                 })}
 
-                                {/* 2. 리포트 항목: [리포트 배지] 리포트명 / 증권사 / 매수 / 목표가 / 날짜 */}
+                                {/* 2. 리포트 항목: [리포트] 리포트명 - 증권사 / 매수 / 목표가 / 날짜 */}
                                 {displayReports.map((report) => (
                                   <div key={report.id} className="stream-row stream-report-row">
                                     <span className="sentiment-tag tag-report">
@@ -2880,13 +2883,11 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                       href="https://markets.hankyung.com/consensus/view/651320"
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="stream-link"
+                                      className="stream-link stream-link-report"
                                       onClick={(e) => e.stopPropagation()}
                                     >
-                                      {report.title}
-                                    </a>
-                                    <div className="report-meta-inline">
-                                      <span className="report-meta-sep">/</span>
+                                      <span className="report-title-text">{report.title}</span>
+                                      <span className="report-dash">-</span>
                                       <span className="report-firm-text">{report.firm}</span>
                                       <span className="report-meta-sep">/</span>
                                       <span className={`report-opinion-text op-${report.opinion === "매수" ? "buy" : "hold"}`}>
@@ -2897,10 +2898,10 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                       {report.date ? (
                                         <>
                                           <span className="report-meta-sep">/</span>
-                                          <span className="stream-date">{report.date}</span>
+                                          <span className="report-date-text">{report.date}</span>
                                         </>
                                       ) : null}
-                                    </div>
+                                    </a>
                                   </div>
                                 ))}
 

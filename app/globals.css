@@ -5446,6 +5446,18 @@ p {
   border: 1px solid #e2e8f0;
 }
 
+.sentiment-tag.sentiment-tag-icon-only {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 9999px;
+}
+
+.sentiment-tag.sentiment-tag-icon-only .tag-emoji {
+  font-size: 13px;
+}
+
 /* 기사/리포트 공통 제목 링크 */
 .stream-link {
   font-size: 12px;
@@ -5464,21 +5476,29 @@ p {
   text-decoration: underline;
 }
 
-.stream-date {
-  font-size: 11px;
-  color: #94a3b8;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-/* 리포트 행 전용 인라인 메타 (리포트명 / 증권사 / 매수 / 목표가 / 날짜) */
-.report-meta-inline {
-  display: flex;
+/* 리포트 전체 단일 행 링크 (리포트명 - 증권사 / 매수 / 목표가 / 날짜) */
+.stream-link-report {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  flex-shrink: 0;
-  font-size: 11px;
-  color: #64748b;
+  color: #334155;
+  font-weight: 500;
+}
+
+.stream-link-report:hover .report-title-text {
+  text-decoration: underline;
+  color: #0f2c59;
+}
+
+.report-title-text {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.report-dash {
+  color: #94a3b8;
+  font-weight: 600;
+  margin: 0 1px;
 }
 
 .report-meta-sep {
@@ -5506,6 +5526,18 @@ p {
 .report-target-text {
   color: #334155;
   font-weight: 600;
+}
+
+.report-date-text {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.stream-date {
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* 하단 더보기 링크 */
