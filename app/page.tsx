@@ -2834,7 +2834,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                           {isExpanded ? (
                             <div className="watchlist-sub-panel">
                               <div className="watchlist-intelligence-stream">
-                                {/* 1. AI 포인트 뷰 항목들 */}
+                                {/* 1. AI 포인트 뷰 항목들 (이모지 매칭) */}
                                 {issues.map((issue) => {
                                   const sentimentClass =
                                     issue.sentiment === "호재"
@@ -2842,10 +2842,17 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                       : issue.sentiment === "악재"
                                       ? "tag-neg"
                                       : "tag-neutral";
+                                  const emoji =
+                                    issue.sentiment === "호재"
+                                      ? "🙂"
+                                      : issue.sentiment === "악재"
+                                      ? "🙁"
+                                      : "😐";
                                   return (
                                     <div key={issue.id} className="stream-row stream-issue-row">
                                       <span className={`sentiment-tag ${sentimentClass}`}>
-                                        {issue.sentiment}
+                                        <span className="tag-emoji" aria-hidden="true">{emoji}</span>
+                                        <span>{issue.sentiment}</span>
                                       </span>
                                       <a
                                         href={issue.articleUrl}

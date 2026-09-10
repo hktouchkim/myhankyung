@@ -5402,13 +5402,24 @@ p {
 
 /* 줄머리 감성/리포트 배지 공통 */
 .sentiment-tag {
-  display: inline-block;
-  padding: 2px 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+  padding: 0 6px;
   border-radius: 4px;
   font-size: 10px;
   font-weight: 800;
   flex-shrink: 0;
   letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.sentiment-tag .tag-emoji {
+  font-size: 11px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 .sentiment-tag.tag-pos {
