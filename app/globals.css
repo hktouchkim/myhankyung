@@ -5184,78 +5184,53 @@ p {
   font-weight: 700;
 }
 
-/* 중앙 시세 영역 (보더/배경 박스 없이 깔끔한 텍스트 렌더링) */
-.strip-col-center {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex: 1;
+/* 시세 컬럼 (가격 / 등락폭 / 등락률 세로열 정렬) */
+.strip-col-price {
+  width: 90px;
+  text-align: right;
+  flex-shrink: 0;
 }
 
-.strip-price-capsule {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  background: transparent;
-  padding: 0;
-  border: none;
-}
-
-.strip-price-capsule .price-number {
+.strip-col-price .price-number {
   font-size: 15px;
   font-weight: 800;
   color: #0f172a;
   letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
 }
 
-/* 변동폭/변동률 박스 없이 깔끔한 텍스트 */
-.rate-plain {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.strip-col-diff {
+  width: 80px;
+  text-align: right;
+  flex-shrink: 0;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
-.rate-plain .rate-percent {
+.strip-col-rate {
+  width: 76px;
+  text-align: right;
+  flex-shrink: 0;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
 }
 
-.rate-plain .rate-diff {
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.rate-plain.rate-up {
+.strip-col-diff.rate-up,
+.strip-col-rate.rate-up {
   color: #dc2626;
 }
 
-.rate-plain.rate-down {
+.strip-col-diff.rate-down,
+.strip-col-rate.rate-down {
   color: #2563eb;
 }
 
-.rate-plain.rate-flat {
+.strip-col-diff.rate-flat,
+.strip-col-rate.rate-flat {
   color: #64748b;
-}
-
-/* 우측 정보: 호재/악재/리포트 요약 및 펼침 */
-.strip-col-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 16px;
-  flex: 1.1;
-  margin-left: 20px;
-}
-
-.strip-summary-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: #64748b;
-  white-space: nowrap;
 }
 
 /* 우측 정보: 호재/악재/중립/리포트 배지 및 펼침 */
@@ -5263,9 +5238,10 @@ p {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 14px;
-  flex: 1.1;
-  margin-left: 20px;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  margin-left: 16px;
 }
 
 .strip-summary-meta {
@@ -5498,17 +5474,26 @@ p {
   }
   .watchlist-strip-row {
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px 12px;
     padding: 12px 6px;
   }
   .strip-col-left {
     flex: 1 1 100%;
   }
-  .strip-col-center {
-    flex: 1;
-    justify-content: flex-start;
+  .strip-col-price {
+    width: auto;
+    text-align: left;
+  }
+  .strip-col-diff {
+    width: auto;
+    text-align: left;
+  }
+  .strip-col-rate {
+    width: auto;
+    text-align: left;
   }
   .strip-col-right {
+    margin-left: auto;
     flex: 0 0 auto;
   }
 }

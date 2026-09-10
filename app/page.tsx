@@ -1659,19 +1659,19 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               </div>
                             </div>
 
-                            {/* 중앙: 현재가 및 등락폭, 등락률 (박스 없이 자연스러운 텍스트) */}
-                            <div className="strip-col-center">
-                              <div className="strip-price-capsule">
-                                <span className="price-number">{displayPrice}</span>
-                                <div className={`rate-plain rate-${direction}`}>
-                                  <span className="rate-percent">
-                                    {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : ""}{formatRate(stock.rate)}
-                                  </span>
-                                  <span className="rate-diff">
-                                    {stock.rate > 0 ? "+" : ""}{displayChange}
-                                  </span>
-                                </div>
-                              </div>
+                            {/* 시세 컬럼 (가격 / 등락폭 / 등락률 세로열 정렬) */}
+                            <div className="strip-col-price">
+                              <span className="price-number">{displayPrice}</span>
+                            </div>
+                            <div className={`strip-col-diff rate-${direction}`}>
+                              <span className="rate-diff-val">
+                                {stock.rate > 0 ? "+" : ""}{displayChange}
+                              </span>
+                            </div>
+                            <div className={`strip-col-rate rate-${direction}`}>
+                              <span className="rate-percent-val">
+                                {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : ""}{formatRate(stock.rate)}
+                              </span>
                             </div>
 
                             {/* 우측: 0개가 아닌 항목만 노출되는 호재/악재/중립/리포트 배지 & 펼침 아이콘 */}
