@@ -1503,22 +1503,18 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                     <span className="module-count">{selectedGroupStocks.length}개 종목</span>
                   </div>
                   <div className="watchlist-heading-actions">
-                    <label className="ai-point-toggle-control" title="모든 종목의 인텔리전스 및 리포트 일괄 열기/접기">
-                      <input
-                        type="checkbox"
-                        checked={expandAllIssues}
-                        onChange={(e) => {
-                          const next = e.target.checked;
-                          setExpandAllIssues(next);
-                          setIssueOverrides({});
-                        }}
-                        aria-label="모든 종목 일괄 열기/접기 토글"
-                      />
-                      <span className="ai-point-toggle-slider" />
-                      <span className="ai-point-toggle-label">
-                        {expandAllIssues ? "모두 접기" : "모두 열기"}
-                      </span>
-                    </label>
+                    <button
+                      type="button"
+                      className="watchlist-toggle-btn"
+                      onClick={() => {
+                        const next = !expandAllIssues;
+                        setExpandAllIssues(next);
+                        setIssueOverrides({});
+                      }}
+                      aria-label={expandAllIssues ? "모든 종목 접기" : "모든 종목 펼치기"}
+                    >
+                      {expandAllIssues ? "접기" : "펼치기"}
+                    </button>
                     <button
                       className="watchlist-add-stock-btn"
                       type="button"
@@ -1730,7 +1726,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                   );
                                 })}
 
-                                {/* 2. 리포트 항목: [리포트 배지] [제목] [증권사] [목표가] [투자의견] [날짜] */}
+                                {/* 2. 리포트 항목: [리포트 배지] 리포트명 / 증권사 / 매수 / 목표가 / 날짜 */}
                                 {displayReports.map((report) => (
                                   <div key={report.id} className="stream-row stream-report-row">
                                     <span className="sentiment-tag tag-report">
@@ -1746,12 +1742,20 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                       {report.title}
                                     </a>
                                     <div className="report-meta-inline">
-                                      <span className="report-firm">{report.firm}</span>
-                                      <span className="report-target">목표가 <strong>{report.target}</strong></span>
-                                      <span className={`opinion-pill op-${report.opinion === "매수" ? "buy" : "hold"}`}>
+                                      <span className="report-meta-sep">/</span>
+                                      <span className="report-firm-text">{report.firm}</span>
+                                      <span className="report-meta-sep">/</span>
+                                      <span className={`report-opinion-text op-${report.opinion === "매수" ? "buy" : "hold"}`}>
                                         {report.opinion}
                                       </span>
-                                      <span className="stream-date">{report.date}</span>
+                                      <span className="report-meta-sep">/</span>
+                                      <span className="report-target-text">목표가 {report.target}</span>
+                                      {report.date ? (
+                                        <>
+                                          <span className="report-meta-sep">/</span>
+                                          <span className="stream-date">{report.date}</span>
+                                        </>
+                                      ) : null}
                                     </div>
                                   </div>
                                 ))}

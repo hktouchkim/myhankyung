@@ -5023,6 +5023,28 @@ p {
   gap: 10px;
 }
 
+.watchlist-toggle-btn {
+  display: inline-flex;
+  height: 34px;
+  padding: 0 13px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 130ms ease;
+}
+
+.watchlist-toggle-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f2c59;
+}
+
 .watchlist-add-stock-btn {
   display: inline-flex;
   height: 34px;
@@ -5398,48 +5420,41 @@ p {
   flex-shrink: 0;
 }
 
-/* 리포트 행 전용 인라인 메타 (증권사 · 목표가 · 투자의견 · 날짜) */
+/* 리포트 행 전용 인라인 메타 (리포트명 / 증권사 / 매수 / 목표가 / 날짜) */
 .report-meta-inline {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
   font-size: 11px;
-}
-
-.report-firm {
-  font-weight: 700;
-  color: #0f2c59;
-  background: #f1f5f9;
-  padding: 1px 6px;
-  border-radius: 4px;
-}
-
-.report-target {
   color: #64748b;
 }
 
-.report-target strong {
-  color: #0f2c59;
-  font-weight: 800;
-}
-
-.opinion-pill {
+.report-meta-sep {
+  color: #cbd5e1;
   font-size: 10px;
-  font-weight: 800;
-  padding: 1px 5px;
-  border-radius: 4px;
 }
 
-.opinion-pill.op-buy {
-  background: #fef2f2;
+.report-firm-text {
+  font-weight: 700;
+  color: #0f2c59;
+}
+
+.report-opinion-text {
+  font-weight: 700;
+}
+
+.report-opinion-text.op-buy {
   color: #dc2626;
-  border: 1px solid #fee2e2;
 }
 
-.opinion-pill.op-hold {
-  background: #f1f5f9;
+.report-opinion-text.op-hold {
   color: #475569;
+}
+
+.report-target-text {
+  color: #334155;
+  font-weight: 600;
 }
 
 /* 하단 더보기 링크 */
