@@ -4837,13 +4837,41 @@ p {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding-bottom: 4px;
 }
 
-.recent-meta-date {
-  color: var(--muted);
-  font-size: 11px;
+.watchlist-alert-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0 13px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 130ms ease;
+}
+
+.watchlist-alert-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.watchlist-total-count {
+  font-size: 14px;
   font-weight: 500;
+  color: #475569;
+  letter-spacing: -0.02em;
+}
+
+.watchlist-total-count strong {
+  font-weight: 700;
+  color: #0f172a;
 }
 
 /* 1. 관심그룹 세그먼트 모듈 (.recent-module 규격) */

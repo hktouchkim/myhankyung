@@ -2590,15 +2590,15 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                   <p>관심 있는 종목의 실시간 흐름과 한경 AI 포인트 뷰·증권사 리포트를 확인하세요.</p>
                 </div>
                 <div className="watchlist-title-right">
-                  <span className="recent-meta-date">실시간 시세 연동</span>
                   <button
-                    className="button action-control-button icon-only-action-btn"
+                    className="button action-control-button watchlist-alert-btn"
                     type="button"
                     onClick={openAlertsDialog}
-                    aria-label="알림 관리"
-                    title="알림 관리"
+                    aria-label="알림 설정"
+                    title="알림 설정"
                   >
-                    <Bell size={18} />
+                    <Bell size={16} />
+                    <span>알림설정</span>
                   </button>
                 </div>
               </div>
@@ -2636,11 +2636,10 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
 
 
               {/* 3. 관심종목 통합 리스트 모듈 (.recent-module) */}
-              <section className="recent-module watchlist-list-module" aria-labelledby="watchlist-list-title">
+              <section className="recent-module watchlist-list-module" aria-label="관심종목 리스트">
                 <div className="recent-module-heading watchlist-list-heading">
                   <div className="watchlist-heading-left">
-                    <h2 id="watchlist-list-title">종목 시세 및 인텔리전스</h2>
-                    <span className="module-count">{selectedGroupStocks.length}개 종목</span>
+                    <span className="watchlist-total-count">총 <strong>{selectedGroupStocks.length}</strong>개 종목</span>
                   </div>
                   <div className="watchlist-heading-actions">
                     <button
