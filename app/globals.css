@@ -5234,6 +5234,11 @@ p {
   font-weight: 800;
 }
 
+.strip-summary-meta .summary-neutral strong {
+  color: #64748b;
+  font-weight: 800;
+}
+
 .strip-summary-meta .summary-report strong {
   color: #0f2c59;
   font-weight: 800;
@@ -5259,7 +5264,7 @@ p {
 
 /* 5. 하위 인텔리전스 서브패널 (배경색 일체화: #ffffff 동일 유지) */
 .watchlist-sub-panel {
-  padding: 16px 20px 20px;
+  padding: 14px 18px 18px;
   background: #ffffff;
   border-top: 1px solid #edf2f7;
   border-radius: 0 0 12px 12px;
@@ -5267,8 +5272,8 @@ p {
 
 .watchlist-sub-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 18px;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 16px;
 }
 
 @media (max-width: 860px) {
@@ -5278,41 +5283,13 @@ p {
 }
 
 .sub-column {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: #fafbfe;
+  border: 1px solid #eef2f6;
   border-radius: 10px;
   padding: 14px 16px;
-}
-
-.sub-col-header {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #edf2f7;
-  margin-bottom: 12px;
-}
-
-.sub-col-header .title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.sub-col-header h3 {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.sub-col-header .count-pill {
-  font-size: 11px;
-  color: #64748b;
-  background: #f1f5f9;
-  padding: 2px 7px;
-  border-radius: 999px;
-  font-weight: 600;
 }
 
 /* AI 포인트 뷰 피드 */
@@ -5348,6 +5325,12 @@ p {
   background: #fef2f2;
   color: #dc2626;
   border: 1px solid #fecaca;
+}
+
+.sentiment-tag.tag-neutral {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
 }
 
 .feed-text-wrap {
@@ -5396,7 +5379,7 @@ p {
   gap: 5px;
   width: 100%;
   padding: 10px 12px;
-  background: #f8fafc;
+  background: #ffffff;
   border: 1px solid #edf2f7;
   border-radius: 8px;
   cursor: pointer;
@@ -5483,6 +5466,34 @@ p {
 .report-action {
   color: #2563eb;
   font-weight: 600;
+}
+
+/* 리포트 더보기 버튼 */
+.report-more-wrapper {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.report-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  text-decoration: none;
+  transition: all 130ms ease;
+}
+
+.report-more-btn:hover {
+  background: #f1f5f9;
+  color: #0f2c59;
+  border-color: #cbd5e1;
 }
 
 .sub-empty-text {

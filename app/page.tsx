@@ -41,7 +41,7 @@ import React, { Fragment, useEffect, useMemo, useState, type CSSProperties, type
 
 type StockIssue = {
   id: string;
-  sentiment: "호재" | "악재";
+  sentiment: "호재" | "악재" | "중립";
   comment: string;
   articleUrl: string;
   publishedAt: string;
@@ -1540,8 +1540,10 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       const issues = (stock.issues || []).slice(0, 5);
                       const posIssuesCount = (stock.issues || []).filter((i) => i.sentiment === "호재").length;
                       const negIssuesCount = (stock.issues || []).filter((i) => i.sentiment === "악재").length;
-                      const stockReports = REPORTS.filter((r) => r.stockId === stock.id).slice(0, 3);
-                      const totalReportsCount = REPORTS.filter((r) => r.stockId === stock.id).length;
+                      const neutralIssuesCount = (stock.issues || []).filter((i) => i.sentiment === "중립").length;
+                      const stockReports = REPORTS.filter((r) => r.stockId === stock.id);
+                      const displayReports = stockReports.slice(0, 1);
+                      const totalReportsCount = stockReports.length;
                       const hasSubContent = issues.length > 0 || stockReports.length > 0;
                       const isExpanded = hasSubContent && (issueOverrides[stock.id] ?? expandAllIssues);
                       const displayPrice = stock.currency === "USD" ? stock.price : `${stock.price}원`;
@@ -1558,6 +1560,21 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                           }));
                         }
                       };
+
+                      // 0개인 항목은 제외하고 1개 이상인 항목만 구성
+                      const summaryItems: { label: string; count: number; className: string }[] = [];
+                      if (posIssuesCount > 0) {
+                        summaryItems.push({ label: "호재", count: posIssuesCount, className: "summary-pos" });
+                      }
+                      if (negIssuesCount > 0) {
+                        summaryItems.push({ label: "악재", count: negIssuesCount, className: "summary-neg" });
+                      }
+                      if (neutralIssuesCount > 0) {
+                        summaryItems.push({ label: "중립", count: neutralIssuesCount, className: "summary-neutral" });
+                      }
+                      if (totalReportsCount > 0) {
+                        summaryItems.push({ label: "리포트", count: totalReportsCount, className: "summary-report" });
+                      }
 
                       return (
                         <div
@@ -1662,21 +1679,20 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               </div>
                             </div>
 
-                            {/* 우측: 호재/악재 및 리포트 건수 요약 & 펼침 아이콘 */}
+                            {/* 우측: 0개가 아닌 항목만 노출되는 호재/악재/중립/리포트 요약 & 펼침 아이콘 */}
                             <div className="strip-col-right">
-                              <div className="strip-summary-meta">
-                                <span className="summary-item summary-pos">
-                                  호재 <strong>{posIssuesCount}</strong>
-                                </span>
-                                <span className="summary-divider">·</span>
-                                <span className="summary-item summary-neg">
-                                  악재 <strong>{negIssuesCount}</strong>
-                                </span>
-                                <span className="summary-divider">·</span>
-                                <span className="summary-item summary-report">
-                                  리포트 <strong>{totalReportsCount}</strong>
-                                </span>
-                              </div>
+                              {summaryItems.length > 0 ? (
+                                <div className="strip-summary-meta">
+                                  {summaryItems.map((item, itemIdx) => (
+                                    <React.Fragment key={item.label}>
+                                      {itemIdx > 0 ? <span className="summary-divider">·</span> : null}
+                                      <span className={`summary-item ${item.className}`}>
+                                        {item.label} <strong>{item.count}</strong>
+                                      </span>
+                                    </React.Fragment>
+                                  ))}
+                                </div>
+                              ) : null}
                               {hasSubContent ? (
                                 <span className={`strip-chevron ${isExpanded ? "open" : ""}`} aria-hidden="true">
                                   <ChevronDown size={16} />
@@ -1685,61 +1701,55 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             </div>
                           </div>
 
-                          {/* 하위 펼침 인텔리전스 (최근 본 기사의 정갈한 피드 스타일) */}
+                          {/* 하위 펼침 인텔리전스 (타이틀 제거, 단일 리포트 + 더보기 링크) */}
                           {isExpanded ? (
                             <div className="watchlist-sub-panel">
                               <div className="watchlist-sub-grid">
-                                {/* 좌측: AI 포인트 뷰 */}
+                                {/* 좌측: 포인트 뷰 목록 (타이틀 없음, 한국경제 표기 삭제) */}
                                 <div className="sub-column ai-point-col">
-                                  <div className="sub-col-header">
-                                    <div className="title-wrap">
-                                      <Sparkles size={14} className="sparkle-icon" />
-                                      <h3>AI 포인트 뷰</h3>
-                                    </div>
-                                    <span className="count-pill">{issues.length}건 분석</span>
-                                  </div>
                                   {issues.length > 0 ? (
                                     <div className="ai-point-feed">
-                                      {issues.map((issue) => (
-                                        <div key={issue.id} className="ai-point-feed-item">
-                                          <span className={`sentiment-tag tag-${issue.sentiment === "호재" ? "pos" : "neg"}`}>
-                                            {issue.sentiment}
-                                          </span>
-                                          <div className="feed-text-wrap">
-                                            <a
-                                              href={issue.articleUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              className="feed-link"
-                                              onClick={(e) => e.stopPropagation()}
-                                            >
-                                              <span>{issue.comment}</span>
-                                              <ExternalLink size={12} className="ext-icon" />
-                                            </a>
-                                            {issue.publishedAt ? (
-                                              <span className="feed-date">{issue.publishedAt} · 한국경제</span>
-                                            ) : null}
+                                      {issues.map((issue) => {
+                                        const sentimentClass =
+                                          issue.sentiment === "호재"
+                                            ? "tag-pos"
+                                            : issue.sentiment === "악재"
+                                            ? "tag-neg"
+                                            : "tag-neutral";
+                                        return (
+                                          <div key={issue.id} className="ai-point-feed-item">
+                                            <span className={`sentiment-tag ${sentimentClass}`}>
+                                              {issue.sentiment}
+                                            </span>
+                                            <div className="feed-text-wrap">
+                                              <a
+                                                href={issue.articleUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="feed-link"
+                                                onClick={(e) => e.stopPropagation()}
+                                              >
+                                                <span>{issue.comment}</span>
+                                                <ExternalLink size={12} className="ext-icon" />
+                                              </a>
+                                              {issue.publishedAt ? (
+                                                <span className="feed-date">{issue.publishedAt}</span>
+                                              ) : null}
+                                            </div>
                                           </div>
-                                        </div>
-                                      ))}
+                                        );
+                                      })}
                                     </div>
                                   ) : (
                                     <p className="sub-empty-text">등록된 AI 모멘텀 포인트가 없습니다.</p>
                                   )}
                                 </div>
 
-                                {/* 우측: 증권사 리포트 */}
+                                {/* 우측: 리포트 (최대 1개 + 더보기 버튼) */}
                                 <div className="sub-column report-col">
-                                  <div className="sub-col-header">
-                                    <div className="title-wrap">
-                                      <FileText size={14} className="report-icon" />
-                                      <h3>증권사 리서치</h3>
-                                    </div>
-                                    <span className="count-pill">{stockReports.length}건 발간</span>
-                                  </div>
-                                  {stockReports.length > 0 ? (
+                                  {displayReports.length > 0 ? (
                                     <div className="report-card-list">
-                                      {stockReports.map((report) => (
+                                      {displayReports.map((report) => (
                                         <button
                                           key={report.id}
                                           type="button"
@@ -1769,6 +1779,20 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                   ) : (
                                     <p className="sub-empty-text">최근 발간된 증권사 리포트가 없습니다.</p>
                                   )}
+
+                                  {/* 리포트 더보기 버튼 */}
+                                  <div className="report-more-wrapper">
+                                    <a
+                                      href="https://markets.hankyung.com/consensus"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="report-more-btn"
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      <span>리포트 더보기</span>
+                                      <ExternalLink size={12} />
+                                    </a>
+                                  </div>
                                 </div>
                               </div>
                             </div>
