@@ -1533,9 +1533,10 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         <thead>
                           <tr>
                             <th scope="col" className="col-drag" aria-label="순서 이동"><span className="sr-only">순서</span></th>
-                            <th scope="col" className="col-stock-strip">종목 및 시세</th>
-                            <th scope="col" className="col-market-brief">시장 브리프 요약</th>
-                            <th scope="col" className="col-turnover">거래대금</th>
+                            <th scope="col" className="col-stock-name">종목명</th>
+                            <th scope="col" className="col-price">현재가</th>
+                            <th scope="col" className="col-change">등락폭</th>
+                            <th scope="col" className="col-rate">등락률</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1551,9 +1552,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
 
                             const isDragging = draggedStockIndex === index;
                             const isDragOver = dragOverStockIndex === index;
-
-                            // 1줄 브리프용 대표 이슈
-                            const primeIssue = issues[0];
 
                             const toggleRow = () => {
                               if (hasSubContent) {
@@ -1610,8 +1608,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                       <GripVertical size={16} />
                                     </div>
                                   </td>
-                                  <td className="col-stock-strip-cell">
-                                    <div className="stock-strip-wrapper">
+                                  <td>
+                                    <div className="stock-table-name-cell">
                                       <button
                                         type="button"
                                         className="stock-favorite-toggle-button active"
@@ -1624,8 +1622,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                       >
                                         <Star size={16} className="star-icon-filled" />
                                       </button>
-                                      <div className="stock-strip-identity">
-                                        <div className="stock-strip-name-row">
+                                      <div className="stock-table-name">
+                                        <div className="stock-name-row">
                                           <a
                                             href={detailUrl}
                                             target="_blank"
@@ -1635,138 +1633,105 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                           >
                                             {stock.name}
                                           </a>
-                                          <span className="stock-strip-code">
-                                            {stock.code} · {stock.market}
-                                            {stock.marketType === "OVERSEAS" ? (
-                                              <span className="market-tag market-tag-overseas">해외</span>
-                                            ) : null}
-                                          </span>
+                                          {hasSubContent ? (
+                                            <span
+                                              className={`stock-row-chevron ${isExpanded ? "is-open" : ""}`}
+                                              aria-hidden="true"
+                                            >
+                                              <ChevronDown size={14} />
+                                            </span>
+                                          ) : null}
                                         </div>
-                                      </div>
-
-                                      {/* 밀착된 컴팩트 시세 블록 (종목명 바로 옆 배치) */}
-                                      <div className="stock-strip-quote">
-                                        <span className="stock-strip-price">{displayPrice}</span>
-                                        <div className={`stock-strip-badge stock-badge-${direction}`}>
-                                          <span className="stock-strip-rate">{stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : ""}{formatRate(stock.rate)}</span>
-                                          <span className="stock-strip-change">{displayChange}</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td className="col-market-brief-cell">
-                                    {primeIssue ? (
-                                      <div className="stock-strip-brief">
-                                        <span className={`stock-brief-dot dot-${primeIssue.sentiment === "호재" ? "pos" : "neg"}`} />
-                                        <span className="stock-brief-text">{primeIssue.comment}</span>
-                                      </div>
-                                    ) : (
-                                      <span className="stock-strip-brief-empty">특이 변동 이슈 없음</span>
-                                    )}
-                                  </td>
-                                  <td className="col-turnover-cell">
-                                    <div className="stock-strip-turnover">
-                                      <span className="turnover-val">{stock.turnover ? `${stock.turnover}백만` : "-"}</span>
-                                      {hasSubContent ? (
-                                        <span
-                                          className={`stock-row-chevron ${isExpanded ? "is-open" : ""}`}
-                                          aria-hidden="true"
-                                        >
-                                          <ChevronDown size={14} />
+                                        <span>
+                                          {stock.code} · {stock.market}
+                                          {stock.marketType === "OVERSEAS" ? (
+                                            <span className="market-tag market-tag-overseas">해외</span>
+                                          ) : null}
                                         </span>
-                                      ) : null}
+                                      </div>
                                     </div>
                                   </td>
+                                  <td className="col-price-val">{displayPrice}</td>
+                                  <td className={`stock-number-${direction}`}>
+                                    {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : "−"} {displayChange}
+                                  </td>
+                                  <td className={`stock-number-${direction}`}>{formatRate(stock.rate)}</td>
                                 </tr>
                                 {isExpanded ? (
                                   <tr className="stock-market-table-card-row">
-                                    <td colSpan={4}>
-                                      <div className="modern-intel-feed-panel">
-                                        <div className="modern-intel-grid">
-                                          {/* 좌측: AI 포인트 뷰 (미니멀 타임라인 피드) */}
-                                          <div className="modern-intel-column">
-                                            <div className="modern-intel-header">
-                                              <div className="intel-title-wrap">
-                                                <Sparkles size={15} className="sparkle-icon" />
-                                                <h4>AI 포인트 뷰</h4>
-                                              </div>
-                                              <span className="intel-count-pill">{issues.length}개의 분석 포인트</span>
+                                    <td colSpan={5}>
+                                      <div className="stock-intelligence-container">
+                                        <div className="stock-intelligence-grid">
+                                          {/* 좌측: AI 포인트 뷰 블록 */}
+                                          <div className="stock-intel-block stock-intel-issues">
+                                            <div className="stock-intel-block-head">
+                                              <Sparkles size={14} className="sparkle-icon" />
+                                              <strong>AI 포인트 뷰</strong>
+                                              <span className="stock-intel-badge">{issues.length}건</span>
                                             </div>
-
                                             {issues.length > 0 ? (
-                                              <div className="modern-bullet-list">
+                                              <div className="stock-intel-issues-list">
                                                 {issues.map((issue) => (
-                                                  <div key={issue.id} className="modern-bullet-item">
-                                                    <div className="bullet-signal">
-                                                      <span className={`signal-indicator ${issue.sentiment === "호재" ? "signal-bull" : "signal-bear"}`}>
-                                                        {issue.sentiment === "호재" ? "모멘텀" : "주의"}
-                                                      </span>
-                                                    </div>
-                                                    <div className="bullet-content">
-                                                      <a
-                                                        href={issue.articleUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="bullet-headline"
-                                                        onClick={(e) => e.stopPropagation()}
-                                                      >
-                                                        <span>{issue.comment}</span>
-                                                        <ExternalLink size={12} className="bullet-link-icon" />
-                                                      </a>
-                                                      {issue.publishedAt ? (
-                                                        <span className="bullet-meta">{issue.publishedAt} · 한국경제 AI Pulse</span>
-                                                      ) : null}
-                                                    </div>
+                                                  <div
+                                                    key={issue.id}
+                                                    className={`stock-intel-issue-item ${issue.sentiment === "호재" ? "sentiment-pos" : "sentiment-neg"}`}
+                                                  >
+                                                    <span className={`stock-issue-badge ${issue.sentiment === "호재" ? "badge-positive" : "badge-negative"}`}>
+                                                      {issue.sentiment}
+                                                    </span>
+                                                    <a
+                                                      href={issue.articleUrl}
+                                                      target="_blank"
+                                                      rel="noopener noreferrer"
+                                                      className="stock-issue-comment-link"
+                                                      aria-label={`${issue.comment} 관련 한경 기사 새 창 보기`}
+                                                      onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                      {issue.comment}
+                                                    </a>
                                                   </div>
                                                 ))}
                                               </div>
                                             ) : (
-                                              <p className="modern-empty-brief">현재 감지된 주요 AI 모멘텀 포인트가 없습니다.</p>
+                                              <p className="stock-intel-empty-text">등록된 AI 포인트 뷰가 없습니다.</p>
                                             )}
                                           </div>
 
-                                          {/* 우측: 증권사 리포트 (컨센서스 리서치 티켓) */}
-                                          <div className="modern-intel-column">
-                                            <div className="modern-intel-header">
-                                              <div className="intel-title-wrap">
-                                                <FileText size={15} className="report-icon" />
-                                                <h4>증권사 리서치</h4>
-                                              </div>
-                                              <span className="intel-count-pill">{stockReports.length}건 발간</span>
+                                          {/* 우측: 증권사 리포트 블록 */}
+                                          <div className="stock-intel-block stock-intel-reports">
+                                            <div className="stock-intel-block-head">
+                                              <FileText size={14} className="report-icon" />
+                                              <strong>증권사 리포트</strong>
+                                              <span className="stock-intel-badge">{stockReports.length}건</span>
                                             </div>
-
                                             {stockReports.length > 0 ? (
-                                              <div className="modern-research-list">
+                                              <div className="stock-intel-reports-list">
                                                 {stockReports.map((report) => (
                                                   <button
                                                     key={report.id}
                                                     type="button"
-                                                    className="modern-report-card"
+                                                    className="stock-intel-report-row"
                                                     onClick={(e) => {
                                                       e.stopPropagation();
                                                       setPreview({ type: "report", item: report });
                                                     }}
                                                   >
-                                                    <div className="report-card-top">
-                                                      <span className="report-firm-badge">{report.firm}</span>
-                                                      <div className="report-target-group">
-                                                        <span className="target-label">목표가</span>
-                                                        <span className="target-val">{report.target}</span>
-                                                        <span className={`opinion-pill opinion-${report.opinion === "매수" ? "buy" : "hold"}`}>
-                                                          {report.opinion}
-                                                        </span>
-                                                      </div>
+                                                    <div className="stock-intel-report-top">
+                                                      <span className="stock-report-firm">{report.firm}</span>
+                                                      <span className="stock-intel-report-target">
+                                                        목표가 <strong>{report.target}</strong>
+                                                      </span>
                                                     </div>
-                                                    <div className="report-card-title">{report.title}</div>
-                                                    <div className="report-card-bottom">
-                                                      <span className="report-card-date">{report.date}</span>
-                                                      <span className="report-view-prompt">리포트 전문 보기 &gt;</span>
+                                                    <div className="stock-report-title">{report.title}</div>
+                                                    <div className="stock-intel-report-bottom">
+                                                      <span>투자의견 <strong>{report.opinion}</strong></span>
+                                                      <span className="stock-report-date">{report.date}</span>
                                                     </div>
                                                   </button>
                                                 ))}
                                               </div>
                                             ) : (
-                                              <p className="modern-empty-brief">해당 종목에 대해 최근 발간된 증권사 리포트가 없습니다.</p>
+                                              <p className="stock-intel-empty-text">최근 발간된 증권사 리포트가 없습니다.</p>
                                             )}
                                           </div>
                                         </div>
@@ -1780,7 +1745,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         </tbody>
                       </table>
                     </div>
-
 
                     <div className="stock-mobile-list" aria-label={`${selectedGroup.name} 모바일 종목 목록`}>
                       {selectedGroupStocks.map((stock, index) => {
@@ -1907,88 +1871,76 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             </dl>
                             {isExpanded ? (
                               <div className="stock-mobile-intelligence">
-                                <div className="modern-intel-column" style={{ marginBottom: "14px" }}>
-                                  <div className="modern-intel-header">
-                                    <div className="intel-title-wrap">
-                                      <Sparkles size={14} className="sparkle-icon" />
-                                      <h4>AI 포인트 뷰</h4>
-                                    </div>
-                                    <span className="intel-count-pill">{issues.length}개 분석</span>
+                                {/* 모바일 AI 포인트 뷰 */}
+                                <div className="stock-intel-block stock-intel-issues">
+                                  <div className="stock-intel-block-head">
+                                    <Sparkles size={13} className="sparkle-icon" />
+                                    <strong>AI 포인트 뷰</strong>
+                                    <span className="stock-intel-badge">{issues.length}건</span>
                                   </div>
-
                                   {issues.length > 0 ? (
-                                    <div className="modern-bullet-list">
+                                    <div className="stock-intel-issues-list">
                                       {issues.map((issue) => (
-                                        <div key={issue.id} className="modern-bullet-item">
-                                          <div className="bullet-signal">
-                                            <span className={`signal-indicator ${issue.sentiment === "호재" ? "signal-bull" : "signal-bear"}`}>
-                                              {issue.sentiment === "호재" ? "모멘텀" : "주의"}
-                                            </span>
-                                          </div>
-                                          <div className="bullet-content">
-                                            <a
-                                              href={issue.articleUrl}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              className="bullet-headline"
-                                              onClick={(e) => e.stopPropagation()}
-                                            >
-                                              <span>{issue.comment}</span>
-                                              <ExternalLink size={12} className="bullet-link-icon" />
-                                            </a>
-                                            {issue.publishedAt ? (
-                                              <span className="bullet-meta">{issue.publishedAt}</span>
-                                            ) : null}
-                                          </div>
+                                        <div
+                                          key={issue.id}
+                                          className={`stock-intel-issue-item ${issue.sentiment === "호재" ? "sentiment-pos" : "sentiment-neg"}`}
+                                        >
+                                          <span className={`stock-issue-badge ${issue.sentiment === "호재" ? "badge-positive" : "badge-negative"}`}>
+                                            {issue.sentiment}
+                                          </span>
+                                          <a
+                                            href={issue.articleUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="stock-issue-comment-link"
+                                            onClick={(e) => e.stopPropagation()}
+                                            aria-label={`${issue.comment} 관련 한경 기사 새 창 보기`}
+                                          >
+                                            {issue.comment}
+                                          </a>
                                         </div>
                                       ))}
                                     </div>
                                   ) : (
-                                    <p className="modern-empty-brief">현재 감지된 주요 AI 모멘텀 포인트가 없습니다.</p>
+                                    <p className="stock-intel-empty-text">등록된 AI 포인트 뷰가 없습니다.</p>
                                   )}
                                 </div>
 
-                                <div className="modern-intel-column">
-                                  <div className="modern-intel-header">
-                                    <div className="intel-title-wrap">
-                                      <FileText size={14} className="report-icon" />
-                                      <h4>증권사 리서치</h4>
-                                    </div>
-                                    <span className="intel-count-pill">{stockReports.length}건</span>
+                                {/* 모바일 증권사 리포트 */}
+                                <div className="stock-intel-block stock-intel-reports" style={{ marginTop: "10px" }}>
+                                  <div className="stock-intel-block-head">
+                                    <FileText size={13} className="report-icon" />
+                                    <strong>증권사 리포트</strong>
+                                    <span className="stock-intel-badge">{stockReports.length}건</span>
                                   </div>
-
                                   {stockReports.length > 0 ? (
-                                    <div className="modern-research-list">
+                                    <div className="stock-intel-reports-list">
                                       {stockReports.map((report) => (
                                         <button
                                           key={report.id}
                                           type="button"
-                                          className="modern-report-card"
+                                          className="stock-intel-report-row"
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             setPreview({ type: "report", item: report });
                                           }}
                                         >
-                                          <div className="report-card-top">
-                                            <span className="report-firm-badge">{report.firm}</span>
-                                            <div className="report-target-group">
-                                              <span className="target-label">목표가</span>
-                                              <span className="target-val">{report.target}</span>
-                                              <span className={`opinion-pill opinion-${report.opinion === "매수" ? "buy" : "hold"}`}>
-                                                {report.opinion}
-                                              </span>
-                                            </div>
+                                          <div className="stock-intel-report-top">
+                                            <span className="stock-report-firm">{report.firm}</span>
+                                            <span className="stock-intel-report-target">
+                                              목표가 <strong>{report.target}</strong>
+                                            </span>
                                           </div>
-                                          <div className="report-card-title">{report.title}</div>
-                                          <div className="report-card-bottom">
-                                            <span className="report-card-date">{report.date}</span>
-                                            <span className="report-view-prompt">리포트 전문 &gt;</span>
+                                          <div className="stock-report-title">{report.title}</div>
+                                          <div className="stock-intel-report-bottom">
+                                            <span>투자의견 <strong>{report.opinion}</strong></span>
+                                            <span className="stock-report-date">{report.date}</span>
                                           </div>
                                         </button>
                                       ))}
                                     </div>
                                   ) : (
-                                    <p className="modern-empty-brief">최근 발간된 증권사 리포트가 없습니다.</p>
+                                    <p className="stock-intel-empty-text">최근 발간된 증권사 리포트가 없습니다.</p>
                                   )}
                                 </div>
                               </div>

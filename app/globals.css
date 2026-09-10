@@ -811,185 +811,36 @@ p {
 
 .stock-market-table th.col-drag,
 .stock-market-table td.col-drag-cell {
-  width: 28px;
-  min-width: 28px;
-  padding: 14px 2px 14px 10px;
+  width: 32px;
+  min-width: 32px;
+  padding: 13px 4px 13px 10px;
   text-align: center;
 }
 
-/* 대안 A: 종목명 + 시세 밀착 스트립 컬럼 */
-.stock-market-table th.col-stock-strip,
-.stock-market-table td.col-stock-strip-cell {
-  width: 42%;
-  min-width: 320px;
-  text-align: left;
-  padding: 10px 12px;
-}
-
-.stock-market-table th.col-market-brief,
-.stock-market-table td.col-market-brief-cell {
+/* 열 너비 재조정 (지표간 거리 좁혀 가독성 극대화) */
+.stock-market-table th.col-stock-name,
+.stock-market-table td:nth-child(2) {
   width: 44%;
   text-align: left;
-  padding: 10px 12px;
 }
 
-.stock-market-table th.col-turnover,
-.stock-market-table td.col-turnover-cell {
-  width: 14%;
-  text-align: right;
-  padding: 10px 14px;
+.stock-market-table th.col-price,
+.stock-market-table td.col-price-val {
+  width: 22%;
+  font-weight: 700;
+}
+
+.stock-market-table th.col-change {
+  width: 17%;
+}
+
+.stock-market-table th.col-rate {
+  width: 17%;
 }
 
 .stock-market-table td {
   color: #31343a;
   font-size: 14px;
-}
-
-/* 컴팩트 스트립 래퍼: 종목명과 시세가 한 덩어리로 시선 이동 제로 */
-.stock-strip-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.stock-strip-identity {
-  display: flex;
-  flex-direction: column;
-  min-width: 140px;
-  max-width: 180px;
-}
-
-.stock-strip-name-row {
-  display: flex;
-  flex-direction: column;
-}
-
-.stock-strip-name-row a {
-  color: #111827;
-  font-size: 15px;
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: -0.02em;
-}
-
-.stock-strip-name-row a:hover {
-  color: #0f2c59;
-  text-decoration: underline;
-}
-
-.stock-strip-code {
-  font-size: 11px;
-  color: #94a3b8;
-  margin-top: 1px;
-}
-
-/* 밀착된 컴팩트 시세 블록 */
-.stock-strip-quote {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto;
-  padding: 4px 8px;
-  background: #f8fafc;
-  border-radius: 8px;
-  border: 1px solid #edf2f7;
-}
-
-.stock-strip-price {
-  font-size: 15px;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.02em;
-}
-
-.stock-strip-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 7px;
-  border-radius: 5px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.stock-badge-up {
-  background: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fee2e2;
-}
-
-.stock-badge-down {
-  background: #eff6ff;
-  color: #2563eb;
-  border: 1px solid #dbeafe;
-}
-
-.stock-badge-flat {
-  background: #f1f5f9;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
-}
-
-.stock-strip-change {
-  font-size: 10px;
-  opacity: 0.85;
-}
-
-/* 시장 브리프 1줄 요약 컬럼 */
-.stock-strip-brief {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  max-width: 400px;
-  overflow: hidden;
-}
-
-.stock-brief-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.stock-brief-dot.dot-pos {
-  background: #10b981;
-  box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
-}
-
-.stock-brief-dot.dot-neg {
-  background: #ef4444;
-  box-shadow: 0 0 6px rgba(239, 68, 68, 0.5);
-}
-
-.stock-brief-text {
-  font-size: 13px;
-  color: #475569;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 500;
-}
-
-.stock-strip-brief-empty {
-  font-size: 12px;
-  color: #cbd5e1;
-}
-
-.stock-strip-turnover {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.turnover-val {
-  font-size: 13px;
-  font-weight: 600;
-  color: #64748b;
 }
 
 /* 드래그 앤 드롭 핸들 및 상태 스타일 */
@@ -4822,7 +4673,7 @@ p {
   color: #f59e0b;
 }
 
-/* 대안 A: 모던 인텔리전스 피드 & 리서치 티켓 디자인 */
+/* 관심종목 인텔리전스 AI 포인트 뷰 서브카드 연관 디자인 */
 .stock-row-expanded td {
   background: #ffffff;
   border-bottom: 0 !important;
@@ -4830,270 +4681,227 @@ p {
 
 .stock-market-table-card-row td {
   background: #ffffff;
-  padding: 0 14px 16px 36px;
+  padding-top: 2px;
+  padding-bottom: 14px;
 }
 
-.modern-intel-feed-panel {
-  padding: 16px 20px;
+.stock-intelligence-container {
+  padding: 12px 16px 14px 16px;
+  margin: 4px 12px 10px 24px;
+  border-radius: 10px;
   background: #f8fafc;
-  border-radius: 12px;
   border: 1px solid #e2e8f0;
   border-left: 4px solid #0f2c59;
 }
 
-.modern-intel-grid {
+.stock-intelligence-grid {
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
-  gap: 20px;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 16px;
   align-items: start;
 }
 
-@media (max-width: 960px) {
-  .modern-intel-grid {
+@media (max-width: 900px) {
+  .stock-intelligence-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 12px;
   }
 }
 
-.modern-intel-column {
-  display: flex;
-  flex-direction: column;
+.stock-intel-block {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 14px;
 }
 
-.modern-intel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.intel-title-wrap {
+.stock-intel-block-head {
   display: flex;
   align-items: center;
   gap: 6px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.intel-title-wrap h4 {
-  margin: 0;
+.stock-intel-block-head strong {
   font-size: 13px;
   font-weight: 700;
   color: #0f172a;
 }
 
-.intel-title-wrap .sparkle-icon {
+.stock-intel-block-head .sparkle-icon {
   color: #f59e0b;
 }
 
-.intel-title-wrap .report-icon {
+.stock-intel-block-head .report-icon {
   color: #2563eb;
 }
 
-.intel-count-pill {
+.stock-intel-badge {
   font-size: 11px;
   font-weight: 600;
   color: #64748b;
-  background: #ffffff;
-  padding: 2px 8px;
-  border-radius: 9999px;
-  border: 1px solid #e2e8f0;
+  background: #f1f5f9;
+  padding: 1px 6px;
+  border-radius: 8px;
+  margin-left: auto;
 }
 
-.modern-empty-brief {
+.stock-intel-empty-text {
   font-size: 12px;
   color: #94a3b8;
-  margin: 12px 0;
+  margin: 8px 0;
   text-align: center;
 }
 
-/* AI 포인트 뷰: 실시간 불릿 피드 (Perplexity / Terminal 감성) */
-.modern-bullet-list {
+/* AI 포인트 뷰 목록 */
+.stock-intel-issues-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 7px;
 }
 
-.modern-bullet-item {
+.stock-intel-issue-item {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 8px 10px;
-  background: #ffffff;
-  border-radius: 8px;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #f8fafc;
   border: 1px solid #edf2f7;
-  transition: all 140ms ease;
+  transition: all 120ms ease;
 }
 
-.modern-bullet-item:hover {
+.stock-intel-issue-item:hover {
+  background: #f1f5f9;
   border-color: #cbd5e1;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-.bullet-signal {
-  flex-shrink: 0;
-  margin-top: 1px;
+.stock-intel-issue-item.sentiment-pos {
+  border-left: 3px solid #168760;
 }
 
-.signal-indicator {
-  display: inline-block;
+.stock-intel-issue-item.sentiment-neg {
+  border-left: 3px solid #d52b1e;
+}
+
+.stock-issue-badge {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
   padding: 2px 6px;
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: -0.02em;
 }
 
-.signal-bull {
-  background: #ecfdf5;
-  color: #059669;
-  border: 1px solid #a7f3d0;
+.badge-positive {
+  background: #e7f7ef;
+  color: #137754;
 }
 
-.signal-bear {
-  background: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
+.badge-negative {
+  background: #fdeeee;
+  color: #c5271b;
 }
 
-.bullet-content {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-  flex: 1;
-}
-
-.bullet-headline {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
+.stock-issue-comment-link {
+  overflow: hidden;
   color: #1e293b;
   font-size: 13px;
-  font-weight: 600;
-  line-height: 1.45;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   text-decoration: none;
-  transition: color 140ms ease;
+  font-weight: 500;
+  flex: 1;
+  transition: color 0.15s ease;
 }
 
-.bullet-headline:hover {
+.stock-issue-comment-link:hover {
   color: #0f2c59;
   text-decoration: underline;
 }
 
-.bullet-link-icon {
-  color: #94a3b8;
-  flex-shrink: 0;
-}
-
-.bullet-meta {
-  font-size: 11px;
-  color: #94a3b8;
-}
-
-/* 증권사 리서치: 컨센서스 티켓 카드 */
-.modern-research-list {
+/* 증권사 리포트 목록 */
+.stock-intel-reports-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
 
-.modern-report-card {
+.stock-intel-report-row {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   width: 100%;
-  padding: 10px 12px;
-  background: #ffffff;
+  padding: 8px 10px;
   border: 1px solid #edf2f7;
-  border-radius: 8px;
+  border-radius: 6px;
+  background: #f8fafc;
   cursor: pointer;
   text-align: left;
-  transition: all 140ms ease;
+  transition: all 120ms ease;
 }
 
-.modern-report-card:hover {
+.stock-intel-report-row:hover {
   border-color: #cbd5e1;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-  transform: translateY(-1px);
+  background: #f1f5f9;
 }
 
-.report-card-top {
+.stock-intel-report-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
 }
 
-.report-firm-badge {
+.stock-report-firm {
   font-size: 11px;
   font-weight: 700;
   color: #0f2c59;
   background: #e2e8f0;
-  padding: 2px 6px;
+  padding: 1px 5px;
   border-radius: 4px;
 }
 
-.report-target-group {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.target-label {
+.stock-intel-report-target {
   font-size: 11px;
   color: #64748b;
 }
 
-.target-val {
-  font-size: 12px;
-  font-weight: 800;
+.stock-intel-report-target strong {
   color: #0f2c59;
+  font-weight: 700;
 }
 
-.opinion-pill {
-  padding: 1px 5px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 800;
-}
-
-.opinion-buy {
-  background: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fee2e2;
-}
-
-.opinion-hold {
-  background: #f1f5f9;
-  color: #475569;
-}
-
-.report-card-title {
-  font-size: 13px;
+.stock-report-title {
+  font-size: 12px;
   font-weight: 600;
   color: #1e293b;
-  line-height: 1.4;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.report-card-bottom {
+.stock-intel-report-bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-size: 11px;
+  color: #64748b;
   margin-top: 2px;
 }
 
-.report-card-date {
-  font-size: 11px;
-  color: #94a3b8;
+.stock-intel-report-bottom strong {
+  color: #334155;
 }
 
-.report-view-prompt {
+.stock-report-date {
   font-size: 11px;
-  font-weight: 600;
-  color: #2563eb;
+  color: #94a3b8;
 }
 
 /* 모바일 카드 연동 */
@@ -5119,13 +4927,26 @@ p {
 
 .stock-mobile-intelligence {
   margin-top: 12px;
-  padding: 12px;
+  padding: 10px;
   background: #f8fafc;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
 }
 
-.stock-mobile-intelligence .report-card-title {
+.stock-mobile-intelligence .stock-intel-block {
+  padding: 10px 12px;
+}
+
+.stock-mobile-intelligence .stock-intel-issue-item {
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.stock-mobile-intelligence .stock-issue-comment-link {
+  white-space: normal;
+}
+
+.stock-mobile-intelligence .stock-report-title {
   white-space: normal;
 }
 
