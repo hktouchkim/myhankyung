@@ -5035,6 +5035,9 @@ p {
 }
 
 .watchlist-list-heading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between;
   padding-bottom: 16px;
   border-bottom: 1px solid #e9eaed;
 }
@@ -5043,6 +5046,22 @@ p {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.watchlist-total-count {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 500;
+  color: #475569;
+  letter-spacing: -0.02em;
+}
+
+.watchlist-total-count strong {
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 2px;
 }
 
 .watchlist-heading-actions {
