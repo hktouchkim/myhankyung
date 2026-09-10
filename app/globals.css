@@ -4797,68 +4797,608 @@ p {
   letter-spacing: -0.02em;
 }
 
-.badge-positive {
-  background: #e7f7ef;
-  color: #137754;
+/* ==========================================================================
+   Next-Gen 관심종목 (최근 본 기사 공통 UI 디자인 시스템 완벽 계승)
+   ========================================================================== */
+
+.recent-watchlist-page {
+  min-height: 800px;
 }
 
-.badge-negative {
-  background: #fdeeee;
-  color: #c5271b;
+/* 상단 타이틀바 날짜 & 알림 */
+.watchlist-title-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 4px;
 }
 
-.stock-issue-comment-link {
-  overflow: hidden;
-  color: #1e293b;
-  font-size: 13px;
-  line-height: 1.4;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-decoration: none;
+.recent-meta-date {
+  color: var(--muted);
+  font-size: 11px;
   font-weight: 500;
-  flex: 1;
-  transition: color 0.15s ease;
 }
 
-.stock-issue-comment-link:hover {
+/* 1. 관심그룹 세그먼트 모듈 (.recent-module 규격) */
+.watchlist-group-module {
+  padding: 14px 20px !important;
+  margin-bottom: 14px;
+}
+
+.watchlist-group-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.watchlist-group-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.watchlist-group-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.watchlist-group-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms ease;
+  white-space: nowrap;
+}
+
+.watchlist-group-tab:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+  border-color: #cbd5e1;
+}
+
+.watchlist-group-tab.active {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.16);
+}
+
+.watchlist-group-tab .group-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.06);
+  color: inherit;
+}
+
+.watchlist-group-tab.active .group-tab-count {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.watchlist-group-manage-btn {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.watchlist-group-manage-btn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+/* 2. 한경 AI 마켓 인텔리전스 모듈 (최근 본 기사의 reading-ai-module 계승) */
+.watchlist-ai-module {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  min-height: 180px;
+  padding: 28px 36px;
+  align-items: center;
+  grid-template-columns: minmax(0, 1fr) 140px;
+  gap: 24px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #ffffff;
+  margin-bottom: 14px;
+}
+
+.watchlist-ai-module::after {
+  position: absolute;
+  top: -90px;
+  right: 130px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(87, 120, 255, 0.08), transparent 70%);
+  content: "";
+  pointer-events: none;
+}
+
+.watchlist-ai-stat-badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ai-stat-ring {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #f0f7ff, #ffffff);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.ai-stat-ring strong {
+  font-size: 26px;
+  color: #0f2c59;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.ai-stat-ring span {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* 3. 관심종목 리스트 모듈 헤더 */
+.watchlist-list-module {
+  padding: 24px 26px !important;
+}
+
+.watchlist-list-heading {
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e9eaed;
+}
+
+.watchlist-heading-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.watchlist-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.watchlist-add-stock-btn {
+  display: inline-flex;
+  height: 34px;
+  padding: 0 14px;
+  align-items: center;
+  gap: 6px;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #ffffff;
+  border: 1px solid #0f172a;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.watchlist-add-stock-btn:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
+}
+
+/* 4. 스트립 리스트 (.watchlist-strip-list) */
+.watchlist-strip-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.watchlist-item-wrapper {
+  border-bottom: 1px solid #edf0f5;
+  transition: background 120ms ease;
+}
+
+.watchlist-item-wrapper:last-child {
+  border-bottom: none;
+}
+
+.watchlist-item-wrapper.expanded {
+  background: #fafbfe;
+  border-radius: 12px;
+  margin: 6px 0;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.watchlist-item-wrapper.dragging {
+  opacity: 0.4;
+  background: #f1f5f9;
+}
+
+.watchlist-item-wrapper.dragover {
+  border-top: 2px solid #2563eb !important;
+}
+
+/* 메인 종목 스트립 행 */
+.watchlist-strip-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 8px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 120ms ease;
+}
+
+.watchlist-strip-row:hover {
+  background: #f8fafc;
+}
+
+.strip-col-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1.2;
+}
+
+.watchlist-drag-grip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: grab;
+  padding: 4px 2px;
+}
+
+.watchlist-drag-grip:hover {
+  color: #475569;
+}
+
+.watchlist-fav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.star-filled {
+  fill: #f59e0b;
+  color: #f59e0b;
+}
+
+.strip-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.strip-stock-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.strip-stock-name:hover {
+  text-decoration: underline;
+  color: #0f2c59;
+}
+
+.strip-stock-meta {
+  font-size: 11px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.market-pill-overseas {
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* 중앙 시세 캡슐 (시선 분산 제로) */
+.strip-col-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.strip-price-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1px solid #edf2f7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.strip-price-capsule .price-number {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.rate-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.rate-pill small {
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.rate-pill.rate-up {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fee2e2;
+}
+
+.rate-pill.rate-down {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #dbeafe;
+}
+
+.rate-pill.rate-flat {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* 우측 정보 및 액션 */
+.strip-col-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  flex: 0.8;
+}
+
+.strip-turnover {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 11px;
+}
+
+.strip-turnover .label {
+  color: #94a3b8;
+  font-size: 10px;
+}
+
+.strip-turnover .val {
+  color: #334155;
+  font-weight: 600;
+}
+
+.strip-chevron {
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  transition: transform 180ms ease;
+}
+
+.strip-chevron.open {
+  transform: rotate(180deg);
+  color: #0f2c59;
+}
+
+.strip-chevron-spacer {
+  width: 16px;
+}
+
+/* 5. 하위 인텔리전스 서브패널 (최근 본 기사의 정제된 톤앤매너) */
+.watchlist-sub-panel {
+  padding: 16px 20px 20px;
+  background: #f8fafc;
+  border-top: 1px solid #edf2f7;
+  border-radius: 0 0 12px 12px;
+}
+
+.watchlist-sub-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 18px;
+}
+
+@media (max-width: 860px) {
+  .watchlist-sub-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sub-column {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.sub-col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #edf2f7;
+  margin-bottom: 12px;
+}
+
+.sub-col-header .title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sub-col-header h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.sub-col-header .count-pill {
+  font-size: 11px;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* AI 포인트 뷰 피드 */
+.ai-point-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.ai-point-feed-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.sentiment-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.sentiment-tag.tag-pos {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.sentiment-tag.tag-neg {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.feed-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.feed-link {
+  font-size: 12px;
+  color: #1e293b;
+  line-height: 1.45;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.feed-link:hover {
   color: #0f2c59;
   text-decoration: underline;
 }
 
-/* 증권사 리포트 목록 */
-.stock-intel-reports-list {
+.feed-link .ext-icon {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.feed-date {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+/* 증권사 리서치 카드 목록 */
+.report-card-list {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-}
-
-.stock-intel-report-row {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #edf2f7;
-  border-radius: 6px;
-  background: #f8fafc;
-  cursor: pointer;
-  text-align: left;
-  transition: all 120ms ease;
-}
-
-.stock-intel-report-row:hover {
-  border-color: #cbd5e1;
-  background: #f1f5f9;
-}
-
-.stock-intel-report-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   gap: 8px;
 }
 
-.stock-report-firm {
+.report-feed-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 130ms ease;
+}
+
+.report-feed-card:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.report-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.firm-name {
   font-size: 11px;
   font-weight: 700;
   color: #0f2c59;
@@ -4867,101 +5407,97 @@ p {
   border-radius: 4px;
 }
 
-.stock-intel-report-target {
-  font-size: 11px;
-  color: #64748b;
-}
-
-.stock-intel-report-target strong {
-  color: #0f2c59;
-  font-weight: 700;
-}
-
-.stock-report-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: #1e293b;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.stock-intel-report-bottom {
+.target-opinion-wrap {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  font-size: 11px;
-  color: #64748b;
-  margin-top: 2px;
-}
-
-.stock-intel-report-bottom strong {
-  color: #334155;
-}
-
-.stock-report-date {
-  font-size: 11px;
-  color: #94a3b8;
-}
-
-/* 모바일 카드 연동 */
-.stock-mobile-clickable {
-  cursor: pointer;
-  transition: background 120ms ease, box-shadow 120ms ease;
-}
-
-.stock-mobile-clickable:active {
-  background: #f8fafc;
-}
-
-.stock-mobile-card-expanded {
-  border-left: 4px solid #0f2c59 !important;
-  background: #ffffff;
-}
-
-.stock-mobile-details-compact {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.stock-mobile-intelligence {
-  margin-top: 12px;
-  padding: 10px;
-  background: #f8fafc;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-}
-
-.stock-mobile-intelligence .stock-intel-block {
-  padding: 10px 12px;
-}
-
-.stock-mobile-intelligence .stock-intel-issue-item {
-  align-items: flex-start;
   gap: 6px;
 }
 
-.stock-mobile-intelligence .stock-issue-comment-link {
-  white-space: normal;
+.target-num {
+  font-size: 11px;
+  color: #64748b;
 }
 
-.stock-mobile-intelligence .stock-report-title {
-  white-space: normal;
+.target-num strong {
+  color: #0f2c59;
+  font-weight: 800;
 }
 
-.market-tag {
-  display: inline-block;
-  margin-left: 4px;
+.opinion-tag {
+  font-size: 10px;
+  font-weight: 800;
   padding: 1px 5px;
   border-radius: 4px;
-  background: #eef2f8;
-  color: #4b5563;
+}
+
+.opinion-tag.op-buy {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fee2e2;
+}
+
+.opinion-tag.op-hold {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.report-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.report-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 10px;
+  margin-top: 2px;
+}
+
+.report-date {
+  color: #94a3b8;
+}
+
+.report-action {
+  color: #2563eb;
   font-weight: 600;
 }
 
-.market-tag-overseas {
-  background: #e9edf8;
-  color: #1e3a8a;
+.sub-empty-text {
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: center;
+  margin: 14px 0;
 }
+
+/* 반응형 모바일 최적화 */
+@media (max-width: 680px) {
+  .watchlist-ai-module {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 16px;
+  }
+  .watchlist-ai-stat-badge {
+    display: none;
+  }
+  .watchlist-strip-row {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 6px;
+  }
+  .strip-col-left {
+    flex: 1 1 100%;
+  }
+  .strip-col-center {
+    flex: 1;
+    justify-content: flex-start;
+  }
+  .strip-col-right {
+    flex: 0 0 auto;
+  }
+}
+

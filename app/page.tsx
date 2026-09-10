@@ -1442,13 +1442,15 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
               onOpenWatchlist={() => window.location.assign("/watchlist")}
             />
           ) : (
-            <section className="watchlist-page">
-              <div className="watchlist-titlebar">
+            <section className="watchlist-page recent-watchlist-page">
+              {/* 상단 타이틀바 (최근 본 기사 동일 규격: h1 + p + 우측 날짜/알림 버튼) */}
+              <div className="watchlist-titlebar recent-page-titlebar">
                 <div>
                   <h1>관심종목</h1>
-                  <p>관심 있는 종목의 흐름과 한경의 기사·리포트를 한곳에서 확인하세요.</p>
+                  <p>관심 있는 종목의 실시간 흐름과 한경 AI 포인트 뷰·증권사 리포트를 확인하세요.</p>
                 </div>
-                <div className="page-actions">
+                <div className="watchlist-title-right">
+                  <span className="recent-meta-date">실시간 시세 연동</span>
                   <button
                     className="button action-control-button icon-only-action-btn"
                     type="button"
@@ -1461,500 +1463,329 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 </div>
               </div>
 
-              {/* 관심그룹 모듈 카드 */}
-              <section className="group-module-card" aria-label="관심그룹 관리">
-                <div className="group-module-row">
-                  <div className="group-tabs" role="group" aria-label="관심그룹 선택">
+              {/* 1. 관심그룹 세그먼트 모듈 (.recent-module) */}
+              <section className="recent-module watchlist-group-module" aria-label="관심그룹 선택 및 관리">
+                <div className="watchlist-group-bar">
+                  <div className="watchlist-group-tabs" role="tablist" aria-label="관심그룹">
                     {groups.map((group) => (
                       <button
                         key={group.id}
                         type="button"
-                        aria-pressed={group.id === selectedGroup.id}
-                        className={`group-tab ${group.id === selectedGroup.id ? "group-tab-active" : ""}`}
+                        role="tab"
+                        aria-selected={group.id === selectedGroup.id}
+                        className={`watchlist-group-tab ${group.id === selectedGroup.id ? "active" : ""}`}
                         onClick={() => chooseGroup(group.id)}
                       >
-                        <span>{group.name}</span>
-                        <em>{group.stockIds.length}</em>
+                        <span className="group-tab-name">{group.name}</span>
+                        <span className="group-tab-count">{group.stockIds.length}</span>
                       </button>
                     ))}
                   </div>
                   <button
-                    className="group-manage-icon-btn"
+                    className="watchlist-group-manage-btn"
                     type="button"
                     onClick={openManageDialog}
-                    aria-label="관심그룹 편집"
-                    title="관심그룹 편집"
+                    aria-label="관심그룹 설정 및 관리"
+                    title="관심그룹 관리"
                   >
                     <Settings size={18} />
                   </button>
                 </div>
               </section>
 
-              {/* 종목 리스트 툴바 (개수 표시 + 슬라이더 토글 스위치 + 종목추가) */}
-              <div className="stock-list-toolbar">
-                <div className="stock-list-status">
-                  <span className="stock-list-count">총 {selectedGroupStocks.length}개 종목</span>
+              {/* 2. 한경 AI 시장 브리프 모듈 (최근 본 기사의 reading-ai-module과 완벽히 동일한 시각 언어) */}
+              <section className="recent-module watchlist-ai-module" aria-labelledby="watchlist-ai-title">
+                <div className="ai-reading-copy">
+                  <div className="ai-reading-kicker">
+                    <Sparkles size={17} className="sparkle-icon" />
+                    <span>한경 AI 마켓 인텔리전스</span>
+                  </div>
+                  <h2 id="watchlist-ai-title">
+                    현재 {selectedGroup.name} 그룹은 <strong>{selectedGroupStocks.filter(s => s.rate > 0).length >= selectedGroupStocks.length / 2 ? "상승 모멘텀 우위" : "선별적 관망세"}</strong>입니다.
+                  </h2>
+                  <p>
+                    {selectedGroup.name} 그룹 내 {selectedGroupStocks.length}개 종목 중 {selectedGroupStocks.filter(s => s.rate > 0).length}개 종목이 상승세를 보이고 있습니다.
+                    한경 증권 AI와 주요 애널리스트 리포트는 차세대 실적 턴어라운드와 글로벌 밸류체인 수주 모멘텀을 주시하고 있습니다.
+                  </p>
                 </div>
-                <div className="stock-list-actions">
-                  <label className="ai-point-toggle-control" title="모든 종목의 AI 포인트 뷰 및 리포트 일괄 켜기/끄기">
-                    <input
-                      type="checkbox"
-                      checked={expandAllIssues}
-                      onChange={(e) => {
-                        const next = e.target.checked;
-                        setExpandAllIssues(next);
-                        setIssueOverrides({});
-                      }}
-                      aria-label="AI 포인트 뷰 일괄 표시 토글"
-                    />
-                    <span className="ai-point-toggle-slider" />
-                    <span className="ai-point-toggle-label">
-                      <Sparkles size={14} className="sparkle-icon" />
-                      AI 포인트 뷰
-                    </span>
-                  </label>
-                  <button
-                    className="stock-toolbar-btn stock-add-btn"
-                    type="button"
-                    onClick={openAddDialog}
-                    aria-label="현재 그룹에 종목 추가"
-                  >
-                    <Plus size={16} />
-                    <span>종목추가</span>
-                  </button>
+                <div className="watchlist-ai-stat-badge" aria-hidden="true">
+                  <div className="ai-stat-ring">
+                    <strong>{selectedGroupStocks.length}</strong>
+                    <span>보유 종목</span>
+                  </div>
                 </div>
-              </div>
+              </section>
 
-              <section className="stock-list-panel" aria-label={`${selectedGroup.name} 종목 목록`}>
+              {/* 3. 관심종목 통합 리스트 모듈 (.recent-module) */}
+              <section className="recent-module watchlist-list-module" aria-labelledby="watchlist-list-title">
+                <div className="recent-module-heading watchlist-list-heading">
+                  <div className="watchlist-heading-left">
+                    <h2 id="watchlist-list-title">종목 시세 및 인텔리전스</h2>
+                    <span className="module-count">{selectedGroupStocks.length}개 종목</span>
+                  </div>
+                  <div className="watchlist-heading-actions">
+                    <label className="ai-point-toggle-control" title="모든 종목의 AI 포인트 뷰 및 리포트 일괄 켜기/끄기">
+                      <input
+                        type="checkbox"
+                        checked={expandAllIssues}
+                        onChange={(e) => {
+                          const next = e.target.checked;
+                          setExpandAllIssues(next);
+                          setIssueOverrides({});
+                        }}
+                        aria-label="AI 포인트 뷰 일괄 표시 토글"
+                      />
+                      <span className="ai-point-toggle-slider" />
+                      <span className="ai-point-toggle-label">
+                        <Sparkles size={14} className="sparkle-icon" />
+                        AI 포인트 뷰
+                      </span>
+                    </label>
+                    <button
+                      className="watchlist-add-stock-btn"
+                      type="button"
+                      onClick={openAddDialog}
+                      aria-label="현재 그룹에 종목 추가"
+                    >
+                      <Plus size={16} />
+                      <span>종목 추가</span>
+                    </button>
+                  </div>
+                </div>
+
                 {selectedGroupStocks.length ? (
-                  <>
-                    <div className="stock-market-table-wrap">
-                      <table className="stock-market-table" aria-label={`${selectedGroup.name} 종목 시세표`}>
-                        <thead>
-                          <tr>
-                            <th scope="col" className="col-drag" aria-label="순서 이동"><span className="sr-only">순서</span></th>
-                            <th scope="col" className="col-stock-name">종목명</th>
-                            <th scope="col" className="col-price">현재가</th>
-                            <th scope="col" className="col-change">등락폭</th>
-                            <th scope="col" className="col-rate">등락률</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {selectedGroupStocks.map((stock, index) => {
-                            const direction = stock.rate > 0 ? "up" : stock.rate < 0 ? "down" : "flat";
-                            const detailUrl = getStockDetailUrl(stock);
-                            const issues = (stock.issues || []).slice(0, 5);
-                            const stockReports = REPORTS.filter((r) => r.stockId === stock.id).slice(0, 3);
-                            const hasSubContent = issues.length > 0 || stockReports.length > 0;
-                            const isExpanded = hasSubContent && (issueOverrides[stock.id] ?? expandAllIssues);
-                            const displayPrice = stock.currency === "USD" ? stock.price : `${stock.price}원`;
-                            const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
+                  <div className="watchlist-strip-list" role="list">
+                    {selectedGroupStocks.map((stock, index) => {
+                      const direction = stock.rate > 0 ? "up" : stock.rate < 0 ? "down" : "flat";
+                      const detailUrl = getStockDetailUrl(stock);
+                      const issues = (stock.issues || []).slice(0, 5);
+                      const stockReports = REPORTS.filter((r) => r.stockId === stock.id).slice(0, 3);
+                      const hasSubContent = issues.length > 0 || stockReports.length > 0;
+                      const isExpanded = hasSubContent && (issueOverrides[stock.id] ?? expandAllIssues);
+                      const displayPrice = stock.currency === "USD" ? stock.price : `${stock.price}원`;
+                      const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
 
-                            const isDragging = draggedStockIndex === index;
-                            const isDragOver = dragOverStockIndex === index;
+                      const isDragging = draggedStockIndex === index;
+                      const isDragOver = dragOverStockIndex === index;
 
-                            const toggleRow = () => {
-                              if (hasSubContent) {
-                                setIssueOverrides((prev) => ({
-                                  ...prev,
-                                  [stock.id]: !isExpanded,
-                                }));
-                              }
-                            };
+                      const toggleItem = () => {
+                        if (hasSubContent) {
+                          setIssueOverrides((prev) => ({
+                            ...prev,
+                            [stock.id]: !isExpanded,
+                          }));
+                        }
+                      };
 
-                            return (
-                              <React.Fragment key={stock.id}>
-                                <tr
-                                  className={`stock-clickable-row ${isExpanded ? "stock-row-expanded" : ""} ${isDragging ? "stock-row-dragging" : ""} ${isDragOver ? "stock-row-dragover" : ""}`}
-                                  onClick={toggleRow}
-                                  draggable
-                                  onDragStart={(e) => {
-                                    setDraggedStockIndex(index);
-                                    e.dataTransfer.effectAllowed = "move";
-                                    e.dataTransfer.setData("text/plain", `${index}`);
-                                  }}
-                                  onDragOver={(e) => {
-                                    e.preventDefault();
-                                    e.dataTransfer.dropEffect = "move";
-                                    if (dragOverStockIndex !== index) {
-                                      setDragOverStockIndex(index);
-                                    }
-                                  }}
-                                  onDragLeave={() => {
-                                    if (dragOverStockIndex === index) {
-                                      setDragOverStockIndex(null);
-                                    }
-                                  }}
-                                  onDrop={(e) => {
-                                    e.preventDefault();
-                                    if (draggedStockIndex !== null && draggedStockIndex !== index) {
-                                      reorderStocksInSelectedGroup(draggedStockIndex, index);
-                                    }
-                                    setDraggedStockIndex(null);
-                                    setDragOverStockIndex(null);
-                                  }}
-                                  onDragEnd={() => {
-                                    setDraggedStockIndex(null);
-                                    setDragOverStockIndex(null);
-                                  }}
-                                  title={hasSubContent ? `${stock.name} 상세 정보 ${isExpanded ? "접기" : "펼치기"}` : undefined}
-                                >
-                                  <td className="col-drag-cell">
-                                    <div
-                                      className="stock-drag-handle"
-                                      title="드래그하여 순서 변경"
-                                      aria-label={`${stock.name} 드래그하여 순서 변경`}
-                                    >
-                                      <GripVertical size={16} />
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div className="stock-table-name-cell">
-                                      <button
-                                        type="button"
-                                        className="stock-favorite-toggle-button active"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          removeStockFromSelectedGroup(stock);
-                                        }}
-                                        aria-label={`${stock.name} 관심종목 해제`}
-                                        title="관심종목 해제"
-                                      >
-                                        <Star size={16} className="star-icon-filled" />
-                                      </button>
-                                      <div className="stock-table-name">
-                                        <div className="stock-name-row">
-                                          <a
-                                            href={detailUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            onClick={(e) => e.stopPropagation()}
-                                            aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}
-                                          >
-                                            {stock.name}
-                                          </a>
-                                          {hasSubContent ? (
-                                            <span
-                                              className={`stock-row-chevron ${isExpanded ? "is-open" : ""}`}
-                                              aria-hidden="true"
-                                            >
-                                              <ChevronDown size={14} />
-                                            </span>
-                                          ) : null}
-                                        </div>
-                                        <span>
-                                          {stock.code} · {stock.market}
-                                          {stock.marketType === "OVERSEAS" ? (
-                                            <span className="market-tag market-tag-overseas">해외</span>
-                                          ) : null}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td className="col-price-val">{displayPrice}</td>
-                                  <td className={`stock-number-${direction}`}>
-                                    {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : "−"} {displayChange}
-                                  </td>
-                                  <td className={`stock-number-${direction}`}>{formatRate(stock.rate)}</td>
-                                </tr>
-                                {isExpanded ? (
-                                  <tr className="stock-market-table-card-row">
-                                    <td colSpan={5}>
-                                      <div className="stock-intelligence-container">
-                                        <div className="stock-intelligence-grid">
-                                          {/* 좌측: AI 포인트 뷰 블록 */}
-                                          <div className="stock-intel-block stock-intel-issues">
-                                            <div className="stock-intel-block-head">
-                                              <Sparkles size={14} className="sparkle-icon" />
-                                              <strong>AI 포인트 뷰</strong>
-                                              <span className="stock-intel-badge">{issues.length}건</span>
-                                            </div>
-                                            {issues.length > 0 ? (
-                                              <div className="stock-intel-issues-list">
-                                                {issues.map((issue) => (
-                                                  <div
-                                                    key={issue.id}
-                                                    className={`stock-intel-issue-item ${issue.sentiment === "호재" ? "sentiment-pos" : "sentiment-neg"}`}
-                                                  >
-                                                    <span className={`stock-issue-badge ${issue.sentiment === "호재" ? "badge-positive" : "badge-negative"}`}>
-                                                      {issue.sentiment}
-                                                    </span>
-                                                    <a
-                                                      href={issue.articleUrl}
-                                                      target="_blank"
-                                                      rel="noopener noreferrer"
-                                                      className="stock-issue-comment-link"
-                                                      aria-label={`${issue.comment} 관련 한경 기사 새 창 보기`}
-                                                      onClick={(e) => e.stopPropagation()}
-                                                    >
-                                                      {issue.comment}
-                                                    </a>
-                                                  </div>
-                                                ))}
-                                              </div>
-                                            ) : (
-                                              <p className="stock-intel-empty-text">등록된 AI 포인트 뷰가 없습니다.</p>
-                                            )}
-                                          </div>
-
-                                          {/* 우측: 증권사 리포트 블록 */}
-                                          <div className="stock-intel-block stock-intel-reports">
-                                            <div className="stock-intel-block-head">
-                                              <FileText size={14} className="report-icon" />
-                                              <strong>증권사 리포트</strong>
-                                              <span className="stock-intel-badge">{stockReports.length}건</span>
-                                            </div>
-                                            {stockReports.length > 0 ? (
-                                              <div className="stock-intel-reports-list">
-                                                {stockReports.map((report) => (
-                                                  <button
-                                                    key={report.id}
-                                                    type="button"
-                                                    className="stock-intel-report-row"
-                                                    onClick={(e) => {
-                                                      e.stopPropagation();
-                                                      setPreview({ type: "report", item: report });
-                                                    }}
-                                                  >
-                                                    <div className="stock-intel-report-top">
-                                                      <span className="stock-report-firm">{report.firm}</span>
-                                                      <span className="stock-intel-report-target">
-                                                        목표가 <strong>{report.target}</strong>
-                                                      </span>
-                                                    </div>
-                                                    <div className="stock-report-title">{report.title}</div>
-                                                    <div className="stock-intel-report-bottom">
-                                                      <span>투자의견 <strong>{report.opinion}</strong></span>
-                                                      <span className="stock-report-date">{report.date}</span>
-                                                    </div>
-                                                  </button>
-                                                ))}
-                                              </div>
-                                            ) : (
-                                              <p className="stock-intel-empty-text">최근 발간된 증권사 리포트가 없습니다.</p>
-                                            )}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                ) : null}
-                              </React.Fragment>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <div className="stock-mobile-list" aria-label={`${selectedGroup.name} 모바일 종목 목록`}>
-                      {selectedGroupStocks.map((stock, index) => {
-                        const direction = stock.rate > 0 ? "up" : stock.rate < 0 ? "down" : "flat";
-                        const detailUrl = getStockDetailUrl(stock);
-                        const issues = (stock.issues || []).slice(0, 5);
-                        const stockReports = REPORTS.filter((r) => r.stockId === stock.id).slice(0, 3);
-                        const hasSubContent = issues.length > 0 || stockReports.length > 0;
-                        const isExpanded = hasSubContent && (issueOverrides[stock.id] ?? expandAllIssues);
-                        const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
-
-                        const isDragging = draggedStockIndex === index;
-                        const isDragOver = dragOverStockIndex === index;
-
-                        const toggleCard = () => {
-                          if (hasSubContent) {
-                            setIssueOverrides((prev) => ({
-                              ...prev,
-                              [stock.id]: !isExpanded,
-                            }));
-                          }
-                        };
-
-                        return (
-                          <article
-                            key={stock.id}
-                            className={`stock-mobile-card stock-mobile-clickable ${isExpanded ? "stock-mobile-card-expanded" : ""} ${isDragging ? "stock-row-dragging" : ""} ${isDragOver ? "stock-row-dragover" : ""}`}
-                            onClick={toggleCard}
-                            draggable
-                            onDragStart={(e) => {
-                              setDraggedStockIndex(index);
-                              e.dataTransfer.effectAllowed = "move";
-                              e.dataTransfer.setData("text/plain", `${index}`);
-                            }}
-                            onDragOver={(e) => {
-                              e.preventDefault();
-                              e.dataTransfer.dropEffect = "move";
-                              if (dragOverStockIndex !== index) {
-                                setDragOverStockIndex(index);
-                              }
-                            }}
-                            onDragLeave={() => {
-                              if (dragOverStockIndex === index) {
-                                setDragOverStockIndex(null);
-                              }
-                            }}
-                            onDrop={(e) => {
-                              e.preventDefault();
-                              if (draggedStockIndex !== null && draggedStockIndex !== index) {
-                                reorderStocksInSelectedGroup(draggedStockIndex, index);
-                              }
-                              setDraggedStockIndex(null);
+                      return (
+                        <div
+                          key={stock.id}
+                          className={`watchlist-item-wrapper ${isExpanded ? "expanded" : ""} ${isDragging ? "dragging" : ""} ${isDragOver ? "dragover" : ""}`}
+                          draggable
+                          onDragStart={(e) => {
+                            setDraggedStockIndex(index);
+                            e.dataTransfer.effectAllowed = "move";
+                            e.dataTransfer.setData("text/plain", `${index}`);
+                          }}
+                          onDragOver={(e) => {
+                            e.preventDefault();
+                            e.dataTransfer.dropEffect = "move";
+                            if (dragOverStockIndex !== index) {
+                              setDragOverStockIndex(index);
+                            }
+                          }}
+                          onDragLeave={() => {
+                            if (dragOverStockIndex === index) {
                               setDragOverStockIndex(null);
-                            }}
-                            onDragEnd={() => {
-                              setDraggedStockIndex(null);
-                              setDragOverStockIndex(null);
+                            }
+                          }}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            if (draggedStockIndex !== null && draggedStockIndex !== index) {
+                              reorderStocksInSelectedGroup(draggedStockIndex, index);
+                            }
+                            setDraggedStockIndex(null);
+                            setDragOverStockIndex(null);
+                          }}
+                          onDragEnd={() => {
+                            setDraggedStockIndex(null);
+                            setDragOverStockIndex(null);
+                          }}
+                        >
+                          {/* 메인 종목 스트립 행 */}
+                          <div
+                            className="watchlist-strip-row"
+                            onClick={toggleItem}
+                            role="button"
+                            tabIndex={0}
+                            aria-expanded={isExpanded}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                toggleItem();
+                              }
                             }}
                           >
-                            <div className="stock-mobile-heading">
-                              <div className="stock-identity">
-                                <div
-                                  className="stock-drag-handle stock-drag-handle-mobile"
-                                  title="드래그하여 순서 변경"
+                            <div className="strip-col-left">
+                              <div
+                                className="watchlist-drag-grip"
+                                title="드래그하여 순서 변경"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <GripVertical size={16} />
+                              </div>
+                              <button
+                                type="button"
+                                className="watchlist-fav-btn"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  removeStockFromSelectedGroup(stock);
+                                }}
+                                aria-label={`${stock.name} 관심종목 해제`}
+                                title="관심종목 해제"
+                              >
+                                <Star size={16} className="star-filled" />
+                              </button>
+                              <div className="strip-identity">
+                                <a
+                                  href={detailUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="strip-stock-name"
                                   onClick={(e) => e.stopPropagation()}
                                 >
-                                  <GripVertical size={16} />
-                                </div>
-                                <button
-                                  type="button"
-                                  className="stock-favorite-toggle-button active"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    removeStockFromSelectedGroup(stock);
-                                  }}
-                                  aria-label={`${stock.name} 관심종목 해제`}
-                                  title="관심종목 해제"
-                                >
-                                  <Star size={18} className="star-icon-filled" />
-                                </button>
-                                <div>
-                                  <div className="stock-name-row">
-                                    <a
-                                      href={detailUrl}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      onClick={(e) => e.stopPropagation()}
-                                      aria-label={`${stock.name} 종목 상세 페이지로 새 창 이동`}
-                                    >
-                                      {stock.name}
-                                    </a>
-                                    {hasSubContent ? (
-                                      <span
-                                        className={`stock-row-chevron ${isExpanded ? "is-open" : ""}`}
-                                        aria-hidden="true"
-                                      >
-                                        <ChevronDown size={14} />
-                                      </span>
-                                    ) : null}
-                                  </div>
-                                  <span>
-                                    {stock.code} · {stock.market}
-                                    {stock.marketType === "OVERSEAS" ? (
-                                      <span className="market-tag market-tag-overseas">해외</span>
-                                    ) : null}
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="stock-mobile-actions">
-                                <Movement stock={stock} />
+                                  {stock.name}
+                                </a>
+                                <span className="strip-stock-meta">
+                                  {stock.code} · {stock.market}
+                                  {stock.marketType === "OVERSEAS" ? (
+                                    <span className="market-pill-overseas">해외</span>
+                                  ) : null}
+                                </span>
                               </div>
                             </div>
-                            <dl className="stock-mobile-details stock-mobile-details-compact">
-                              <div>
-                                <dt>등락폭</dt>
-                                <dd className={`stock-number-${direction}`}>
-                                  {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : "−"} {displayChange}
-                                </dd>
+
+                            <div className="strip-col-center">
+                              {/* 시선 이동이 전혀 없는 일체형 시세 캡슐 */}
+                              <div className="strip-price-capsule">
+                                <span className="price-number">{displayPrice}</span>
+                                <div className={`rate-pill rate-${direction}`}>
+                                  <span>{stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : ""}{formatRate(stock.rate)}</span>
+                                  <small>{displayChange}</small>
+                                </div>
                               </div>
-                              <div>
-                                <dt>등락률</dt>
-                                <dd className={`stock-number-${direction}`}>{formatRate(stock.rate)}</dd>
-                              </div>
-                            </dl>
-                            {isExpanded ? (
-                              <div className="stock-mobile-intelligence">
-                                {/* 모바일 AI 포인트 뷰 */}
-                                <div className="stock-intel-block stock-intel-issues">
-                                  <div className="stock-intel-block-head">
-                                    <Sparkles size={13} className="sparkle-icon" />
-                                    <strong>AI 포인트 뷰</strong>
-                                    <span className="stock-intel-badge">{issues.length}건</span>
+                            </div>
+
+                            <div className="strip-col-right">
+                              <span className="strip-turnover">
+                                <span className="label">거래대금</span>
+                                <span className="val">{stock.turnover ? `${stock.turnover}백만` : "-"}</span>
+                              </span>
+                              {hasSubContent ? (
+                                <span className={`strip-chevron ${isExpanded ? "open" : ""}`} aria-hidden="true">
+                                  <ChevronDown size={16} />
+                                </span>
+                              ) : <span className="strip-chevron-spacer" />}
+                            </div>
+                          </div>
+
+                          {/* 하위 펼침 인텔리전스 (최근 본 기사의 정갈한 피드 스타일) */}
+                          {isExpanded ? (
+                            <div className="watchlist-sub-panel">
+                              <div className="watchlist-sub-grid">
+                                {/* 좌측: AI 포인트 뷰 */}
+                                <div className="sub-column ai-point-col">
+                                  <div className="sub-col-header">
+                                    <div className="title-wrap">
+                                      <Sparkles size={14} className="sparkle-icon" />
+                                      <h3>AI 포인트 뷰</h3>
+                                    </div>
+                                    <span className="count-pill">{issues.length}건 분석</span>
                                   </div>
                                   {issues.length > 0 ? (
-                                    <div className="stock-intel-issues-list">
+                                    <div className="ai-point-feed">
                                       {issues.map((issue) => (
-                                        <div
-                                          key={issue.id}
-                                          className={`stock-intel-issue-item ${issue.sentiment === "호재" ? "sentiment-pos" : "sentiment-neg"}`}
-                                        >
-                                          <span className={`stock-issue-badge ${issue.sentiment === "호재" ? "badge-positive" : "badge-negative"}`}>
+                                        <div key={issue.id} className="ai-point-feed-item">
+                                          <span className={`sentiment-tag tag-${issue.sentiment === "호재" ? "pos" : "neg"}`}>
                                             {issue.sentiment}
                                           </span>
-                                          <a
-                                            href={issue.articleUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="stock-issue-comment-link"
-                                            onClick={(e) => e.stopPropagation()}
-                                            aria-label={`${issue.comment} 관련 한경 기사 새 창 보기`}
-                                          >
-                                            {issue.comment}
-                                          </a>
+                                          <div className="feed-text-wrap">
+                                            <a
+                                              href={issue.articleUrl}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="feed-link"
+                                              onClick={(e) => e.stopPropagation()}
+                                            >
+                                              <span>{issue.comment}</span>
+                                              <ExternalLink size={12} className="ext-icon" />
+                                            </a>
+                                            {issue.publishedAt ? (
+                                              <span className="feed-date">{issue.publishedAt} · 한국경제</span>
+                                            ) : null}
+                                          </div>
                                         </div>
                                       ))}
                                     </div>
                                   ) : (
-                                    <p className="stock-intel-empty-text">등록된 AI 포인트 뷰가 없습니다.</p>
+                                    <p className="sub-empty-text">등록된 AI 모멘텀 포인트가 없습니다.</p>
                                   )}
                                 </div>
 
-                                {/* 모바일 증권사 리포트 */}
-                                <div className="stock-intel-block stock-intel-reports" style={{ marginTop: "10px" }}>
-                                  <div className="stock-intel-block-head">
-                                    <FileText size={13} className="report-icon" />
-                                    <strong>증권사 리포트</strong>
-                                    <span className="stock-intel-badge">{stockReports.length}건</span>
+                                {/* 우측: 증권사 리포트 */}
+                                <div className="sub-column report-col">
+                                  <div className="sub-col-header">
+                                    <div className="title-wrap">
+                                      <FileText size={14} className="report-icon" />
+                                      <h3>증권사 리서치</h3>
+                                    </div>
+                                    <span className="count-pill">{stockReports.length}건 발간</span>
                                   </div>
                                   {stockReports.length > 0 ? (
-                                    <div className="stock-intel-reports-list">
+                                    <div className="report-card-list">
                                       {stockReports.map((report) => (
                                         <button
                                           key={report.id}
                                           type="button"
-                                          className="stock-intel-report-row"
+                                          className="report-feed-card"
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             setPreview({ type: "report", item: report });
                                           }}
                                         >
-                                          <div className="stock-intel-report-top">
-                                            <span className="stock-report-firm">{report.firm}</span>
-                                            <span className="stock-intel-report-target">
-                                              목표가 <strong>{report.target}</strong>
-                                            </span>
+                                          <div className="report-card-head">
+                                            <span className="firm-name">{report.firm}</span>
+                                            <div className="target-opinion-wrap">
+                                              <span className="target-num">목표가 <strong>{report.target}</strong></span>
+                                              <span className={`opinion-tag op-${report.opinion === "매수" ? "buy" : "hold"}`}>
+                                                {report.opinion}
+                                              </span>
+                                            </div>
                                           </div>
-                                          <div className="stock-report-title">{report.title}</div>
-                                          <div className="stock-intel-report-bottom">
-                                            <span>투자의견 <strong>{report.opinion}</strong></span>
-                                            <span className="stock-report-date">{report.date}</span>
+                                          <div className="report-card-title">{report.title}</div>
+                                          <div className="report-card-footer">
+                                            <span className="report-date">{report.date}</span>
+                                            <span className="report-action">리포트 전문 보기 &gt;</span>
                                           </div>
                                         </button>
                                       ))}
                                     </div>
                                   ) : (
-                                    <p className="stock-intel-empty-text">최근 발간된 증권사 리포트가 없습니다.</p>
+                                    <p className="sub-empty-text">최근 발간된 증권사 리포트가 없습니다.</p>
                                   )}
                                 </div>
                               </div>
-                            ) : null}
-                          </article>
-                        );
-                      })}
-                    </div>
-                  </>
+                            </div>
+                          ) : null}
+                        </div>
+                      );
+                    })}
+                  </div>
                 ) : (
                   <div className="empty-panel">
                     <Star size={26} />
-                    <strong>아직 등록한 종목이 없습니다.</strong>
-                    <p>이 그룹에서 보고 싶은 종목을 한 개씩 추가해보세요.</p>
+                    <strong>등록된 관심종목이 없습니다.</strong>
+                    <p>상단의 '+ 종목 추가' 버튼을 눌러 관심 있는 종목을 등록해보세요.</p>
                   </div>
                 )}
               </section>
