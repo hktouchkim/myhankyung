@@ -5213,35 +5213,61 @@ p {
   white-space: nowrap;
 }
 
-.strip-summary-meta .summary-divider {
-  color: #cbd5e1;
-  font-size: 11px;
+/* 우측 정보: 호재/악재/중립/리포트 배지 및 펼침 */
+.strip-col-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  flex: 1.1;
+  margin-left: 20px;
 }
 
-.strip-summary-meta .summary-item {
+.strip-summary-meta {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 6px;
+  font-size: 11px;
+  white-space: nowrap;
 }
 
-.strip-summary-meta .summary-pos strong {
+.summary-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.summary-badge strong {
+  font-weight: 800;
+}
+
+.summary-badge.badge-pos {
+  background: #ecfdf5;
   color: #059669;
-  font-weight: 800;
+  border: 1px solid #d1fae5;
 }
 
-.strip-summary-meta .summary-neg strong {
+.summary-badge.badge-neg {
+  background: #fef2f2;
   color: #dc2626;
-  font-weight: 800;
+  border: 1px solid #fee2e2;
 }
 
-.strip-summary-meta .summary-neutral strong {
-  color: #64748b;
-  font-weight: 800;
+.summary-badge.badge-neutral {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
 }
 
-.strip-summary-meta .summary-report strong {
-  color: #0f2c59;
-  font-weight: 800;
+.summary-badge.badge-report {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #dbeafe;
 }
 
 .strip-chevron {
@@ -5296,13 +5322,13 @@ p {
 .ai-point-feed {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 10px;
 }
 
 .ai-point-feed-item {
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
 }
 
 .sentiment-tag {
@@ -5312,7 +5338,6 @@ p {
   font-size: 10px;
   font-weight: 800;
   flex-shrink: 0;
-  margin-top: 1px;
 }
 
 .sentiment-tag.tag-pos {
@@ -5333,22 +5358,25 @@ p {
   border: 1px solid #e2e8f0;
 }
 
-.feed-text-wrap {
+.feed-inline-wrap {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex: 1;
   min-width: 0;
 }
 
 .feed-link {
   font-size: 12px;
   color: #1e293b;
-  line-height: 1.45;
+  line-height: 1.4;
   text-decoration: none;
   font-weight: 600;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
 }
 
 .feed-link:hover {
@@ -5356,14 +5384,11 @@ p {
   text-decoration: underline;
 }
 
-.feed-link .ext-icon {
-  color: #94a3b8;
-  flex-shrink: 0;
-}
-
 .feed-date {
-  font-size: 10px;
+  font-size: 11px;
   color: #94a3b8;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* 증권사 리서치 카드 목록 */

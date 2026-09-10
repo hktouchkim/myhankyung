@@ -1081,7 +1081,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedAddStockId, setSelectedAddStockId] = useState<string | null>(null);
   const [addTargetGroupIds, setAddTargetGroupIds] = useState<string[]>([INITIAL_GROUPS[0].id]);
-  const [expandAllIssues, setExpandAllIssues] = useState(true);
+  const [expandAllIssues, setExpandAllIssues] = useState(false);
   const [issueOverrides, setIssueOverrides] = useState<Record<string, boolean>>({});
 
   const [newGroupName, setNewGroupName] = useState("");
@@ -1503,7 +1503,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                     <span className="module-count">{selectedGroupStocks.length}개 종목</span>
                   </div>
                   <div className="watchlist-heading-actions">
-                    <label className="ai-point-toggle-control" title="모든 종목의 AI 포인트 뷰 및 리포트 일괄 켜기/끄기">
+                    <label className="ai-point-toggle-control" title="모든 종목의 인텔리전스 및 리포트 일괄 열기/접기">
                       <input
                         type="checkbox"
                         checked={expandAllIssues}
@@ -1512,12 +1512,11 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                           setExpandAllIssues(next);
                           setIssueOverrides({});
                         }}
-                        aria-label="AI 포인트 뷰 일괄 표시 토글"
+                        aria-label="모든 종목 일괄 열기/접기 토글"
                       />
                       <span className="ai-point-toggle-slider" />
                       <span className="ai-point-toggle-label">
-                        <Sparkles size={14} className="sparkle-icon" />
-                        AI 포인트 뷰
+                        {expandAllIssues ? "모두 접기" : "모두 열기"}
                       </span>
                     </label>
                     <button
@@ -1564,16 +1563,16 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       // 0개인 항목은 제외하고 1개 이상인 항목만 구성
                       const summaryItems: { label: string; count: number; className: string }[] = [];
                       if (posIssuesCount > 0) {
-                        summaryItems.push({ label: "호재", count: posIssuesCount, className: "summary-pos" });
+                        summaryItems.push({ label: "호재", count: posIssuesCount, className: "badge-pos" });
                       }
                       if (negIssuesCount > 0) {
-                        summaryItems.push({ label: "악재", count: negIssuesCount, className: "summary-neg" });
+                        summaryItems.push({ label: "악재", count: negIssuesCount, className: "badge-neg" });
                       }
                       if (neutralIssuesCount > 0) {
-                        summaryItems.push({ label: "중립", count: neutralIssuesCount, className: "summary-neutral" });
+                        summaryItems.push({ label: "중립", count: neutralIssuesCount, className: "badge-neutral" });
                       }
                       if (totalReportsCount > 0) {
-                        summaryItems.push({ label: "리포트", count: totalReportsCount, className: "summary-report" });
+                        summaryItems.push({ label: "리포트", count: totalReportsCount, className: "badge-report" });
                       }
 
                       return (
@@ -1679,17 +1678,14 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               </div>
                             </div>
 
-                            {/* 우측: 0개가 아닌 항목만 노출되는 호재/악재/중립/리포트 요약 & 펼침 아이콘 */}
+                            {/* 우측: 0개가 아닌 항목만 노출되는 호재/악재/중립/리포트 배지 & 펼침 아이콘 */}
                             <div className="strip-col-right">
                               {summaryItems.length > 0 ? (
                                 <div className="strip-summary-meta">
-                                  {summaryItems.map((item, itemIdx) => (
-                                    <React.Fragment key={item.label}>
-                                      {itemIdx > 0 ? <span className="summary-divider">·</span> : null}
-                                      <span className={`summary-item ${item.className}`}>
-                                        {item.label} <strong>{item.count}</strong>
-                                      </span>
-                                    </React.Fragment>
+                                  {summaryItems.map((item) => (
+                                    <span key={item.label} className={`summary-badge ${item.className}`}>
+                                      {item.label} <strong>{item.count}</strong>
+                                    </span>
                                   ))}
                                 </div>
                               ) : null}
@@ -1705,7 +1701,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                           {isExpanded ? (
                             <div className="watchlist-sub-panel">
                               <div className="watchlist-sub-grid">
-                                {/* 좌측: 포인트 뷰 목록 (타이틀 없음, 한국경제 표기 삭제) */}
+                                {/* 좌측: 포인트 뷰 목록 (제목 우측 끝에 날짜 인라인 배치, 새창 아이콘 제거) */}
                                 <div className="sub-column ai-point-col">
                                   {issues.length > 0 ? (
                                     <div className="ai-point-feed">
@@ -1721,7 +1717,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                             <span className={`sentiment-tag ${sentimentClass}`}>
                                               {issue.sentiment}
                                             </span>
-                                            <div className="feed-text-wrap">
+                                            <div className="feed-inline-wrap">
                                               <a
                                                 href={issue.articleUrl}
                                                 target="_blank"
@@ -1729,8 +1725,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                                 className="feed-link"
                                                 onClick={(e) => e.stopPropagation()}
                                               >
-                                                <span>{issue.comment}</span>
-                                                <ExternalLink size={12} className="ext-icon" />
+                                                {issue.comment}
                                               </a>
                                               {issue.publishedAt ? (
                                                 <span className="feed-date">{issue.publishedAt}</span>
