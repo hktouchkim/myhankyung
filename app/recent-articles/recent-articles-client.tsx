@@ -6,6 +6,7 @@ import {
   Bookmark,
   Clock3,
   Home,
+  Info,
   LogOut,
   Menu,
   Newspaper,
@@ -183,6 +184,7 @@ export default function RecentArticlesClient() {
   const [visibleCount, setVisibleCount] = useState(20);
   const [removingId, setRemovingId] = useState<string | null>(null);
   const [toast, setToast] = useState("");
+  const [infoOpen, setInfoOpen] = useState(false);
   const visibleArticles = useMemo(() => articles.slice(0, visibleCount), [articles, visibleCount]);
   const topCategories = CATEGORY_SUMMARY_DATA;
   const totalCategoryCount = CATEGORY_SUMMARY_DATA.reduce((sum, item) => sum + item.count, 0);
@@ -194,6 +196,18 @@ export default function RecentArticlesClient() {
     const timer = window.setTimeout(() => setToast(""), 2400);
     return () => window.clearTimeout(timer);
   }, [toast]);
+
+  useEffect(() => {
+    if (!infoOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target?.closest(".recent-info-tooltip-wrap")) {
+        setInfoOpen(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [infoOpen]);
 
   const removeArticle = (article: RecentArticle) => {
     setRemovingId(article.id);
@@ -239,7 +253,26 @@ export default function RecentArticlesClient() {
               <h1>최근 본 기사</h1>
               <p>최근 3개월간 읽은 기사와 나의 뉴스 소비 패턴을 확인해보세요.</p>
             </div>
-            <span>2026.08.06 00:00 기준</span>
+            <div className="recent-info-tooltip-wrap">
+              <button
+                type="button"
+                className={`recent-info-btn ${infoOpen ? "active" : ""}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setInfoOpen((prev) => !prev);
+                }}
+                aria-label="업데이트 기준 안내"
+                aria-expanded={infoOpen}
+              >
+                <Info size={19} />
+              </button>
+              {infoOpen ? (
+                <div className="recent-info-tooltip" role="tooltip">
+                  <strong>업데이트 기준</strong>
+                  <p>읽기 흐름 분석, 기사 열람 분야, 기사 열람 시간은 매일 자정에 갱신됩니다. 기사 열람 내역은 실시간으로 반영됩니다.</p>
+                </div>
+              ) : null}
+            </div>
           </section>
 
           <section className="recent-module reading-ai-module" aria-labelledby="reading-ai-title">

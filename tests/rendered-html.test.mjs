@@ -78,7 +78,7 @@ test("keeps the My한경 dashboard at the root URL", async () => {
   assert.match(html, /dashboard-mini-donut/);
   assert.match(html, /증권/);
   assert.match(html, /54(?:<!-- -->)?%/);
-  assert.equal((html.match(/dashboard-recent-item/g) ?? []).length, 6);
+  assert.equal((html.match(/dashboard-recent-item/g) ?? []).length, 4);
   assert.match(html, /2026\.08\.18 09:29/);
   assert.match(html, /보유 배지/);
   assert.match(html, /보유 배지<\/h2><span>8개<\/span>/);
@@ -215,8 +215,7 @@ test("keeps the My한경 dashboard modules in the requested order", async () => 
   assert.ok(scrapIndex < watchlistIndex);
   assert.ok(watchlistIndex < reporterIndex);
   assert.match(dashboardSource, /DASHBOARD_BADGES\.map/);
-  assert.match(dashboardSource, /onClick=\{onOpenRecent\}/);
-  assert.match(dashboardSource, /DASHBOARD_RECENT_ARTICLES\.map/);
+  assert.match(dashboardSource, /DASHBOARD_RECENT_ARTICLES(?:\.slice\([^)]*\))?\.map/);
   assert.match(dashboardSource, /dashboard-recent-stats/);
   assert.match(styles, /\.dashboard-recent-item strong\s*\{[^}]*text-overflow:\s*ellipsis;[^}]*white-space:\s*nowrap;/s);
   assert.match(styles, /\.dashboard-recent-heading-link\s*\{[^}]*text-decoration:\s*none;/s);

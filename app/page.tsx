@@ -10,6 +10,7 @@ import {
   Bookmark,
   BookOpen,
   Check,
+  ChevronLeft,
   ChevronRight,
   ChevronDown,
   ChevronUp,
@@ -3298,27 +3299,41 @@ function Dashboard({
               <h2>My 브리핑</h2>
               <span>1개</span>
             </div>
+            <button type="button" aria-label="My 브리핑 전체보기">
+              <ChevronRight size={20} />
+            </button>
           </div>
 
-          <div className="dashboard-briefing-profile">
-            <span className="dashboard-briefing-emblem" aria-hidden="true">
-              <Banknote size={34} strokeWidth={1.7} />
-            </span>
-            <div>
-              <div className="dashboard-briefing-name">
-                <strong>미국 증시</strong>
-                <Settings size={20} strokeWidth={1.7} aria-hidden="true" />
+          <div className="dashboard-briefing-toolbar">
+            <div className="dashboard-briefing-profile">
+              <span className="dashboard-briefing-emblem" aria-hidden="true">
+                <Banknote size={34} strokeWidth={1.7} />
+              </span>
+              <div>
+                <div className="dashboard-briefing-name">
+                  <strong>미국 증시</strong>
+                  <Settings size={20} strokeWidth={1.7} aria-hidden="true" />
+                </div>
+                <div className="dashboard-briefing-schedule">
+                  <span>매일(월~일)</span>
+                  <span>오전 08:00</span>
+                </div>
               </div>
-              <div className="dashboard-briefing-schedule">
-                <span>매일(월~일)</span>
-                <span>오전 08:00</span>
-              </div>
+            </div>
+            <div className="dashboard-briefing-paging" aria-label="브리핑 넘겨보기">
+              <button type="button" aria-label="이전 브리핑 보기" disabled>
+                <ChevronLeft size={18} />
+              </button>
+              <span className="briefing-page-indicator">1 / 1</span>
+              <button type="button" aria-label="다음 브리핑 보기" disabled>
+                <ChevronRight size={18} />
+              </button>
             </div>
           </div>
 
           <div className="dashboard-briefing-copy">
-            <p>2026년 8월 18일 오전 브리핑입니다.</p>
-            <p>
+            <p className="dashboard-briefing-date">2026년 8월 18일 오전 브리핑입니다.</p>
+            <p className="dashboard-briefing-body">
               17일(현지시간) 뉴욕증시의 다우존스, S&amp;P500, 나스닥 등 3대 주요 지수는 미국과 이란 간의 임시 휴전 종료로 인한 중동 지정학적 긴장 고조 여파로 일제히 하락 마감했습니다. 양국 간 갈등이 심화되면서 브렌트유와 서부텍사스산원유(WTI) 등 국제 유가가 급등세로 전환했고, 이는 인플레이션 압력을 높여 미국 국채 금리 상승을 견인했습니다. 부진한 미국 소비 지표로 인해 경기 둔화 우려가 상존하는 가운데, 유가와 금리의 동반 상승이 투자 심리를 크게 위축시킨 것으로 분석됩니다.
             </p>
           </div>
@@ -3360,7 +3375,7 @@ function Dashboard({
             </div>
           </dl>
           <ul className="dashboard-recent-list" aria-label="최근 본 기사 목록">
-            {DASHBOARD_RECENT_ARTICLES.map((article) => (
+            {DASHBOARD_RECENT_ARTICLES.slice(0, 4).map((article) => (
               <li className="dashboard-recent-item" key={`${article.url}-${article.publishedAt}`}>
                 <a href={article.url}>
                   <strong>{article.title}</strong>
