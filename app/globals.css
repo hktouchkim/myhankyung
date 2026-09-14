@@ -5474,15 +5474,14 @@ p {
   color: #64748b;
 }
 
-/* 우측 정보: 호재/악재/중립/리포트 배지 및 펼침 */
+/* 우측 정보: 펼침 아이콘 */
 .strip-col-right {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 12px;
-  flex: 1;
-  min-width: 0;
-  margin-left: 16px;
+  width: 28px;
+  flex-shrink: 0;
+  margin-left: 8px;
 }
 
 .strip-summary-meta {
@@ -5588,60 +5587,93 @@ p {
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   padding: 4px 2px 8px 2px;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #cbd5e1 transparent;
 }
 
 .pointview-card-slider::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+  height: 6px;
+  display: block; /* PC에서도 슬라이더/스크롤 가능함을 직관적으로 표시 */
+}
+
+.pointview-card-slider::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 9999px;
+}
+
+.pointview-card-slider::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.pointview-card-slider::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .pointview-card {
-  flex: 0 0 280px;
-  max-width: 320px;
+  flex: 0 0 300px;
+  max-width: 340px;
   scroll-snap-align: start;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 12px 14px;
   text-decoration: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  justify-content: center;
   transition: all 0.15s ease-in-out;
   cursor: pointer;
   box-sizing: border-box;
 }
 
-.pointview-card:hover {
-  background: #ffffff;
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 12px rgba(15, 44, 89, 0.07);
+/* 2. 박스 자체의 색깔을 호재 악재로 표현 */
+.pointview-card.card-pos {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+}
+
+.pointview-card.card-pos:hover {
+  background: #ffe3e3;
+  border-color: #fca5a5;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.08);
   transform: translateY(-1px);
 }
 
-.pointview-card:hover .pointview-card-comment {
-  color: #0f2c59;
+.pointview-card.card-neg {
+  background: #f0f7ff;
+  border: 1px solid #d0e4ff;
 }
 
-.pointview-card-header {
+.pointview-card.card-neg:hover {
+  background: #e0effe;
+  border-color: #93c5fd;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+  transform: translateY(-1px);
+}
+
+.pointview-card.card-neutral {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.pointview-card.card-neutral:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.08);
+  transform: translateY(-1px);
+}
+
+/* 3. 스마일 아이콘 바로 우측부터 코멘트를 노출 (인라인/플렉스 가로 배치) */
+.pointview-card-body {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.pointview-card-date {
-  font-size: 11px;
-  color: #94a3b8;
-  font-weight: 500;
-  white-space: nowrap;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .pointview-card-comment {
   margin: 0;
   font-size: 13px;
-  line-height: 1.5;
-  color: #334155;
+  line-height: 1.45;
+  color: #1e293b;
   font-weight: 500;
   letter-spacing: -0.01em;
   display: -webkit-box;
@@ -5650,6 +5682,7 @@ p {
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: keep-all;
+  flex: 1;
 }
 
 /* 줄머리 감성 배지 공통 */
@@ -5675,21 +5708,21 @@ p {
 }
 
 .sentiment-tag.tag-pos {
-  background: #fef2f2;
+  background: #ffffff;
   color: #dc2626;
-  border: 1px solid #fee2e2;
+  border: 1px solid #fca5a5;
 }
 
 .sentiment-tag.tag-neg {
-  background: #eff6ff;
+  background: #ffffff;
   color: #2563eb;
-  border: 1px solid #dbeafe;
+  border: 1px solid #93c5fd;
 }
 
 .sentiment-tag.tag-neutral {
-  background: #f1f5f9;
+  background: #ffffff;
   color: #475569;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #cbd5e1;
 }
 
 .sentiment-tag.sentiment-tag-icon-only {
@@ -5698,6 +5731,7 @@ p {
   padding: 0;
   justify-content: center;
   border-radius: 9999px;
+  margin-top: 1px;
 }
 
 .sentiment-tag.sentiment-tag-icon-only .tag-emoji {

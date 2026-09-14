@@ -2720,9 +2720,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       const direction = stock.rate > 0 ? "up" : stock.rate < 0 ? "down" : "flat";
                       const detailUrl = getStockDetailUrl(stock);
                       const issues = (stock.issues || []).slice(0, 5);
-                      const posIssuesCount = (stock.issues || []).filter((i) => i.sentiment === "호재").length;
-                      const negIssuesCount = (stock.issues || []).filter((i) => i.sentiment === "악재").length;
-                      const neutralIssuesCount = (stock.issues || []).filter((i) => i.sentiment === "중립").length;
                       const hasSubContent = issues.length > 0;
                       const isExpanded = hasSubContent && (issueOverrides[stock.id] ?? expandAllIssues);
                       const displayPrice = stock.currency === "USD" ? stock.price : `${stock.price}원`;
@@ -2739,18 +2736,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                           }));
                         }
                       };
-
-                      // 0개인 항목은 제외하고 1개 이상인 항목만 구성 (직관적인 표정 이모지 표기)
-                      const summaryItems: { id: string; icon?: string; label: string; count: number; className: string }[] = [];
-                      if (posIssuesCount > 0) {
-                        summaryItems.push({ id: "pos", icon: "🙂", label: "호재", count: posIssuesCount, className: "badge-pos" });
-                      }
-                      if (negIssuesCount > 0) {
-                        summaryItems.push({ id: "neg", icon: "🙁", label: "악재", count: negIssuesCount, className: "badge-neg" });
-                      }
-                      if (neutralIssuesCount > 0) {
-                        summaryItems.push({ id: "neutral", icon: "😐", label: "중립", count: neutralIssuesCount, className: "badge-neutral" });
-                      }
 
                       return (
                         <div
@@ -2856,27 +2841,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               </span>
                             </div>
 
-                            {/* 우측: 0개가 아닌 항목만 노출되는 호재/악재/중립 배지 & 펼침 아이콘 */}
+                            {/* 우측: 펼침 아이콘 */}
                             <div className="strip-col-right">
-                              {summaryItems.length > 0 ? (
-                                <div className="strip-summary-meta">
-                                  {summaryItems.map((item) => (
-                                    <span
-                                      key={item.id}
-                                      className={`summary-badge ${item.className}`}
-                                      title={`${item.label} ${item.count}개`}
-                                      aria-label={`${item.label} ${item.count}개`}
-                                    >
-                                      {item.icon ? (
-                                        <span className="summary-badge-icon" aria-hidden="true">{item.icon}</span>
-                                      ) : (
-                                        <span className="summary-badge-text">{item.label}</span>
-                                      )}
-                                      <strong>{item.count}</strong>
-                                    </span>
-                                  ))}
-                                </div>
-                              ) : null}
                               {hasSubContent ? (
                                 <span className={`strip-chevron ${isExpanded ? "open" : ""}`} aria-hidden="true">
                                   <ChevronDown size={16} />
@@ -2903,16 +2869,22 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                         : issue.sentiment === "악재"
                                         ? "🙁"
                                         : "😐";
+                                      const sentimentCardClass =
+                                        issue.sentiment === "호재"
+                                          ? "card-pos"
+                                          : issue.sentiment === "악재"
+                                          ? "card-neg"
+                                          : "card-neutral";
                                     return (
                                       <a
                                         key={issue.id}
                                         href="https://www.hankyung.com/article/2026091052376"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="pointview-card"
+                                        className={`pointview-card ${sentimentCardClass}`}
                                         onClick={(e) => e.stopPropagation()}
                                       >
-                                        <div className="pointview-card-header">
+                                        <div className="pointview-card-body">
                                           <span
                                             className={`sentiment-tag ${sentimentClass} sentiment-tag-icon-only`}
                                             title={issue.sentiment}
@@ -2920,11 +2892,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                           >
                                             <span className="tag-emoji" aria-hidden="true">{emoji}</span>
                                           </span>
-                                          {issue.publishedAt ? (
-                                            <span className="pointview-card-date">{issue.publishedAt}</span>
-                                          ) : null}
+                                          <p className="pointview-card-comment">{issue.comment}</p>
                                         </div>
-                                        <p className="pointview-card-comment">{issue.comment}</p>
                                       </a>
                                     );
                                   })}
