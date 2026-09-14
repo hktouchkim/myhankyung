@@ -2214,7 +2214,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedAddStockId, setSelectedAddStockId] = useState<string | null>(null);
   const [addTargetGroupIds, setAddTargetGroupIds] = useState<string[]>([INITIAL_GROUPS[0].id]);
-  const [expandAllIssues, setExpandAllIssues] = useState(false);
+  const [expandAllIssues, setExpandAllIssues] = useState(true);
   const [issueOverrides, setIssueOverrides] = useState<Record<string, boolean>>({});
 
   const [newGroupName, setNewGroupName] = useState("");
@@ -2647,7 +2647,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
               <div className="watchlist-titlebar recent-page-titlebar">
                 <div>
                   <h1>관심종목</h1>
-                  <p>관심 있는 종목의 실시간 흐름과 한경 AI 포인트 뷰·증권사 리포트를 확인하세요.</p>
+                  <p>관심 있는 종목의 실시간 흐름과 한경 AI 포인트 뷰를 확인하세요.</p>
                 </div>
               </div>
 
@@ -2723,10 +2723,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       const posIssuesCount = (stock.issues || []).filter((i) => i.sentiment === "호재").length;
                       const negIssuesCount = (stock.issues || []).filter((i) => i.sentiment === "악재").length;
                       const neutralIssuesCount = (stock.issues || []).filter((i) => i.sentiment === "중립").length;
-                      const stockReports = REPORTS.filter((r) => r.stockId === stock.id);
-                      const displayReports = stockReports.slice(0, 1);
-                      const totalReportsCount = stockReports.length;
-                      const hasSubContent = issues.length > 0 || stockReports.length > 0;
+                      const hasSubContent = issues.length > 0;
                       const isExpanded = hasSubContent && (issueOverrides[stock.id] ?? expandAllIssues);
                       const displayPrice = stock.currency === "USD" ? stock.price : `${stock.price}원`;
                       const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
@@ -2743,7 +2740,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         }
                       };
 
-                      // 0개인 항목은 제외하고 1개 이상인 항목만 구성 (A안: 직관적인 표정 이모지 + 리포트 표기)
+                      // 0개인 항목은 제외하고 1개 이상인 항목만 구성 (직관적인 표정 이모지 표기)
                       const summaryItems: { id: string; icon?: string; label: string; count: number; className: string }[] = [];
                       if (posIssuesCount > 0) {
                         summaryItems.push({ id: "pos", icon: "🙂", label: "호재", count: posIssuesCount, className: "badge-pos" });
@@ -2753,9 +2750,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       }
                       if (neutralIssuesCount > 0) {
                         summaryItems.push({ id: "neutral", icon: "😐", label: "중립", count: neutralIssuesCount, className: "badge-neutral" });
-                      }
-                      if (totalReportsCount > 0) {
-                        summaryItems.push({ id: "report", label: "리포트", count: totalReportsCount, className: "badge-report" });
                       }
 
                       return (
@@ -2798,8 +2792,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             className={`watchlist-strip-row ${hasSubContent ? "has-subcontent" : "no-subcontent"}`}
                             onClick={toggleItem}
                             role={hasSubContent ? "button" : undefined}
-                            tabIndex={hasSubContent ? 0 : -1}
                             aria-expanded={hasSubContent ? isExpanded : undefined}
+                            tabIndex={hasSubContent ? 0 : -1}
                             onKeyDown={(e) => {
                               if (hasSubContent && (e.key === "Enter" || e.key === " ")) {
                                 e.preventDefault();
@@ -2807,14 +2801,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               }
                             }}
                           >
+                            {/* 좌측: 별 아이콘 + 종목명/코드 */}
                             <div className="strip-col-left">
-                              <div
-                                className="watchlist-drag-grip"
-                                title="드래그하여 순서 변경"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <GripVertical size={16} />
-                              </div>
                               <button
                                 type="button"
                                 className="watchlist-fav-btn"
@@ -2827,6 +2815,13 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               >
                                 <Star size={16} className="star-filled" />
                               </button>
+                              <div
+                                className="watchlist-drag-grip"
+                                title="드래그하여 순서 변경"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <GripVertical size={16} />
+                              </div>
                               <div className="strip-identity">
                                 <a
                                   href={detailUrl}
@@ -2861,7 +2856,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               </span>
                             </div>
 
-                            {/* 우측: 0개가 아닌 항목만 노출되는 호재/악재/중립/리포트 배지 & 펼침 아이콘 */}
+                            {/* 우측: 0개가 아닌 항목만 노출되는 호재/악재/중립 배지 & 펼침 아이콘 */}
                             <div className="strip-col-right">
                               {summaryItems.length > 0 ? (
                                 <div className="strip-summary-meta">
@@ -2890,79 +2885,53 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             </div>
                           </div>
 
-                          {/* 하위 펼침 인텔리전스 (포인트뷰 & 리포트를 한 묶음으로 세로 배열) */}
+                          {/* 하위 펼침 인텔리전스 (AI 포인트 뷰 가로 카드 슬라이더) */}
                           {isExpanded ? (
                             <div className="watchlist-sub-panel">
-                              <div className="watchlist-intelligence-stream">
-                                {/* 1. AI 포인트 뷰 항목들 (글자 없이 아이콘 이모지만으로 표시) */}
-                                {issues.map((issue) => {
-                                  const sentimentClass =
-                                    issue.sentiment === "호재"
-                                      ? "tag-pos"
-                                      : issue.sentiment === "악재"
-                                      ? "tag-neg"
-                                      : "tag-neutral";
-                                  const emoji =
-                                    issue.sentiment === "호재"
-                                      ? "🙂"
-                                      : issue.sentiment === "악재"
-                                      ? "🙁"
-                                      : "😐";
-                                  return (
-                                    <div key={issue.id} className="stream-row stream-issue-row">
-                                      <span
-                                        className={`sentiment-tag ${sentimentClass} sentiment-tag-icon-only`}
-                                        title={issue.sentiment}
-                                        aria-label={issue.sentiment}
-                                      >
-                                        <span className="tag-emoji" aria-hidden="true">{emoji}</span>
-                                      </span>
+                              {issues.length > 0 ? (
+                                <div className="pointview-card-slider" role="region" aria-label={`${stock.name} AI 포인트 뷰`}>
+                                  {issues.map((issue) => {
+                                    const sentimentClass =
+                                      issue.sentiment === "호재"
+                                        ? "tag-pos"
+                                        : issue.sentiment === "악재"
+                                        ? "tag-neg"
+                                        : "tag-neutral";
+                                    const emoji =
+                                      issue.sentiment === "호재"
+                                        ? "🙂"
+                                        : issue.sentiment === "악재"
+                                        ? "🙁"
+                                        : "😐";
+                                    return (
                                       <a
+                                        key={issue.id}
                                         href="https://www.hankyung.com/article/2026091052376"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="stream-link"
+                                        className="pointview-card"
                                         onClick={(e) => e.stopPropagation()}
                                       >
-                                        {issue.comment}
+                                        <div className="pointview-card-header">
+                                          <span
+                                            className={`sentiment-tag ${sentimentClass} sentiment-tag-icon-only`}
+                                            title={issue.sentiment}
+                                            aria-label={issue.sentiment}
+                                          >
+                                            <span className="tag-emoji" aria-hidden="true">{emoji}</span>
+                                          </span>
+                                          {issue.publishedAt ? (
+                                            <span className="pointview-card-date">{issue.publishedAt}</span>
+                                          ) : null}
+                                        </div>
+                                        <p className="pointview-card-comment">{issue.comment}</p>
                                       </a>
-                                      {issue.publishedAt ? (
-                                        <span className="stream-date">{issue.publishedAt}</span>
-                                      ) : null}
-                                    </div>
-                                  );
-                                })}
-
-                                {/* 2. 리포트 항목: [리포트] 매수 / 리포트명 / 목표가 / 증권사명 ... (우측 끝에 작성일) */}
-                                {displayReports.map((report) => (
-                                  <div key={report.id} className="stream-row stream-report-row">
-                                    <span className="sentiment-tag tag-report">
-                                      리포트
-                                    </span>
-                                    <a
-                                      href="https://markets.hankyung.com/consensus/view/651320"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="stream-link stream-link-report"
-                                      onClick={(e) => e.stopPropagation()}
-                                    >
-                                      <span className={`report-opinion-text op-${report.opinion === "매수" ? "buy" : "hold"}`}>
-                                        {report.opinion}
-                                      </span>
-                                      <span className="report-title-text">{report.title}</span>
-                                      <span className="report-target-text">목표가 {report.target}</span>
-                                      <span className="report-firm-text">{report.firm}</span>
-                                    </a>
-                                    {report.date ? (
-                                      <span className="stream-date">{report.date}</span>
-                                    ) : null}
-                                  </div>
-                                ))}
-
-                                {issues.length === 0 && displayReports.length === 0 ? (
-                                  <p className="sub-empty-text">등록된 인텔리전스 및 리포트가 없습니다.</p>
-                                ) : null}
-                              </div>
+                                    );
+                                  })}
+                                </div>
+                              ) : (
+                                <p className="sub-empty-text">등록된 AI 포인트 뷰가 없습니다.</p>
+                              )}
                             </div>
                           ) : null}
                         </div>
