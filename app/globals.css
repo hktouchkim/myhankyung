@@ -5474,12 +5474,13 @@ p {
   color: #64748b;
 }
 
-/* 우측 정보: 펼침 아이콘 */
+/* 우측 정보: 펼침 아이콘 + 이동 핸들 */
 .strip-col-right {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 28px;
+  gap: 8px;
+  width: 52px;
   flex-shrink: 0;
   margin-left: 8px;
 }
@@ -5581,39 +5582,15 @@ p {
 }
 
 .pointview-card-slider {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
   padding: 4px 2px 8px 2px;
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #cbd5e1 transparent;
-}
-
-.pointview-card-slider::-webkit-scrollbar {
-  height: 6px;
-  display: block; /* PC에서도 슬라이더/스크롤 가능함을 직관적으로 표시 */
-}
-
-.pointview-card-slider::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 9999px;
-}
-
-.pointview-card-slider::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
-}
-
-.pointview-card-slider::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
 }
 
 .pointview-card {
-  flex: 0 0 300px;
-  max-width: 340px;
-  scroll-snap-align: start;
+  width: 100%;
+  min-width: 0;
   border-radius: 12px;
   padding: 12px 14px;
   text-decoration: none;
@@ -5744,11 +5721,22 @@ p {
   padding: 8px 0;
 }
 
-/* 좁은 화면/모바일: 다음 카드가 있음을 알 수 있도록 약 80~82% 너비로 다음 카드 살짝 걸치게(peek) 노출 */
+/* 좁은 화면/모바일: 다음 카드가 있음을 알 수 있도록 약 80~82% 너비로 다음 카드 살짝 걸치게(peek) 가로 슬라이더 노출 */
 @media (max-width: 640px) {
+  .pointview-card-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .pointview-card-slider::-webkit-scrollbar {
+    display: none;
+  }
   .pointview-card {
     flex: 0 0 82%;
     max-width: 82%;
+    scroll-snap-align: start;
     padding: 10px 12px;
   }
   .pointview-card-comment {

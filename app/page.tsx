@@ -191,13 +191,6 @@ const STOCKS: Stock[] = [
         articleUrl: "https://www.hankyung.com/article/2026080310421",
         publishedAt: "2026.08.03 10:42",
       },
-      {
-        id: "issue-000660-2",
-        sentiment: "악재",
-        comment: "단기 급등에 따른 차익실현 매물 및 반도체 피크아웃 경계론 일부 제기",
-        articleUrl: "https://www.hankyung.com/article/2026080214102",
-        publishedAt: "2026.08.02 14:10",
-      },
     ],
   },
   {
@@ -221,6 +214,13 @@ const STOCKS: Stock[] = [
         comment: "2.5D 패키징용 듀얼 TC 본더 신규 수주 사이클 진입으로 하반기 실적 호조 전망",
         articleUrl: "https://www.hankyung.com/article/2026080217351",
         publishedAt: "2026.08.02 17:35",
+      },
+      {
+        id: "issue-042700-2",
+        sentiment: "호재",
+        comment: "북미 인공지능 반도체 공급망 확장 및 고대역폭메모리 장비 점유율 1위 지속",
+        articleUrl: "https://www.hankyung.com/article/2026080413201",
+        publishedAt: "2026.08.04 13:20",
       },
     ],
   },
@@ -461,6 +461,13 @@ const STOCKS: Stock[] = [
         comment: "하이브리드 판매 비중 확대로 수익성 방어, 미국 관세 정책 모니터링 필요",
         articleUrl: "https://www.hankyung.com/article/2026080344426",
         publishedAt: "2026.08.03 14:20",
+      },
+      {
+        id: "issue-005380-2",
+        sentiment: "호재",
+        comment: "인도법인 현지 증시 상장 성공 및 글로벌 생산 거점 다변화 가속화",
+        articleUrl: "https://www.hankyung.com/article/2026080410151",
+        publishedAt: "2026.08.04 10:15",
       },
     ],
   },
@@ -766,7 +773,29 @@ const STOCKS: Stock[] = [
     volume: "372,400",
     high: "250,500",
     low: "244,000",
-    issues: [],
+    issues: [
+      {
+        id: "issue-012330-1",
+        sentiment: "호재",
+        comment: "전동화 핵심 부품 수주 다변화 및 글로벌 완성차 대상 공급 계약 체결 확대",
+        articleUrl: "https://www.hankyung.com/article/2026091052376",
+        publishedAt: "2026.08.05 10:10",
+      },
+      {
+        id: "issue-012330-2",
+        sentiment: "호재",
+        comment: "자율주행 및 커넥티비티 소프트웨어 통합 플랫폼 개발 본격화",
+        articleUrl: "https://www.hankyung.com/article/2026091052376",
+        publishedAt: "2026.08.03 14:30",
+      },
+      {
+        id: "issue-012330-3",
+        sentiment: "중립",
+        comment: "물류비 안정세 속 북미 신공장 가동 안정화 및 초기 투자 비용 관리 지속",
+        articleUrl: "https://www.hankyung.com/article/2026091052376",
+        publishedAt: "2026.08.01 11:20",
+      },
+    ],
   },
   {
     id: "068270",
@@ -2800,13 +2829,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               >
                                 <Star size={16} className="star-filled" />
                               </button>
-                              <div
-                                className="watchlist-drag-grip"
-                                title="드래그하여 순서 변경"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <GripVertical size={16} />
-                              </div>
                               <div className="strip-identity">
                                 <a
                                   href={detailUrl}
@@ -2841,13 +2863,20 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               </span>
                             </div>
 
-                            {/* 우측: 펼침 아이콘 */}
+                            {/* 우측: 펼침 아이콘 + 맨 우측 이동 핸들 */}
                             <div className="strip-col-right">
                               {hasSubContent ? (
                                 <span className={`strip-chevron ${isExpanded ? "open" : ""}`} aria-hidden="true">
                                   <ChevronDown size={16} />
                                 </span>
                               ) : <span className="strip-chevron-spacer" />}
+                              <div
+                                className="watchlist-drag-grip"
+                                title="드래그하여 순서 변경"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <GripVertical size={16} />
+                              </div>
                             </div>
                           </div>
 
