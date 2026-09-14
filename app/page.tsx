@@ -766,15 +766,7 @@ const STOCKS: Stock[] = [
     volume: "372,400",
     high: "250,500",
     low: "244,000",
-    issues: [
-      {
-        id: "issue-012330-1",
-        sentiment: "호재",
-        comment: "전동화 부품 핵심 마진 흑자 전환과 글로벌 OEM 대상 논캡티브 수주 확대",
-        articleUrl: "https://www.hankyung.com/article/2026080410201",
-        publishedAt: "2026.08.04 10:20",
-      },
-    ],
+    issues: [],
   },
   {
     id: "068270",
@@ -2736,13 +2728,13 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         >
                           {/* 메인 종목 스트립 행 */}
                           <div
-                            className="watchlist-strip-row"
+                            className={`watchlist-strip-row ${hasSubContent ? "has-subcontent" : "no-subcontent"}`}
                             onClick={toggleItem}
-                            role="button"
-                            tabIndex={0}
-                            aria-expanded={isExpanded}
+                            role={hasSubContent ? "button" : undefined}
+                            tabIndex={hasSubContent ? 0 : -1}
+                            aria-expanded={hasSubContent ? isExpanded : undefined}
                             onKeyDown={(e) => {
-                              if (e.key === "Enter" || e.key === " ") {
+                              if (hasSubContent && (e.key === "Enter" || e.key === " ")) {
                                 e.preventDefault();
                                 toggleItem();
                               }

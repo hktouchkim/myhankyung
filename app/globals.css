@@ -5297,6 +5297,10 @@ p {
   transition: background 120ms ease;
 }
 
+.watchlist-strip-row.no-subcontent {
+  cursor: default;
+}
+
 .watchlist-strip-row:hover {
   background: #f8fafc;
 }
