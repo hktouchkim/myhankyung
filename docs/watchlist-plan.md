@@ -1,10 +1,8 @@
 # My한경 > 관심종목 서비스 기획서
 
-- **최초 작성일**: 2026.08.10  
+- **최초버전**: 1.0-2026.08.10  
 - **현재버전**: 1.3-2026.09.11  
 - **프로토타입URL**: [https://myhankyung.vercel.app/watchlist](https://myhankyung.vercel.app/watchlist)  
-- **메뉴 위치**: My한경 > 관심종목 (`/watchlist`)  
-- **문서 성격**: 프로토타입 구현 기준 서비스 정책 및 UI 구조 확정안  
 
 ---
 
