@@ -2431,17 +2431,75 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
     }
   };
 
+  const UserInputPolicy = {
+    WATCHLIST_GROUP_NAME_MAX_LENGTH: 20,
+    MAX_GROUPS: 10,
+    MAX_STOCKS_PER_GROUP: 30,
+  };
+
+  const sanitizeGroupName = (val: string): string => {
+    // 1. 줄바꿈(\n, \r) 및 제어문자(ISOControl, \x00-\x1F, \x7F-\x9F) 제거
+    let sanitized = val.replace(/[\r\n\x00-\x1F\x7F-\x9F]/g, "");
+    // 2. 특수문자(한글, 영문, 숫자, 공백 제외 문자) 3개 이상 연속 입력 차단 -> 2개로 축소
+    sanitized = sanitized.replace(/([^0-9a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ\s])\1{2,}/g, "$1$1");
+    // 3. 연속된 공백 1칸으로 자동 정규화
+    sanitized = sanitized.replace(/\s+/g, " ");
+    return sanitized;
+  };
+
+  const isMeaningfulName = (val: string): boolean => {
+    // 최소 1자 이상의 문자(한글/영문) 또는 숫자가 반드시 포함되어야 함
+    return /[0-9a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ]/.test(val);
+  };
+
+  const validateGroupName = (
+    rawName: string,
+    targetGroupId?: string | null,
+  ): { valid: boolean; normalizedName: string; errorMessage?: string } => {
+    const sanitized = sanitizeGroupName(rawName).trim();
+    if (!sanitized) {
+      return { valid: false, normalizedName: "", errorMessage: "그룹명을 입력해주세요." };
+    }
+    if (!isMeaningfulName(sanitized)) {
+      return {
+        valid: false,
+        normalizedName: "",
+        errorMessage: "그룹명에 한글, 영문 또는 숫자가 최소 1자 이상 포함되어야 합니다.",
+      };
+    }
+    if (sanitized.length > UserInputPolicy.WATCHLIST_GROUP_NAME_MAX_LENGTH) {
+      return {
+        valid: false,
+        normalizedName: "",
+        errorMessage: `그룹명은 최대 ${UserInputPolicy.WATCHLIST_GROUP_NAME_MAX_LENGTH}자까지 입력 가능합니다.`,
+      };
+    }
+    // 동일 사용자의 다른 그룹명과 대소문자 무시(case-insensitive) 중복 불가
+    const isDuplicate = groups.some(
+      (g) =>
+        (!targetGroupId || g.id !== targetGroupId) &&
+        g.name.trim().toLowerCase() === sanitized.toLowerCase(),
+    );
+    if (isDuplicate) {
+      return { valid: false, normalizedName: "", errorMessage: "이미 사용 중인 그룹명입니다." };
+    }
+    return { valid: true, normalizedName: sanitized };
+  };
+
   const addGroup = () => {
-    if (groups.length >= 5) {
-      showToast("관심그룹은 최대 5개까지 만들 수 있습니다.");
+    if (groups.length >= UserInputPolicy.MAX_GROUPS) {
+      showToast(`관심그룹은 최대 ${UserInputPolicy.MAX_GROUPS}개까지 만들 수 있습니다.`);
       return;
     }
-    const name = newGroupName.trim().slice(0, 10);
-    if (!name) return;
+    const result = validateGroupName(newGroupName);
+    if (!result.valid) {
+      if (result.errorMessage) showToast(result.errorMessage);
+      return;
+    }
     const id = `group-${Date.now()}`;
-    setGroups((current) => [...current, { id, name, stockIds: [] }]);
+    setGroups((current) => [...current, { id, name: result.normalizedName, stockIds: [] }]);
     setNewGroupName("");
-    showToast(`${name} 그룹을 만들었습니다.`);
+    showToast(`${result.normalizedName} 그룹을 만들었습니다.`);
   };
 
   const moveGroup = (groupId: string, direction: -1 | 1) => {
@@ -2461,10 +2519,14 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   };
 
   const saveGroupName = () => {
-    const name = editingGroupName.trim().slice(0, 10);
-    if (!editingGroupId || !name) return;
+    if (!editingGroupId) return;
+    const result = validateGroupName(editingGroupName, editingGroupId);
+    if (!result.valid) {
+      if (result.errorMessage) showToast(result.errorMessage);
+      return;
+    }
     setGroups((current) =>
-      current.map((group) => (group.id === editingGroupId ? { ...group, name } : group)),
+      current.map((group) => (group.id === editingGroupId ? { ...group, name: result.normalizedName } : group)),
     );
     setEditingGroupId(null);
     showToast("그룹 이름을 변경했습니다.");
@@ -2472,6 +2534,11 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
 
   const deleteGroup = () => {
     if (!pendingDeleteGroup || groups.length === 1) return;
+    if (pendingDeleteGroup.id === groups[0].id) {
+      showToast("기본 그룹은 삭제할 수 없습니다.");
+      setPendingDeleteGroupId(null);
+      return;
+    }
     const nextGroups = groups.filter((group) => group.id !== pendingDeleteGroup.id);
     setGroups(nextGroups);
     if (selectedGroupId === pendingDeleteGroup.id) {
@@ -3103,76 +3170,103 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
       {dialog === "manage" ? (
         <AppDialog
           title="관심그룹 관리"
-          description="관심그룹은 최대 5개까지 생성 가능하며 최소 1개 이상 유지됩니다. (이름 최대 15자)"
+          description="관심그룹은 최대 10개까지 생성 가능하며 최소 1개 이상 유지됩니다. (이름 최대 20자)"
           onClose={() => setDialog(null)}
         >
           <div className="manage-layout">
             <section className="manage-groups" aria-label="관심그룹 관리">
               <div className="manage-group-list">
-                {groups.map((group, index) => (
-                  <div
-                    key={group.id}
-                    className="manage-group-row"
-                  >
-                    <div className="group-select-area">
-                      <GripVertical size={17} />
-                      {editingGroupId === group.id ? (
-                        <input
-                          value={editingGroupName}
-                          maxLength={15}
-                          onClick={(event) => event.stopPropagation()}
-                          onChange={(event) => setEditingGroupName(event.target.value)}
-                          onKeyDown={(event) => {
-                            if (event.key === "Enter") saveGroupName();
+                {groups.map((group, index) => {
+                  const isDefaultGroup = index === 0;
+                  return (
+                    <div
+                      key={group.id}
+                      className="manage-group-row"
+                    >
+                      <div className="group-select-area">
+                        <GripVertical size={17} />
+                        {editingGroupId === group.id ? (
+                          <div className="group-edit-input-wrapper">
+                            <input
+                              value={editingGroupName}
+                              maxLength={UserInputPolicy.WATCHLIST_GROUP_NAME_MAX_LENGTH}
+                              onClick={(event) => event.stopPropagation()}
+                              onChange={(event) => setEditingGroupName(event.target.value)}
+                              onKeyDown={(event) => {
+                                if (event.key === "Enter") saveGroupName();
+                              }}
+                              aria-label="그룹 이름"
+                              autoFocus
+                            />
+                            <span className="group-input-counter">
+                              {editingGroupName.length}/{UserInputPolicy.WATCHLIST_GROUP_NAME_MAX_LENGTH}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="group-name-label">
+                            {group.name}
+                            {isDefaultGroup ? <small className="default-group-tag">기본</small> : null}
+                          </span>
+                        )}
+                      </div>
+                      <div className="group-row-actions">
+                        {editingGroupId === group.id ? (
+                          <button type="button" onClick={saveGroupName} aria-label="그룹 이름 저장"><Check size={16} /></button>
+                        ) : (
+                          <button type="button" onClick={() => startRenameGroup(group)} aria-label={`${group.name} 이름 수정`}><Pencil size={15} /></button>
+                        )}
+                        <button type="button" disabled={index === 0} onClick={() => moveGroup(group.id, -1)} aria-label={`${group.name} 위로 이동`}><ArrowUp size={15} /></button>
+                        <button type="button" disabled={index === groups.length - 1} onClick={() => moveGroup(group.id, 1)} aria-label={`${group.name} 아래로 이동`}><ArrowDown size={15} /></button>
+                        <button
+                          className="danger-icon"
+                          type="button"
+                          disabled={groups.length === 1 || isDefaultGroup}
+                          onClick={() => {
+                            if (isDefaultGroup) {
+                              showToast("기본 그룹은 삭제할 수 없습니다.");
+                              return;
+                            }
+                            setPendingDeleteGroupId(group.id);
                           }}
-                          aria-label="그룹 이름"
-                          autoFocus
-                        />
-                      ) : (
-                        <span>{group.name}</span>
-                      )}
+                          aria-label={isDefaultGroup ? `${group.name}은(는) 기본 그룹이므로 삭제 불가` : `${group.name} 삭제`}
+                          title={isDefaultGroup ? "기본 그룹은 삭제할 수 없습니다" : undefined}
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
                     </div>
-                    <div className="group-row-actions">
-                      {editingGroupId === group.id ? (
-                        <button type="button" onClick={saveGroupName} aria-label="그룹 이름 저장"><Check size={16} /></button>
-                      ) : (
-                        <button type="button" onClick={() => startRenameGroup(group)} aria-label={`${group.name} 이름 수정`}><Pencil size={15} /></button>
-                      )}
-                      <button type="button" disabled={index === 0} onClick={() => moveGroup(group.id, -1)} aria-label={`${group.name} 위로 이동`}><ArrowUp size={15} /></button>
-                      <button type="button" disabled={index === groups.length - 1} onClick={() => moveGroup(group.id, 1)} aria-label={`${group.name} 아래로 이동`}><ArrowDown size={15} /></button>
-                      <button
-                        className="danger-icon"
-                        type="button"
-                        disabled={groups.length === 1}
-                        onClick={() => setPendingDeleteGroupId(group.id)}
-                        aria-label={`${group.name} 삭제`}
-                      >
-                        <Trash2 size={15} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
-              <div className="new-group-form">
-                <input
-                  value={newGroupName}
-                  maxLength={15}
-                  disabled={groups.length >= 5}
-                  onChange={(event) => setNewGroupName(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") addGroup();
-                  }}
-                  placeholder={groups.length >= 5 ? "그룹은 최대 5개까지 생성 가능합니다" : "새 그룹 이름 (최대 15자)"}
-                  aria-label="새 그룹 이름"
-                />
-                <button
-                  type="button"
-                  onClick={addGroup}
-                  disabled={!newGroupName.trim() || groups.length >= 5}
-                  aria-label="새 그룹 추가"
-                >
-                  <Plus size={18} />
-                </button>
+              <div className="new-group-box">
+                <div className="new-group-form">
+                  <input
+                    value={newGroupName}
+                    maxLength={UserInputPolicy.WATCHLIST_GROUP_NAME_MAX_LENGTH}
+                    disabled={groups.length >= UserInputPolicy.MAX_GROUPS}
+                    onChange={(event) => setNewGroupName(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") addGroup();
+                    }}
+                    placeholder={
+                      groups.length >= UserInputPolicy.MAX_GROUPS
+                        ? `그룹은 최대 ${UserInputPolicy.MAX_GROUPS}개까지 생성 가능합니다`
+                        : "새 그룹 이름 (최대 20자)"
+                    }
+                    aria-label="새 그룹 이름"
+                  />
+                  <span className="group-input-counter">
+                    {newGroupName.length}/{UserInputPolicy.WATCHLIST_GROUP_NAME_MAX_LENGTH}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={addGroup}
+                    disabled={!newGroupName.trim() || groups.length >= UserInputPolicy.MAX_GROUPS}
+                    aria-label="새 그룹 추가"
+                  >
+                    <Plus size={18} />
+                  </button>
+                </div>
               </div>
 
               {pendingDeleteGroup ? (
@@ -3193,7 +3287,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
             </section>
           </div>
           <div className="dialog-actions manage-dialog-actions">
-            <p>현재 그룹 {groups.length}/5개 (최소 1개 유지)</p>
+            <p>현재 그룹 {groups.length}/{UserInputPolicy.MAX_GROUPS}개 (최소 1개 유지)</p>
             <button className="button button-primary" type="button" onClick={() => setDialog(null)}>완료</button>
           </div>
         </AppDialog>
