@@ -2851,7 +2851,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                         <span className="tag-emoji" aria-hidden="true">{emoji}</span>
                                       </span>
                                       <a
-                                        href={issue.articleUrl}
+                                        href="https://www.hankyung.com/article/2026091052376"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="stream-link"
