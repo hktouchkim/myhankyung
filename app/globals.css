@@ -5425,6 +5425,29 @@ p {
   font-weight: 700;
 }
 
+/* 당일 미니 스파크라인 차트 컬럼 */
+.strip-col-chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  flex-shrink: 0;
+  margin: 0 4px;
+}
+
+.mini-sparkline-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 24px;
+}
+
+.mini-sparkline-svg {
+  display: block;
+  overflow: visible;
+}
+
 /* 시세 컬럼 (가격 / 등락폭 / 등락률 세로열 정렬) */
 .strip-col-price {
   width: 90px;
@@ -5762,6 +5785,10 @@ p {
   }
   .strip-col-left {
     flex: 1 1 100%;
+  }
+  .strip-col-chart {
+    width: 60px;
+    margin: 0;
   }
   .strip-col-price {
     width: auto;

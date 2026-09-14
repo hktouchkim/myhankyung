@@ -64,6 +64,7 @@ type Stock = {
   currency?: "KRW" | "USD";
   ticker?: string;
   issues?: StockIssue[];
+  sparkline?: number[];
 };
 
 type WatchGroup = {
@@ -113,6 +114,61 @@ type AlertSettings = {
   threshold: "3" | "5" | "10";
 };
 
+// 당일 미니 스파크라인 컴포넌트
+function MiniSparkline({
+  data,
+  rate,
+  width = 68,
+  height = 24,
+}: {
+  data?: number[];
+  rate: number;
+  width?: number;
+  height?: number;
+}) {
+  const isUp = rate > 0;
+  const isDown = rate < 0;
+  const strokeColor = isUp ? "#dc2626" : isDown ? "#2563eb" : "#64748b";
+  const fillColor = isUp ? "rgba(220, 38, 38, 0.12)" : isDown ? "rgba(37, 99, 235, 0.12)" : "rgba(100, 116, 139, 0.08)";
+
+  // 기본 스파크라인 데이터가 없을 경우 rate에 기반한 8포인트 자연스러운 당일 장중 데이터 생성
+  const points = data && data.length >= 2 ? data : isUp
+    ? [10, 12, 11, 15, 14, 18, 17, 21]
+    : isDown
+    ? [21, 19, 20, 16, 17, 13, 14, 10]
+    : [15, 16, 15, 14, 15, 16, 15, 15];
+
+  const min = Math.min(...points);
+  const max = Math.max(...points);
+  const range = max - min || 1;
+  const padY = 3;
+  const usableH = height - padY * 2;
+
+  const coords = points.map((val, idx) => {
+    const x = (idx / (points.length - 1)) * width;
+    const y = height - padY - ((val - min) / range) * usableH;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+
+  const linePath = `M ${coords.join(" L ")}`;
+  const areaPath = `M ${coords[0]} L ${coords.join(" L ")} L ${width},${height} L 0,${height} Z`;
+
+  return (
+    <div className="mini-sparkline-wrap" title={`당일 주가 흐름 (${rate > 0 ? "+" : ""}${rate}%)`}>
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="mini-sparkline-svg">
+        <defs>
+          <linearGradient id={`spark-grad-${rate > 0 ? "up" : rate < 0 ? "down" : "flat"}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={strokeColor} stopOpacity={0.25} />
+            <stop offset="100%" stopColor={strokeColor} stopOpacity={0.0} />
+          </linearGradient>
+        </defs>
+        <path d={areaPath} fill={`url(#spark-grad-${rate > 0 ? "up" : rate < 0 ? "down" : "flat"})`} />
+        <path d={linePath} fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
+  );
+}
+
 type CollapsibleModule = "timeline" | "stocks" | "articles" | "reports";
 type CollapsedModules = Record<CollapsibleModule, boolean>;
 
@@ -145,6 +201,7 @@ const STOCKS: Stock[] = [
     volume: "17,480,321",
     high: "88,100",
     low: "85,700",
+    sparkline: [86200, 85900, 86800, 86500, 87100, 86900, 87400, 87400],
     issues: [
       {
         id: "issue-005930-1",
@@ -183,6 +240,7 @@ const STOCKS: Stock[] = [
     volume: "9,978,244",
     high: "294,500",
     low: "271,000",
+    sparkline: [272000, 276000, 274000, 281000, 285000, 289000, 288000, 291000],
     issues: [
       {
         id: "issue-000660-1",
@@ -2846,6 +2904,11 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                   ) : null}
                                 </span>
                               </div>
+                            </div>
+
+                            {/* 당일 미니 스파크라인 차트 (종목명과 현재가 사이) */}
+                            <div className="strip-col-chart" onClick={(e) => e.stopPropagation()}>
+                              <MiniSparkline data={stock.sparkline} rate={stock.rate} />
                             </div>
 
                             {/* 시세 컬럼 (가격 / 등락폭 / 등락률 세로열 정렬) */}
