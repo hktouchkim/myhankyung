@@ -38,7 +38,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Image from "next/image";
-import React, { Fragment, useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import React, { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 type StockIssue = {
   id: string;
@@ -169,6 +169,105 @@ function MiniSparkline({
   );
 }
 
+// PC 마우스 드래그 앤 스크롤을 지원하는 포인트 뷰 카드 슬라이더
+function PointviewCardSlider({
+  stockName,
+  issues,
+}: {
+  stockName: string;
+  issues: StockIssue[];
+}) {
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const isDownRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+  const isDraggingRef = useRef(false);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!sliderRef.current) return;
+    isDownRef.current = true;
+    isDraggingRef.current = false;
+    startXRef.current = e.pageX - sliderRef.current.offsetLeft;
+    scrollLeftRef.current = sliderRef.current.scrollLeft;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDownRef.current || !sliderRef.current) return;
+    const x = e.pageX - sliderRef.current.offsetLeft;
+    const walk = (x - startXRef.current) * 1.5; // 스크롤 민감도
+    if (Math.abs(walk) > 4) {
+      isDraggingRef.current = true;
+    }
+    sliderRef.current.scrollLeft = scrollLeftRef.current - walk;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    isDownRef.current = false;
+  };
+
+  return (
+    <div
+      ref={sliderRef}
+      className="pointview-card-slider"
+      role="region"
+      aria-label={`${stockName} AI 포인트 뷰`}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUpOrLeave}
+      onMouseLeave={handleMouseUpOrLeave}
+    >
+      {issues.map((issue) => {
+        const sentimentClass =
+          issue.sentiment === "호재"
+            ? "tag-pos"
+            : issue.sentiment === "악재"
+            ? "tag-neg"
+            : "tag-neutral";
+        const emoji =
+          issue.sentiment === "호재"
+            ? "🙂"
+            : issue.sentiment === "악재"
+            ? "🙁"
+            : "😐";
+        const sentimentCardClass =
+          issue.sentiment === "호재"
+            ? "card-pos"
+            : issue.sentiment === "악재"
+            ? "card-neg"
+            : "card-neutral";
+
+        return (
+          <a
+            key={issue.id}
+            href="https://www.hankyung.com/article/2026091052376"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`pointview-card ${sentimentCardClass}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              // 드래그 중 마우스가 떼어졌을 때는 클릭(링크 이동) 방지
+              if (isDraggingRef.current) {
+                e.preventDefault();
+              }
+            }}
+          >
+            <div className="pointview-card-body">
+              <span
+                className={`sentiment-tag ${sentimentClass} sentiment-tag-icon-only`}
+                title={issue.sentiment}
+                aria-label={issue.sentiment}
+              >
+                <span className="tag-emoji" aria-hidden="true">{emoji}</span>
+              </span>
+              <p className="pointview-card-comment">{issue.comment}</p>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  );
+}
+
 type CollapsibleModule = "timeline" | "stocks" | "articles" | "reports";
 type CollapsedModules = Record<CollapsibleModule, boolean>;
 
@@ -207,22 +306,36 @@ const STOCKS: Stock[] = [
         id: "issue-005930-1",
         sentiment: "호재",
         comment: "차세대 파운드리 2나노 공정 수율 개선으로 글로벌 빅테크 수주 가능성 확대",
-        articleUrl: "https://www.hankyung.com/article/2026080349201",
+        articleUrl: "https://www.hankyung.com/article/2026091052376",
         publishedAt: "2026.08.03 09:18",
       },
       {
         id: "issue-005930-2",
         sentiment: "호재",
         comment: "미국 테일러 공장 보조금 지급 확정 및 세액공제 수혜로 투자비 부담 완화",
-        articleUrl: "https://www.hankyung.com/article/2026080162201",
+        articleUrl: "https://www.hankyung.com/article/2026091052376",
         publishedAt: "2026.08.01 16:22",
       },
       {
         id: "issue-005930-3",
         sentiment: "악재",
         comment: "레거시 메모리 가격 상승 탄력 둔화 전망에 따른 하반기 마진 우려 제기",
-        articleUrl: "https://www.hankyung.com/article/2026080214101",
+        articleUrl: "https://www.hankyung.com/article/2026091052376",
         publishedAt: "2026.08.02 14:10",
+      },
+      {
+        id: "issue-005930-4",
+        sentiment: "호재",
+        comment: "HBM3E 12단 제품 주요 고객사 퀄테스트 통과 및 4분기 양산 본격화",
+        articleUrl: "https://www.hankyung.com/article/2026091052376",
+        publishedAt: "2026.08.04 11:30",
+      },
+      {
+        id: "issue-005930-5",
+        sentiment: "중립",
+        comment: "글로벌 IT 세트 수요 회복 속도 모니터링 필요 및 재고 자산 건전성 유지",
+        articleUrl: "https://www.hankyung.com/article/2026091052376",
+        publishedAt: "2026.08.05 15:40",
       },
     ],
   },
@@ -852,6 +965,13 @@ const STOCKS: Stock[] = [
         comment: "물류비 안정세 속 북미 신공장 가동 안정화 및 초기 투자 비용 관리 지속",
         articleUrl: "https://www.hankyung.com/article/2026091052376",
         publishedAt: "2026.08.01 11:20",
+      },
+      {
+        id: "issue-012330-4",
+        sentiment: "호재",
+        comment: "샤시·제동·조향 전장화 프리미엄 부품 믹스 개선에 따른 영업이익률 상승세",
+        articleUrl: "https://www.hankyung.com/article/2026091052376",
+        publishedAt: "2026.08.04 09:40",
       },
     ],
   },
@@ -2648,6 +2768,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
 
   const [draggedStockIndex, setDraggedStockIndex] = useState<number | null>(null);
   const [dragOverStockIndex, setDragOverStockIndex] = useState<number | null>(null);
+  const [canDragStock, setCanDragStock] = useState<boolean>(false);
 
   const reorderStocksInSelectedGroup = (fromIndex: number, toIndex: number) => {
     if (fromIndex === toIndex) return;
@@ -2828,8 +2949,12 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         <div
                           key={stock.id}
                           className={`watchlist-item-wrapper ${isExpanded ? "expanded" : ""} ${isDragging ? "dragging" : ""} ${isDragOver ? "dragover" : ""}`}
-                          draggable
+                          draggable={canDragStock}
                           onDragStart={(e) => {
+                            if (!canDragStock) {
+                              e.preventDefault();
+                              return;
+                            }
                             setDraggedStockIndex(index);
                             e.dataTransfer.effectAllowed = "move";
                             e.dataTransfer.setData("text/plain", `${index}`);
@@ -2853,10 +2978,12 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             }
                             setDraggedStockIndex(null);
                             setDragOverStockIndex(null);
+                            setCanDragStock(false);
                           }}
                           onDragEnd={() => {
                             setDraggedStockIndex(null);
                             setDragOverStockIndex(null);
+                            setCanDragStock(false);
                           }}
                         >
                           {/* 메인 종목 스트립 행 */}
@@ -2926,7 +3053,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               </span>
                             </div>
 
-                            {/* 우측: 펼침 아이콘 + 맨 우측 이동 핸들 */}
+                            {/* 우측: 펼침 아이콘 + 맨 우측 이동 핸들 (오직 핸들 mousedown 시에만 드래그 허용) */}
                             <div className="strip-col-right">
                               {hasSubContent ? (
                                 <span className={`strip-chevron ${isExpanded ? "open" : ""}`} aria-hidden="true">
@@ -2937,6 +3064,11 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                 className="watchlist-drag-grip"
                                 title="드래그하여 순서 변경"
                                 onClick={(e) => e.stopPropagation()}
+                                onMouseDown={(e) => {
+                                  e.stopPropagation();
+                                  setCanDragStock(true);
+                                }}
+                                onMouseUp={() => setCanDragStock(false)}
                               >
                                 <GripVertical size={16} />
                               </div>
@@ -2947,49 +3079,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                           {isExpanded ? (
                             <div className="watchlist-sub-panel">
                               {issues.length > 0 ? (
-                                <div className="pointview-card-slider" role="region" aria-label={`${stock.name} AI 포인트 뷰`}>
-                                  {issues.map((issue) => {
-                                    const sentimentClass =
-                                      issue.sentiment === "호재"
-                                        ? "tag-pos"
-                                        : issue.sentiment === "악재"
-                                        ? "tag-neg"
-                                        : "tag-neutral";
-                                    const emoji =
-                                      issue.sentiment === "호재"
-                                        ? "🙂"
-                                        : issue.sentiment === "악재"
-                                        ? "🙁"
-                                        : "😐";
-                                      const sentimentCardClass =
-                                        issue.sentiment === "호재"
-                                          ? "card-pos"
-                                          : issue.sentiment === "악재"
-                                          ? "card-neg"
-                                          : "card-neutral";
-                                    return (
-                                      <a
-                                        key={issue.id}
-                                        href="https://www.hankyung.com/article/2026091052376"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={`pointview-card ${sentimentCardClass}`}
-                                        onClick={(e) => e.stopPropagation()}
-                                      >
-                                        <div className="pointview-card-body">
-                                          <span
-                                            className={`sentiment-tag ${sentimentClass} sentiment-tag-icon-only`}
-                                            title={issue.sentiment}
-                                            aria-label={issue.sentiment}
-                                          >
-                                            <span className="tag-emoji" aria-hidden="true">{emoji}</span>
-                                          </span>
-                                          <p className="pointview-card-comment">{issue.comment}</p>
-                                        </div>
-                                      </a>
-                                    );
-                                  })}
-                                </div>
+                                <PointviewCardSlider stockName={stock.name} issues={issues} />
                               ) : (
                                 <p className="sub-empty-text">등록된 AI 포인트 뷰가 없습니다.</p>
                               )}
