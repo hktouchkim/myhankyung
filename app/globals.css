@@ -5869,36 +5869,33 @@ p {
 /* 2. 박스 자체의 색깔을 호재 악재로 표현 */
 .pointview-card.card-pos {
   background: #fff5f5;
-  border: 1px solid #fed7d7;
+  border: none;
 }
 
 .pointview-card.card-pos:hover {
   background: #ffe3e3;
-  border-color: #fca5a5;
   box-shadow: 0 4px 12px rgba(220, 38, 38, 0.08);
   transform: translateY(-1px);
 }
 
 .pointview-card.card-neg {
   background: #f0f7ff;
-  border: 1px solid #d0e4ff;
+  border: none;
 }
 
 .pointview-card.card-neg:hover {
   background: #e0effe;
-  border-color: #93c5fd;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
   transform: translateY(-1px);
 }
 
 .pointview-card.card-neutral {
   background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  border: none;
 }
 
 .pointview-card.card-neutral:hover {
   background: #f1f5f9;
-  border-color: #cbd5e1;
   box-shadow: 0 4px 12px rgba(100, 116, 139, 0.08);
   transform: translateY(-1px);
 }
