@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  ArrowDown,
-  ArrowUp,
   Award,
   Banknote,
   BarChart3,
@@ -2431,6 +2429,8 @@ function AppDialog({
 export function MyHankyungClient({ initialView = "home" }: { initialView?: "home" | "watchlist" }) {
   const view = initialView;
   const [groups, setGroups] = useState<WatchGroup[]>(INITIAL_GROUPS);
+  const [draggedGroupId, setDraggedGroupId] = useState<string | null>(null);
+  const groupDragRef = useRef<{ id: string; startY: number; active: boolean } | null>(null);
   const [selectedGroupId, setSelectedGroupId] = useState(INITIAL_GROUPS[0].id);
   const [showArticleAnalysis, setShowArticleAnalysis] = useState(true);
   const [dialog, setDialog] = useState<"add" | "alerts" | "manage" | null>(null);
@@ -2729,15 +2729,24 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
     showToast(`${result.normalizedName} 그룹을 만들었습니다.`);
   };
 
-  const moveGroup = (groupId: string, direction: -1 | 1) => {
+  const reorderGroup = (groupId: string, targetId: string) => {
     setGroups((current) => {
-      const index = current.findIndex((group) => group.id === groupId);
-      const nextIndex = index + direction;
-      if (index < 0 || nextIndex < 0 || nextIndex >= current.length) return current;
+      const from = current.findIndex((group) => group.id === groupId);
+      const to = current.findIndex((group) => group.id === targetId);
+      if (from < 0 || to < 0 || from === to) return current;
       const next = [...current];
-      [next[index], next[nextIndex]] = [next[nextIndex], next[index]];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved);
       return next;
     });
+  };
+
+  const endGroupDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    groupDragRef.current = null;
+    setDraggedGroupId(null);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
   };
 
   const startRenameGroup = (group: WatchGroup) => {
@@ -2761,7 +2770,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
 
   const deleteGroup = () => {
     if (!pendingDeleteGroup || groups.length === 1) return;
-    if (pendingDeleteGroup.id === groups[0].id) {
+    if (pendingDeleteGroup.id === INITIAL_GROUPS[0].id) {
       showToast("기본 그룹은 삭제할 수 없습니다.");
       setPendingDeleteGroupId(null);
       return;
@@ -3312,16 +3321,55 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
         >
           <div className="manage-layout">
             <section className="manage-groups" aria-label="관심그룹 관리">
-              <div className="manage-group-list">
+              <div className="manage-group-list"
+                          onPointerMove={(event) => {
+                            const drag = groupDragRef.current;
+                            if (!drag) return;
+                            if (!drag.active && Math.abs(event.clientY - drag.startY) < 4) return;
+                            drag.active = true;
+                            setDraggedGroupId(drag.id);
+                            const list = event.currentTarget;
+                            if (!list) return;
+                            const bounds = list.getBoundingClientRect();
+                            if (event.clientY < bounds.top + 28) list.scrollTop -= 12;
+                            if (event.clientY > bounds.bottom - 28) list.scrollTop += 12;
+                            const row = document.elementFromPoint(event.clientX, event.clientY)?.closest<HTMLElement>(".manage-group-row");
+                            if (row && list.contains(row) && row.dataset.groupId) {
+                              reorderGroup(drag.id, row.dataset.groupId);
+                            }
+                          }}
+                          onPointerUp={endGroupDrag}
+                          onPointerCancel={endGroupDrag}
+                          onLostPointerCapture={endGroupDrag}
+              >
                 {groups.map((group, index) => {
-                  const isDefaultGroup = index === 0;
+                  const isDefaultGroup = group.id === INITIAL_GROUPS[0].id;
                   return (
                     <div
                       key={group.id}
-                      className="manage-group-row"
+                      className={`manage-group-row ${draggedGroupId === group.id ? "group-dragging" : ""}`}
+                      data-group-id={group.id}
                     >
                       <div className="group-select-area">
-                        <GripVertical size={17} />
+                        <button
+                          type="button"
+                          className="group-drag-handle"
+                          aria-label={`${group.name} 순서 변경`}
+                          title="끌어서 순서 변경"
+                          onPointerDown={(event) => {
+                            if (event.button !== 0) return;
+                            groupDragRef.current = { id: group.id, startY: event.clientY, active: false };
+                            event.currentTarget.closest(".manage-group-list")?.setPointerCapture(event.pointerId);
+                          }}
+                          onKeyDown={(event) => {
+                            if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
+                            event.preventDefault();
+                            const target = groups[index + (event.key === "ArrowUp" ? -1 : 1)];
+                            if (target) reorderGroup(group.id, target.id);
+                          }}
+                        >
+                          <GripVertical size={17} />
+                        </button>
                         {editingGroupId === group.id ? (
                           <div className="group-edit-input-wrapper">
                             <input
@@ -3352,8 +3400,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         ) : (
                           <button type="button" onClick={() => startRenameGroup(group)} aria-label={`${group.name} 이름 수정`}><Pencil size={15} /></button>
                         )}
-                        <button type="button" disabled={index === 0} onClick={() => moveGroup(group.id, -1)} aria-label={`${group.name} 위로 이동`}><ArrowUp size={15} /></button>
-                        <button type="button" disabled={index === groups.length - 1} onClick={() => moveGroup(group.id, 1)} aria-label={`${group.name} 아래로 이동`}><ArrowDown size={15} /></button>
                         <button
                           className="danger-icon"
                           type="button"

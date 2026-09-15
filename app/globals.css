@@ -6067,3 +6067,25 @@ p {
 }
 
 .site-frame:has(.recent-watchlist-page) .dialog-panel { font-size: 16px; }
+
+/* Group order changes start only from the handle. */
+.group-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #94a3b8;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.group-drag-handle:hover { background: #f1f5f9; color: #475569; }
+.group-drag-handle:active { cursor: grabbing; }
+.group-drag-handle:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.manage-group-row.group-dragging { background: #eff6ff; border-color: #93c5fd; }
