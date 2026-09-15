@@ -183,26 +183,33 @@ function PointviewCardSlider({
   const scrollLeftRef = useRef(0);
   const isDraggingRef = useRef(false);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!sliderRef.current) return;
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
     isDownRef.current = true;
     isDraggingRef.current = false;
-    startXRef.current = e.pageX - sliderRef.current.offsetLeft;
-    scrollLeftRef.current = sliderRef.current.scrollLeft;
+    startXRef.current = e.clientX;
+    scrollLeftRef.current = e.currentTarget.scrollLeft;
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDownRef.current || !sliderRef.current) return;
-    const x = e.pageX - sliderRef.current.offsetLeft;
-    const walk = (x - startXRef.current) * 1.5; // 스크롤 민감도
-    if (Math.abs(walk) > 4) {
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDownRef.current) return;
+    const dx = e.clientX - startXRef.current;
+    if (!isDraggingRef.current && Math.abs(dx) <= 3) return;
+    if (!isDraggingRef.current) {
       isDraggingRef.current = true;
+      e.currentTarget.setPointerCapture(e.pointerId);
+      e.currentTarget.classList.add("is-dragging");
     }
-    sliderRef.current.scrollLeft = scrollLeftRef.current - walk;
+    e.preventDefault();
+    e.currentTarget.scrollLeft = scrollLeftRef.current - dx;
   };
 
-  const handleMouseUpOrLeave = () => {
+  const handlePointerEnd = (e: React.PointerEvent<HTMLDivElement>) => {
     isDownRef.current = false;
+    e.currentTarget.classList.remove("is-dragging");
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
   };
 
   return (
@@ -211,10 +218,22 @@ function PointviewCardSlider({
       className="pointview-card-slider"
       role="region"
       aria-label={`${stockName} AI 포인트 뷰`}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUpOrLeave}
-      onMouseLeave={handleMouseUpOrLeave}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerEnd}
+      onPointerCancel={handlePointerEnd}
+      onLostPointerCapture={handlePointerEnd}
+      onPointerLeave={(e) => {
+        if (!e.currentTarget.hasPointerCapture(e.pointerId)) isDownRef.current = false;
+      }}
+      onDragStart={(e) => e.preventDefault()}
+      onClickCapture={(e) => {
+        if (isDraggingRef.current) {
+          e.preventDefault();
+          e.stopPropagation();
+          isDraggingRef.current = false;
+        }
+      }}
     >
       {issues.map((issue) => {
         const sentimentClass =
@@ -243,6 +262,7 @@ function PointviewCardSlider({
             target="_blank"
             rel="noopener noreferrer"
             className={`pointview-card ${sentimentCardClass}`}
+            draggable={false}
             onClick={(e) => {
               e.stopPropagation();
               // 드래그 중 마우스가 떼어졌을 때는 클릭(링크 이동) 방지
@@ -3024,11 +3044,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                 >
                                   {stock.name}
                                 </a>
-                                <span className="strip-stock-meta">
-                                  {stock.code} · {stock.market}
-                                  {stock.marketType === "OVERSEAS" ? (
-                                    <span className="market-pill-overseas">해외</span>
-                                  ) : null}
+                                <span className="strip-stock-ticker">
+                                  {stock.ticker || stock.code}
                                 </span>
                               </div>
                             </div>
@@ -3195,7 +3212,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         <span className="radio-mark">{checked ? <Check size={14} /> : null}</span>
                         <span className="result-name">
                           <strong>{stock.name}</strong>
-                          <small>{stock.code} · {stock.market}</small>
+                          <small>{stock.ticker || stock.code}</small>
                         </span>
                         {alreadyAdded ? <span className="search-result-status">등록됨</span> : <Movement stock={stock} compact />}
                       </button>

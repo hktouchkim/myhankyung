@@ -245,6 +245,9 @@ p {
   white-space: nowrap;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .button.action-control-button { font-size: 15px; }
+
+
 .button.action-control-button:hover:not(:disabled) {
   border-color: #92969e;
   background: #f7f7f8;
@@ -263,6 +266,9 @@ p {
   font-weight: 700;
   transition: transform 120ms ease, background 150ms ease, border-color 150ms ease;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .button { font-size: 15px; }
+
 
 .button:hover:not(:disabled) {
   transform: translateY(-1px);
@@ -312,6 +318,9 @@ p {
   padding: 0 12px;
   font-size: 13px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .button-small { font-size: 14px; }
+
 
 .timeline-panel,
 .group-filter-panel,
@@ -587,6 +596,9 @@ p {
   transition: all 120ms ease;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .group-tab { font-size: 14px; }
+
+
 .group-tab:hover {
   background: #f1f5f9;
   border-color: #cbd5e1;
@@ -605,6 +617,9 @@ p {
   font-size: 11px;
   font-style: normal;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .group-tab em { font-size: 12px; }
+
 
 .group-tab-active {
   border-color: #0f2c59 !important;
@@ -1187,6 +1202,9 @@ p {
   font-size: 16px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .movement strong { font-size: 17px; }
+
+
 .movement span {
   display: flex;
   margin-top: 2px;
@@ -1195,6 +1213,9 @@ p {
   font-size: 13px;
   font-weight: 700;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .movement span { font-size: 14px; }
+
 
 .movement-up span {
   color: var(--red);
@@ -1243,6 +1264,9 @@ p {
   margin: 5px 0 16px;
   font-size: 13px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .content-empty p { font-size: 14px; }
+
 
 .content-section {
   margin: 0;
@@ -1390,6 +1414,10 @@ p {
   font-size: 11px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .report-meta,
+.site-frame:has(.recent-watchlist-page) .dialog-panel .preview-badges { font-size: 12px; }
+
+
 .sentiment {
   display: inline-flex;
   width: 24px;
@@ -1400,6 +1428,9 @@ p {
   font-size: 15px;
   line-height: 1;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .sentiment { font-size: 16px; }
+
 
 .sentiment-긍정 {
   background: #fff0ed;
@@ -1447,6 +1478,9 @@ p {
   font-size: 13px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .article-analysis-summary-item { font-size: 14px; }
+
+
 .article-analysis-summary-item + .article-analysis-summary-item::before {
   margin: 0 8px;
   color: #c2c5ca;
@@ -1458,6 +1492,9 @@ p {
   font-size: 12px;
   white-space: nowrap;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .article-analysis-summary-item strong { font-size: 13px; }
+
 
 .article-analysis-row {
   display: grid;
@@ -1473,6 +1510,9 @@ p {
   white-space: nowrap;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .article-analysis-row > strong { font-size: 13px; }
+
+
 .article-analysis-comment {
   overflow: hidden;
   color: #62666e;
@@ -1482,10 +1522,16 @@ p {
   white-space: nowrap;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .article-analysis-comment { font-size: 13px; }
+
+
 .article-card small {
   color: #8a8e95;
   font-size: 11px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .article-card small { font-size: 12px; }
+
 
 .article-thumbnail {
   position: relative;
@@ -1534,6 +1580,9 @@ p {
   font-size: 16px;
   font-weight: 700;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .article-thumbnail span { font-size: 17px; }
+
 
 .thumb-navy { background: linear-gradient(135deg, #10295b, #40629c); }
 .thumb-blue { background: linear-gradient(135deg, #315fc7, #74a1de); }
@@ -1609,6 +1658,9 @@ p {
   font-size: 12px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .report-details { font-size: 13px; }
+
+
 .report-details strong {
   margin-left: 4px;
   color: #2f343a;
@@ -1650,10 +1702,16 @@ p {
   letter-spacing: 0.06em;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .premium-banner strong { font-size: 23px; }
+
+
 .premium-banner span {
   font-size: 13px;
   font-weight: 700;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .premium-banner span { font-size: 14px; }
+
 
 .premium-banner em {
   padding: 6px 12px;
@@ -1664,6 +1722,9 @@ p {
   font-style: normal;
   font-weight: 700;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .premium-banner em { font-size: 13px; }
+
 
 .dashboard-grid {
   margin-top: 16px;
@@ -1720,6 +1781,9 @@ p {
   font-size: 10px;
   font-weight: 800;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .title-with-icon > span { font-size: 11px; }
+
 
 .dashboard-my-briefing-card,
 .dashboard-recent-card {
@@ -1788,6 +1852,9 @@ p {
   padding: 0 4px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .briefing-page-indicator { font-size: 12px; }
+
+
 .dashboard-briefing-emblem {
   display: flex;
   width: 68px;
@@ -1810,6 +1877,9 @@ p {
   line-height: 1.25;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-briefing-name strong { font-size: 20px; }
+
+
 .dashboard-briefing-schedule {
   display: flex;
   margin-top: 8px;
@@ -1824,6 +1894,9 @@ p {
   font-size: 11px;
   white-space: nowrap;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-briefing-schedule span { font-size: 12px; }
+
 
 .dashboard-briefing-copy {
   margin-top: 22px;
@@ -1841,6 +1914,9 @@ p {
   letter-spacing: -0.02em;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-briefing-date { font-size: 15px; }
+
+
 .dashboard-briefing-body {
   margin: 0;
   font-size: 14px;
@@ -1853,6 +1929,9 @@ p {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-briefing-body { font-size: 15px; }
+
 
 .dashboard-recent-heading-link {
   min-width: 0;
@@ -1889,11 +1968,17 @@ p {
   font-size: 10px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-recent-stats dt { font-size: 11px; }
+
+
 .dashboard-recent-stats dd {
   margin-top: 7px;
   font-size: 15px;
   font-weight: 800;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-recent-stats dd { font-size: 16px; }
+
 
 .dashboard-top-category {
   display: flex;
@@ -1961,12 +2046,18 @@ p {
   white-space: nowrap;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-recent-item strong { font-size: 14px; }
+
+
 .dashboard-recent-item time {
   display: block;
   margin-top: 3px;
   color: var(--muted);
   font-size: 10px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-recent-item time { font-size: 11px; }
+
 
 .dashboard-recent-item a:hover strong {
   text-decoration: underline;
@@ -2018,6 +2109,9 @@ p {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-badge-item strong { font-size: 12px; }
+
 
 .dashboard-badge-emblem {
   position: relative;
@@ -2099,12 +2193,18 @@ p {
   font-size: 12px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-group-tabs .group-tab { font-size: 13px; }
+
+
 .dashboard-group-tabs .group-tab em {
   min-width: 19px;
   height: 19px;
   padding: 0 5px;
   font-size: 10px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-group-tabs .group-tab em { font-size: 11px; }
+
 
 .dashboard-watch-card .dashboard-stock-list {
   margin-top: 12px;
@@ -2129,10 +2229,16 @@ p {
   font-size: 14px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-stock-list > button > span strong { font-size: 15px; }
+
+
 .dashboard-stock-list > button > span small {
   color: var(--muted);
   font-size: 10px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-stock-list > button > span small { font-size: 11px; }
+
 
 .dashboard-view-all {
   display: flex;
@@ -2154,6 +2260,9 @@ p {
   font-size: 13px;
   text-align: center;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-stock-empty { font-size: 14px; }
+
 
 .compact-dashboard-card {
   min-height: 265px;
@@ -2182,11 +2291,17 @@ p {
   white-space: nowrap;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-news-list strong { font-size: 15px; }
+
+
 .dashboard-news-list small {
   margin-top: 3px;
   color: var(--muted);
   font-size: 10px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-news-list small { font-size: 11px; }
+
 
 .reporter-row {
   display: grid;
@@ -2215,9 +2330,15 @@ p {
   font-weight: 700;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .reporter-row > div > span { font-size: 13px; }
+
+
 .reporter-row strong {
   font-size: 12px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .reporter-row strong { font-size: 13px; }
+
 
 .reporter-update {
   display: flex;
@@ -2228,6 +2349,9 @@ p {
   color: var(--muted);
   font-size: 11px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .reporter-update { font-size: 12px; }
+
 
 /* Dialogs */
 .dialog-backdrop {
@@ -2403,12 +2527,18 @@ p {
   white-space: nowrap;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .add-group-option strong { font-size: 13px; }
+
+
 .add-group-option small {
   flex: 0 0 auto;
   color: var(--navy);
   font-size: 9px;
   font-weight: 700;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .add-group-option small { font-size: 10px; }
+
 
 /* 현재 그룹 필수 선택(해제 불가) 비활성화 스타일 */
 .add-group-option-current-disabled {
@@ -2437,11 +2567,17 @@ p {
   font-weight: 700;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .current-group-badge { font-size: 11px !important; }
+
+
 .add-section-label {
   margin-bottom: 4px;
   font-size: 13px;
   font-weight: 800;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .add-section-label { font-size: 14px; }
+
 
 .stock-search-section .search-field {
   margin-top: 2px;
@@ -2504,6 +2640,9 @@ p {
   font-weight: 700;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .search-result-status { font-size: 12px; }
+
+
 .result-name {
   min-width: 0;
   flex: 1;
@@ -2518,11 +2657,17 @@ p {
   font-size: 14px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .result-name strong { font-size: 15px; }
+
+
 .result-name small {
   margin-top: 1px;
   color: var(--muted);
   font-size: 10px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .result-name small { font-size: 11px; }
+
 
 .no-search-result {
   padding: 34px 20px;
@@ -2543,6 +2688,9 @@ p {
   color: var(--muted);
   font-size: 11px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .search-before-state { font-size: 12px; }
+
 
 .notification-list {
   display: flex;
@@ -2589,11 +2737,17 @@ p {
   font-size: 14px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .alert-copy strong { font-size: 15px; }
+
+
 .alert-copy p {
   margin: 2px 0 0;
   color: var(--muted);
   font-size: 11px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .alert-copy p { font-size: 12px; }
+
 
 .switch {
   position: relative;
@@ -2639,6 +2793,9 @@ p {
   font-size: 12px;
   font-weight: 700;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .inline-setting { font-size: 13px; }
+
 
 .inline-setting select {
   min-width: 118px;
@@ -2712,6 +2869,9 @@ p {
   gap: 6px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .group-select-area > span.group-name-label { font-size: 14px; }
+
+
 .default-group-tag {
   display: inline-flex;
   align-items: center;
@@ -2722,6 +2882,9 @@ p {
   padding: 1px 6px;
   border-radius: 4px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .default-group-tag { font-size: 11px; }
+
 
 .group-edit-input-wrapper {
   display: flex;
@@ -2742,12 +2905,18 @@ p {
   font-size: 13px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .group-edit-input-wrapper input { font-size: 14px; }
+
+
 .group-input-counter {
   font-size: 11px;
   color: #8c929c;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .group-input-counter { font-size: 12px; }
+
 
 .group-row-actions {
   display: flex;
@@ -2804,6 +2973,9 @@ p {
   background: transparent;
   font-size: 12px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .new-group-form input { font-size: 13px; }
+
 
 .new-group-form .group-input-counter {
   padding-right: 4px;
@@ -2902,11 +3074,17 @@ p {
   font-size: 13px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .delete-confirmation strong { font-size: 14px; }
+
+
 .delete-confirmation p {
   margin: 4px 0 10px;
   color: #75534e;
   font-size: 10px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .delete-confirmation p { font-size: 11px; }
+
 
 .delete-confirmation > div {
   display: flex;
@@ -2924,6 +3102,9 @@ p {
   color: var(--muted);
   font-size: 10px;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .manage-dialog-actions p { font-size: 11px; }
+
 
 .preview-content h3 {
   margin: 15px 0 10px;
@@ -2960,6 +3141,9 @@ p {
   font-size: 10px;
 }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .preview-content dt { font-size: 11px; }
+
+
 .preview-content dd {
   margin: 3px 0 0;
   font-weight: 700;
@@ -2984,6 +3168,9 @@ p {
   transform: translateX(-50%);
   animation: toast-in 180ms ease-out;
 }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .toast { font-size: 13px; }
+
 
 @keyframes toast-in {
   from { opacity: 0; transform: translate(-50%, 8px); }
@@ -3206,6 +3393,9 @@ p {
     font-size: 18px;
   }
 
+.site-frame:has(.recent-watchlist-page) .dialog-panel .premium-banner strong { font-size: 19px; }
+
+
   .dashboard-card {
     min-height: auto;
     padding: 20px;
@@ -3238,6 +3428,9 @@ p {
   .dashboard-briefing-copy p {
     font-size: 14px;
   }
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel .dashboard-briefing-copy p { font-size: 15px; }
+
 
   .dashboard-recent-stats {
     margin-top: 18px;
@@ -5059,6 +5252,8 @@ p {
   letter-spacing: -0.02em;
 }
 
+.recent-watchlist-page .watchlist-total-count { font-size: 15px; }
+
 .watchlist-total-count strong {
   font-weight: 700;
   color: #0f172a;
@@ -5106,6 +5301,8 @@ p {
   white-space: nowrap;
 }
 
+.recent-watchlist-page .watchlist-group-tab { font-size: 14px; }
+
 .watchlist-group-tab:hover {
   background: #f1f5f9;
   color: #1e293b;
@@ -5132,6 +5329,8 @@ p {
   background: rgba(0, 0, 0, 0.06);
   color: inherit;
 }
+
+.recent-watchlist-page .watchlist-group-tab .group-tab-count { font-size: 12px; }
 
 .watchlist-group-tab.active .group-tab-count {
   background: rgba(255, 255, 255, 0.22);
@@ -5248,6 +5447,8 @@ p {
   letter-spacing: -0.02em;
 }
 
+.recent-watchlist-page .watchlist-total-count { font-size: 15px; }
+
 .watchlist-total-count strong {
   font-weight: 700;
   color: #0f172a;
@@ -5276,6 +5477,8 @@ p {
   transition: all 130ms ease;
 }
 
+.recent-watchlist-page .watchlist-toggle-btn { font-size: 13px; }
+
 .watchlist-toggle-btn:hover {
   background: #f8fafc;
   border-color: #94a3b8;
@@ -5297,6 +5500,8 @@ p {
   cursor: pointer;
   transition: all 140ms ease;
 }
+
+.recent-watchlist-page .watchlist-add-stock-btn { font-size: 13px; }
 
 .watchlist-add-stock-btn:hover {
   background: #1e293b;
@@ -5403,6 +5608,8 @@ p {
   text-overflow: ellipsis;
 }
 
+.recent-watchlist-page .strip-stock-name { font-size: 16px; }
+
 .strip-stock-name:hover {
   text-decoration: underline;
   color: #0f2c59;
@@ -5415,6 +5622,8 @@ p {
   align-items: center;
   gap: 5px;
 }
+
+.recent-watchlist-page .strip-stock-meta { font-size: 12px; }
 
 .market-pill-overseas {
   background: #e0e7ff;
@@ -5463,6 +5672,8 @@ p {
   font-variant-numeric: tabular-nums;
 }
 
+.recent-watchlist-page .strip-col-price .price-number { font-size: 16px; }
+
 .strip-col-diff {
   width: 80px;
   text-align: right;
@@ -5471,6 +5682,8 @@ p {
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
+
+.recent-watchlist-page .strip-col-diff { font-size: 14px; }
 
 .strip-col-rate {
   width: 76px;
@@ -5481,6 +5694,8 @@ p {
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
 }
+
+.recent-watchlist-page .strip-col-rate { font-size: 14px; }
 
 .strip-col-diff.rate-up,
 .strip-col-rate.rate-up {
@@ -5611,8 +5826,7 @@ p {
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   padding: 4px 2px 8px 2px;
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-width: none;
   cursor: grab;
   user-select: none;
 }
@@ -5622,22 +5836,18 @@ p {
 }
 
 .pointview-card-slider::-webkit-scrollbar {
-  height: 6px;
-  display: block;
+  display: none;
 }
 
-.pointview-card-slider::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 9999px;
+/* Mouse dragging tracks the pointer without snapping between cards. */
+@media (pointer: fine) {
+  .pointview-card-slider { scroll-snap-type: none; }
 }
 
-.pointview-card-slider::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
-}
-
-.pointview-card-slider::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+.pointview-card-slider.is-dragging,
+.pointview-card-slider.is-dragging .pointview-card {
+  cursor: grabbing;
+  scroll-snap-type: none;
 }
 
 .pointview-card {
@@ -5716,6 +5926,8 @@ p {
   flex: 1;
 }
 
+.recent-watchlist-page .pointview-card-comment { font-size: 14px; }
+
 /* 줄머리 감성 배지 공통 */
 .sentiment-tag {
   display: inline-flex;
@@ -5731,12 +5943,16 @@ p {
   line-height: 1;
 }
 
+.recent-watchlist-page .sentiment-tag { font-size: 11px; }
+
 .sentiment-tag .tag-emoji {
   font-size: 11px;
   line-height: 1;
   display: inline-flex;
   align-items: center;
 }
+
+.recent-watchlist-page .sentiment-tag .tag-emoji { font-size: 12px; }
 
 .sentiment-tag.tag-pos {
   background: #ffffff;
@@ -5769,11 +5985,15 @@ p {
   font-size: 14px;
 }
 
+.recent-watchlist-page .sentiment-tag.sentiment-tag-icon-only .tag-emoji { font-size: 15px; }
+
 .sub-empty-text {
   font-size: 12px;
   color: #94a3b8;
   padding: 8px 0;
 }
+
+.recent-watchlist-page .sub-empty-text { font-size: 13px; }
 
 /* 좁은 화면/모바일: 다음 카드가 있음을 알 수 있도록 약 80~82% 너비로 다음 카드 살짝 걸치게(peek) 가로 슬라이더 노출 */
 @media (max-width: 640px) {
@@ -5797,6 +6017,9 @@ p {
     font-size: 12.5px;
     -webkit-line-clamp: 2;
   }
+
+.recent-watchlist-page .pointview-card-comment { font-size: 13.5px; }
+
 }
 
 /* 반응형 모바일 최적화 */
@@ -5839,3 +6062,11 @@ p {
   }
 }
 
+/* Watchlist content inherits 16px; the page title keeps its existing size. */
+.recent-watchlist-page { font-size: 16px; }
+.strip-stock-ticker { font-size: 12px; color: #64748b; white-space: nowrap; flex-shrink: 0; }
+@media (min-width: 681px) {
+  .strip-identity { flex-direction: row; align-items: baseline; gap: 8px; }
+}
+
+.site-frame:has(.recent-watchlist-page) .dialog-panel { font-size: 16px; }
