@@ -2446,6 +2446,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedAddStockIds, setSelectedAddStockIds] = useState<string[]>([]);
   const groupTabsRef = useRef<HTMLDivElement>(null);
+  const tabDragRef = useRef<{ startX: number; scrollLeft: number; dragged: boolean } | null>(null);
+  const suppressTabClickRef = useRef(false);
   const [expandAllIssues, setExpandAllIssues] = useState(true);
   const [issueOverrides, setIssueOverrides] = useState<Record<string, boolean>>({});
 
@@ -2895,7 +2897,54 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
               {/* 1. 관심그룹 세그먼트 모듈 (.recent-module) */}
               <section className="recent-module watchlist-group-module" aria-label="관심그룹 선택 및 관리">
                 <div className="watchlist-group-bar">
-                  <div ref={groupTabsRef} className="watchlist-group-tabs" role="tablist" aria-label="관심그룹">
+                  <div
+                    ref={groupTabsRef}
+                    className="watchlist-group-tabs"
+                    role="tablist"
+                    aria-label="관심그룹"
+                    onPointerDown={(event) => {
+                      if (event.pointerType !== "mouse" || event.button !== 0) return;
+                      suppressTabClickRef.current = false;
+                      tabDragRef.current = { startX: event.clientX, scrollLeft: event.currentTarget.scrollLeft, dragged: false };
+                    }}
+                    onPointerMove={(event) => {
+                      const drag = tabDragRef.current;
+                      if (!drag) return;
+                      const dx = event.clientX - drag.startX;
+                      if (!drag.dragged && Math.abs(dx) <= 4) return;
+                      if (!drag.dragged) {
+                        drag.dragged = true;
+                        event.currentTarget.setPointerCapture(event.pointerId);
+                        event.currentTarget.classList.add("tabs-dragging");
+                      }
+                      suppressTabClickRef.current = true;
+                      event.preventDefault();
+                      event.currentTarget.scrollLeft = drag.scrollLeft - dx;
+                    }}
+                    onPointerUp={(event) => {
+                      tabDragRef.current = null;
+                      event.currentTarget.classList.remove("tabs-dragging");
+                      if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+                    }}
+                    onPointerCancel={() => {
+                      tabDragRef.current = null;
+                      groupTabsRef.current?.classList.remove("tabs-dragging");
+                    }}
+                    onLostPointerCapture={() => {
+                      tabDragRef.current = null;
+                      groupTabsRef.current?.classList.remove("tabs-dragging");
+                    }}
+                    onPointerLeave={() => {
+                      if (!tabDragRef.current?.dragged) tabDragRef.current = null;
+                    }}
+                    onClickCapture={(event) => {
+                      if (!suppressTabClickRef.current) return;
+                      event.preventDefault();
+                      event.stopPropagation();
+                      suppressTabClickRef.current = false;
+                    }}
+                    onDragStart={(event) => event.preventDefault()}
+                  >
                     {groups.map((group) => (
                       <button
                         key={group.id}
