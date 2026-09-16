@@ -2884,7 +2884,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
               <div className="watchlist-titlebar recent-page-titlebar">
                 <div>
                   <h1>관심종목</h1>
-                  <p>관심 있는 종목의 실시간 흐름과 한경 AI 포인트 뷰를 확인하세요.</p>
+                  <p>내가 등록한 관심종목의 주가변동과 핵심 이슈를 빠르게 확인하세요.</p>
                 </div>
               </div>
 
