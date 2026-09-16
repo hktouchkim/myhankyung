@@ -3124,18 +3124,20 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             </div>
 
                             {/* 시세 컬럼 (가격 / 등락폭 / 등락률 세로열 정렬) */}
-                            <div className="strip-col-price">
-                              <span className="price-number">{displayPrice}</span>
-                            </div>
-                            <div className={`strip-col-diff rate-${direction}`}>
-                              <span className="rate-diff-val">
-                                {stock.rate > 0 ? "+" : ""}{displayChange}
-                              </span>
-                            </div>
-                            <div className={`strip-col-rate rate-${direction}`}>
-                              <span className="rate-percent-val">
-                                {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : ""}{formatRate(stock.rate)}
-                              </span>
+                            <div className="strip-col-quotes">
+                              <div className="strip-col-price">
+                                <span className="price-number">{displayPrice}</span>
+                              </div>
+                              <div className={`strip-col-diff rate-${direction}`}>
+                                <span className="rate-diff-val">
+                                  {stock.rate > 0 ? "+" : ""}{displayChange}
+                                </span>
+                              </div>
+                              <div className={`strip-col-rate rate-${direction}`}>
+                                <span className="rate-percent-val">
+                                  {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : ""}{formatRate(stock.rate)}
+                                </span>
+                              </div>
                             </div>
 
                             {/* 우측: 펼침 아이콘 + 맨 우측 이동 핸들 (오직 핸들 mousedown 시에만 드래그 허용) */}

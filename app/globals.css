@@ -5735,6 +5735,11 @@ p {
 }
 
 /* 시세 컬럼 (가격 / 등락폭 / 등락률 세로열 정렬) */
+.strip-col-quotes {
+  display: flex;
+  align-items: center;
+}
+
 .strip-col-price {
   width: 90px;
   text-align: right;
@@ -6096,7 +6101,7 @@ p {
 
 }
 
-/* 반응형 모바일 최적화 */
+/* 반응형 모바일 최적화 (680px 이하 2줄 카드형 구조) */
 @media (max-width: 680px) {
   .watchlist-ai-module {
     grid-template-columns: 1fr;
@@ -6107,39 +6112,80 @@ p {
     display: none;
   }
   .watchlist-strip-row {
+    display: flex;
     flex-wrap: wrap;
-    gap: 8px 12px;
-    padding: 12px 6px;
+    align-items: center;
+    padding: 12px 10px;
+    gap: 10px 0;
   }
+  /* 1행 좌측: 별 + 종목명/티커 */
   .strip-col-left {
-    flex: 1 1 100%;
-  }
-  .strip-col-chart {
-    width: auto;
     flex: 1 1 auto;
-    min-width: 140px;
-    max-width: 190px;
-    margin: 0;
+    min-width: 0;
+    margin-right: 8px;
   }
-  .day-range-val {
-    font-size: 11px;
-    min-width: 40px;
+  .strip-identity {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+  .strip-stock-name {
+    font-size: 15.5px;
+    line-height: 1.25;
+  }
+  .strip-stock-ticker {
+    font-size: 11.5px;
+  }
+  /* 1행 우측: 시세(현재가+등락률) + 드래그핸들/접힘 */
+  .strip-col-quotes {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-left: auto;
+    flex-shrink: 0;
   }
   .strip-col-price {
     width: auto;
-    text-align: left;
+    text-align: right;
+  }
+  .strip-col-price .price-number {
+    font-size: 15.5px;
+    font-weight: 800;
   }
   .strip-col-diff {
-    width: auto;
-    text-align: left;
+    display: none; /* 모바일에서는 등락률과 중복되므로 깔끔하게 숨김 */
   }
   .strip-col-rate {
     width: auto;
-    text-align: left;
+    text-align: right;
+    font-size: 13px;
   }
   .strip-col-right {
-    margin-left: auto;
-    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
+  /* 2행 전폭: Price Range Bar (종목명 아래 꽉 찬 슬라이더 바) */
+  .strip-col-chart {
+    order: 3;
+    width: 100%;
+    flex: 1 1 100%;
+    margin: 0;
+    padding: 6px 4px 2px 4px;
+    background: #f8fafc;
+    border-radius: 6px;
+  }
+  .day-range-bar-wrap {
+    width: 100%;
+    gap: 8px;
+  }
+  .day-range-val {
+    font-size: 11px;
+    min-width: auto;
+    color: #64748b;
   }
 }
 
