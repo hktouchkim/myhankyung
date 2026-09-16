@@ -1890,6 +1890,11 @@ const INITIAL_GROUPS: WatchGroup[] = [
       "COST",   // 코스트코
     ],
   },
+  {
+    id: "group-korea-department",
+    name: "한국대기업백화점",
+    stockIds: STOCKS.filter((stock) => stock.marketType === "DOMESTIC").slice(0, 30).map((stock) => stock.id),
+  },
 ];
 
 const ARTICLES: Article[] = [
@@ -2439,8 +2444,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const [collapsedModules, setCollapsedModules] = useState<CollapsedModules>(DEFAULT_COLLAPSED_MODULES);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedAddStockId, setSelectedAddStockId] = useState<string | null>(null);
-  const [addTargetGroupIds, setAddTargetGroupIds] = useState<string[]>([INITIAL_GROUPS[0].id]);
+  const [selectedAddStockIds, setSelectedAddStockIds] = useState<string[]>([]);
+  const groupTabsRef = useRef<HTMLDivElement>(null);
   const [expandAllIssues, setExpandAllIssues] = useState(true);
   const [issueOverrides, setIssueOverrides] = useState<Record<string, boolean>>({});
 
@@ -2538,7 +2543,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
           stock.code.toLowerCase().includes(normalizedSearchQuery),
       ).slice(0, 6)
     : [];
-  const selectedAddStock = selectedAddStockId ? stockById(selectedAddStockId) : undefined;
+
   const pendingDeleteGroup = pendingDeleteGroupId
     ? groups.find((group) => group.id === pendingDeleteGroupId)
     : undefined;
@@ -2596,6 +2601,17 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
     setSelectedGroupId(groupId);
   };
 
+  useEffect(() => {
+    const tabs = groupTabsRef.current;
+    const active = tabs?.querySelector<HTMLElement>('[aria-selected="true"]');
+    if (!tabs || !active) return;
+    const bounds = tabs.getBoundingClientRect();
+    const rect = active.getBoundingClientRect();
+    const delta = rect.left < bounds.left ? rect.left - bounds.left
+      : rect.right > bounds.right ? rect.right - bounds.right : 0;
+    if (delta) tabs.scrollBy({ left: delta, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }, [selectedGroupId, groups]);
+
   const toggleArticleAnalysis = () => {
     setShowArticleAnalysis((current) => {
       const next = !current;
@@ -2614,8 +2630,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
 
   const openAddDialog = () => {
     setSearchQuery("");
-    setSelectedAddStockId(null);
-    setAddTargetGroupIds([selectedGroupId]);
+    setSelectedAddStockIds([]);
     setDialog("add");
   };
 
@@ -2631,31 +2646,18 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   };
 
   const addStock = () => {
-    if (!selectedAddStock) return;
-    let limitExceeded = false;
-    setGroups((currentGroups) =>
-      currentGroups.map((group) => {
-        const shouldInclude = addTargetGroupIds.includes(group.id);
-        const alreadyIncluded = group.stockIds.includes(selectedAddStock.id);
-        if (shouldInclude && !alreadyIncluded) {
-          if (group.stockIds.length >= 30) {
-            limitExceeded = true;
-            return group;
-          }
-          return { ...group, stockIds: [...group.stockIds, selectedAddStock.id] };
-        }
-        if (!shouldInclude && alreadyIncluded) {
-          return { ...group, stockIds: group.stockIds.filter((stockId) => stockId !== selectedAddStock.id) };
-        }
-        return group;
-      }),
-    );
-    setDialog(null);
-    if (limitExceeded) {
-      showToast("일부 그룹의 종목 한도(30개)를 초과하여 제외되었습니다.");
-    } else {
-      showToast(`${selectedAddStock.name}의 관심그룹을 저장했습니다.`);
+    const additions = selectedAddStockIds.filter((id) => !selectedGroup.stockIds.includes(id));
+    if (!additions.length) return;
+    if (selectedGroup.stockIds.length + additions.length > 30) {
+      showToast("그룹당 최대 30개까지 등록할 수 있습니다. 선택한 종목 수를 줄여주세요.");
+      return;
     }
+    setGroups((current) => current.map((group) => group.id === selectedGroup.id
+      ? { ...group, stockIds: Array.from(new Set([...group.stockIds, ...additions])) }
+      : group));
+    setDialog(null);
+    setSelectedAddStockIds([]);
+    showToast(`${selectedGroup.name}에 ${additions.length}개 종목을 추가했습니다.`);
   };
 
   const UserInputPolicy = {
@@ -2891,7 +2893,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
               {/* 1. 관심그룹 세그먼트 모듈 (.recent-module) */}
               <section className="recent-module watchlist-group-module" aria-label="관심그룹 선택 및 관리">
                 <div className="watchlist-group-bar">
-                  <div className="watchlist-group-tabs" role="tablist" aria-label="관심그룹">
+                  <div ref={groupTabsRef} className="watchlist-group-tabs" role="tablist" aria-label="관심그룹">
                     {groups.map((group) => (
                       <button
                         key={group.id}
@@ -3136,38 +3138,9 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
           onClose={() => setDialog(null)}
         >
           <div className="dialog-body add-stock-dialog">
-            {/* 1. 관심그룹 선택 (현재 그룹은 필수 포함/해제 불가) */}
             <section className="add-dialog-section">
-              <div className="add-section-label">관심그룹</div>
-              <div className="add-group-checklist" aria-label="종목을 저장할 관심그룹">
-                {groups.map((group) => {
-                  const isCurrentGroup = group.id === selectedGroupId;
-                  const checked = addTargetGroupIds.includes(group.id);
-                  return (
-                    <label
-                      key={group.id}
-                      className={`add-group-option ${checked ? "add-group-option-checked" : ""} ${isCurrentGroup ? "add-group-option-current-disabled" : ""}`}
-                      title={isCurrentGroup ? "현재 활성화된 그룹은 반드시 포함됩니다." : undefined}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        disabled={isCurrentGroup}
-                        onChange={(event) => {
-                          setAddTargetGroupIds((current) =>
-                            event.target.checked
-                              ? Array.from(new Set([...current, group.id]))
-                              : current.filter((groupId) => groupId !== group.id),
-                          );
-                        }}
-                      />
-                      <span className="checkbox-mark">{checked ? <Check size={14} /> : null}</span>
-                      <strong>{group.name}</strong>
-                      {isCurrentGroup ? <small className="current-group-badge">현재 그룹 (필수)</small> : null}
-                    </label>
-                  );
-                })}
-              </div>
+              <div className="add-section-label">현재 관심그룹</div>
+              <strong className="add-current-group">{selectedGroup.name}</strong>
             </section>
 
             {/* 2. 종목 검색 */}
@@ -3179,7 +3152,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                   value={searchQuery}
                   onChange={(event) => {
                     setSearchQuery(event.target.value);
-                    setSelectedAddStockId(null);
                   }}
                   placeholder="종목명 또는 종목코드 검색"
                   autoFocus
@@ -3189,7 +3161,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                     type="button"
                     onClick={() => {
                       setSearchQuery("");
-                      setSelectedAddStockId(null);
                     }}
                     aria-label="검색어 지우기"
                   >
@@ -3202,23 +3173,27 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                 <div className="search-results" aria-label="종목 검색 결과">
                   {searchedStocks.map((stock) => {
                     const alreadyAdded = selectedGroup.stockIds.includes(stock.id);
-                    const checked = alreadyAdded || selectedAddStockId === stock.id;
+                    const checked = alreadyAdded || selectedAddStockIds.includes(stock.id);
                     return (
                       <button
                         key={stock.id}
                         className={`search-result ${checked ? "search-result-selected" : ""} ${alreadyAdded ? "search-result-added" : ""}`}
                         type="button"
-                        aria-pressed={checked}
-                        aria-label={alreadyAdded ? `${stock.name}, 현재 그룹에 등록됨, 그룹 설정` : `${stock.name} 선택`}
+                        role="checkbox"
+                        aria-checked={checked}
+                        disabled={alreadyAdded}
+                        aria-label={alreadyAdded ? `${stock.name}, 현재 그룹에 등록됨` : `${stock.name} 선택`}
                         onClick={() => {
-                          setSelectedAddStockId(stock.id);
-                          const currentMemberships = groups
-                            .filter((group) => group.stockIds.includes(stock.id))
-                            .map((group) => group.id);
-                          setAddTargetGroupIds(Array.from(new Set([selectedGroupId, ...currentMemberships])));
+                          if (!checked && selectedGroup.stockIds.length + selectedAddStockIds.length >= 30) {
+                            showToast("그룹당 최대 30개까지 등록할 수 있습니다.");
+                            return;
+                          }
+                          setSelectedAddStockIds((current) => current.includes(stock.id)
+                            ? current.filter((id) => id !== stock.id)
+                            : [...current, stock.id]);
                         }}
                       >
-                        <span className="radio-mark">{checked ? <Check size={14} /> : null}</span>
+                        <span className="stock-checkbox-mark" aria-hidden="true">{checked ? <Check size={14} /> : null}</span>
                         <span className="result-name">
                           <strong>{stock.name}</strong>
                           <small>{stock.ticker || stock.code}</small>
@@ -3238,10 +3213,11 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
             </section>
           </div>
           <div className="dialog-actions">
+            <span className="add-selection-count" aria-live="polite">{selectedAddStockIds.length}개 선택 · 추가 가능 {30 - selectedGroup.stockIds.length}개</span>
             <button
               className="button button-primary"
               type="button"
-              disabled={!selectedAddStock}
+              disabled={!selectedAddStockIds.length}
               onClick={addStock}
             >
               저장
