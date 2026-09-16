@@ -112,7 +112,7 @@ type AlertSettings = {
   threshold: "3" | "5" | "10";
 };
 
-// 볼륨 슬라이더 방식의 Day Price Range Bar 컴포넌트
+// 수평 인라인 볼륨 슬라이더 방식의 Day Price Range Bar 컴포넌트
 function DayPriceRangeBar({
   high,
   low,
@@ -136,12 +136,10 @@ function DayPriceRangeBar({
     percent = Math.min(Math.max(((numPrice - numLow) / (numHigh - numLow)) * 100, 0), 100);
   }
 
-  const formatTag = (str: string) => {
+  const formatPrice = (str: string) => {
     if (currency === "USD") {
       return str.startsWith("$") ? str : `$${str}`;
     }
-    const n = parseNum(str);
-    if (n >= 1000000) return `${(n / 10000).toFixed(0)}만`;
     return str;
   };
 
@@ -150,14 +148,9 @@ function DayPriceRangeBar({
 
   return (
     <div className="day-range-bar-wrap" title={tooltipText} role="img" aria-label={tooltipText}>
-      <div className="day-range-labels">
-        <span className="day-range-label low">
-          <span className="lbl-tag">L</span> {formatTag(low)}
-        </span>
-        <span className="day-range-label high">
-          <span className="lbl-tag">H</span> {formatTag(high)}
-        </span>
-      </div>
+      <span className="day-range-val low" title={`당일 저가: ${low}`}>
+        {formatPrice(low)}
+      </span>
       <div className="day-range-slider-track">
         <div
           className={`day-range-knob ${directionClass}`}
@@ -166,6 +159,9 @@ function DayPriceRangeBar({
           <span className="knob-core" />
         </div>
       </div>
+      <span className="day-range-val high" title={`당일 고가: ${high}`}>
+        {formatPrice(high)}
+      </span>
     </div>
   );
 }
