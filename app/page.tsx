@@ -2630,7 +2630,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
 
   const openAddDialog = () => {
     setSearchQuery("");
-    setSelectedAddStockIds([]);
+    setSelectedAddStockIds([...selectedGroup.stockIds]);
     setDialog("add");
   };
 
@@ -2645,19 +2645,21 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
     setDialog("alerts");
   };
 
+  const addedStockCount = selectedAddStockIds.filter((id) => !selectedGroup.stockIds.includes(id)).length;
+  const removedStockCount = selectedGroup.stockIds.filter((id) => !selectedAddStockIds.includes(id)).length;
+
   const addStock = () => {
-    const additions = selectedAddStockIds.filter((id) => !selectedGroup.stockIds.includes(id));
-    if (!additions.length) return;
-    if (selectedGroup.stockIds.length + additions.length > 30) {
-      showToast("그룹당 최대 30개까지 등록할 수 있습니다. 선택한 종목 수를 줄여주세요.");
+    if (!addedStockCount && !removedStockCount) return;
+    if (selectedAddStockIds.length > 30) {
+      showToast("그룹당 최대 30개까지 등록할 수 있습니다.");
       return;
     }
     setGroups((current) => current.map((group) => group.id === selectedGroup.id
-      ? { ...group, stockIds: Array.from(new Set([...group.stockIds, ...additions])) }
+      ? { ...group, stockIds: [...selectedAddStockIds] }
       : group));
     setDialog(null);
     setSelectedAddStockIds([]);
-    showToast(`${selectedGroup.name}에 ${additions.length}개 종목을 추가했습니다.`);
+    showToast(`${selectedGroup.name}: ${addedStockCount}개 추가, ${removedStockCount}개 해제했습니다.`);
   };
 
   const UserInputPolicy = {
@@ -3172,19 +3174,16 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
               {normalizedSearchQuery ? (
                 <div className="search-results" aria-label="종목 검색 결과">
                   {searchedStocks.map((stock) => {
-                    const alreadyAdded = selectedGroup.stockIds.includes(stock.id);
-                    const checked = alreadyAdded || selectedAddStockIds.includes(stock.id);
+                    const checked = selectedAddStockIds.includes(stock.id);
                     return (
                       <button
                         key={stock.id}
-                        className={`search-result ${checked ? "search-result-selected" : ""} ${alreadyAdded ? "search-result-added" : ""}`}
+                        className={`search-result ${checked ? "search-result-selected" : ""} `}
                         type="button"
-                        role="checkbox"
-                        aria-checked={checked}
-                        disabled={alreadyAdded}
-                        aria-label={alreadyAdded ? `${stock.name}, 현재 그룹에 등록됨` : `${stock.name} 선택`}
+                        aria-pressed={checked}
+                        aria-label={`${stock.name} 관심종목 ${checked ? "해제" : "선택"}`}
                         onClick={() => {
-                          if (!checked && selectedGroup.stockIds.length + selectedAddStockIds.length >= 30) {
+                          if (!checked && selectedAddStockIds.length >= 30) {
                             showToast("그룹당 최대 30개까지 등록할 수 있습니다.");
                             return;
                           }
@@ -3193,12 +3192,12 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                             : [...current, stock.id]);
                         }}
                       >
-                        <span className="stock-checkbox-mark" aria-hidden="true">{checked ? <Check size={14} /> : null}</span>
+                        <Star size={16} className={checked ? "star-filled" : "stock-star-empty"} aria-hidden="true" />
                         <span className="result-name">
                           <strong>{stock.name}</strong>
                           <small>{stock.ticker || stock.code}</small>
                         </span>
-                        {alreadyAdded ? <span className="search-result-status">등록됨</span> : <Movement stock={stock} compact />}
+                        <Movement stock={stock} compact />
                       </button>
                     );
                   })}
@@ -3213,11 +3212,11 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
             </section>
           </div>
           <div className="dialog-actions">
-            <span className="add-selection-count" aria-live="polite">{selectedAddStockIds.length}개 선택 · 추가 가능 {30 - selectedGroup.stockIds.length}개</span>
+            <span className="add-selection-count" aria-live="polite">{addedStockCount}개 추가 · {removedStockCount}개 해제 · 추가 가능 {30 - selectedAddStockIds.length}개</span>
             <button
               className="button button-primary"
               type="button"
-              disabled={!selectedAddStockIds.length}
+              disabled={!addedStockCount && !removedStockCount}
               onClick={addStock}
             >
               저장

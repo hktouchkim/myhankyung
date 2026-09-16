@@ -6091,7 +6091,6 @@ p {
 .manage-group-row.group-dragging { background: #eff6ff; border-color: #93c5fd; }
 
 .add-current-group { display: block; padding: 12px 14px; border-radius: 8px; background: #f1f5f9; color: #0f172a; }
-.stock-checkbox-mark { display: flex; align-items: center; justify-content: center; flex: 0 0 20px; width: 20px; height: 20px; border: 1px solid #cbd5e1; border-radius: 4px; color: white; }
-.search-result-selected .stock-checkbox-mark { background: #0f172a; border-color: #0f172a; }
+.stock-star-empty { color: #94a3b8; fill: none; flex-shrink: 0; }
 .add-selection-count { margin-right: auto; font-size: 13px; color: #64748b; }
 .watchlist-group-tabs { min-width: 0; }
