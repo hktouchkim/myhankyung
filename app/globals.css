@@ -5503,7 +5503,7 @@ p {
 
 .recent-watchlist-page .watchlist-add-stock-btn { font-size: 13px; }
 
-.watchlist-add-stock-btn:hover {
+.watchlist-add-stock-btn:hover:not(:disabled) {
   background: #1e293b;
   transform: translateY(-1px);
 }
@@ -6097,3 +6097,10 @@ p {
 .watchlist-group-tab { flex-shrink: 0; }
 .watchlist-group-tabs.tabs-dragging,
 .watchlist-group-tabs.tabs-dragging .watchlist-group-tab { cursor: grabbing; }
+
+.watchlist-add-stock-btn:disabled {
+  background: #e2e8f0;
+  border-color: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+}

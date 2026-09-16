@@ -2995,6 +2995,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                     <button
                       className="watchlist-add-stock-btn"
                       type="button"
+                      disabled={selectedGroup.stockIds.length >= UserInputPolicy.MAX_STOCKS_PER_GROUP}
                       onClick={openAddDialog}
                       aria-label="현재 그룹에 종목 추가"
                     >
