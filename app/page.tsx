@@ -112,57 +112,60 @@ type AlertSettings = {
   threshold: "3" | "5" | "10";
 };
 
-// 당일 미니 스파크라인 컴포넌트
-function MiniSparkline({
-  data,
+// 볼륨 슬라이더 방식의 Day Price Range Bar 컴포넌트
+function DayPriceRangeBar({
+  high,
+  low,
+  price,
   rate,
-  width = 68,
-  height = 24,
+  currency = "KRW",
 }: {
-  data?: number[];
+  high: string;
+  low: string;
+  price: string;
   rate: number;
-  width?: number;
-  height?: number;
+  currency?: "KRW" | "USD";
 }) {
-  const isUp = rate > 0;
-  const isDown = rate < 0;
-  const strokeColor = isUp ? "#dc2626" : isDown ? "#2563eb" : "#64748b";
-  const fillColor = isUp ? "rgba(220, 38, 38, 0.12)" : isDown ? "rgba(37, 99, 235, 0.12)" : "rgba(100, 116, 139, 0.08)";
+  const parseNum = (str: string) => parseFloat(str.replace(/[^0-9.-]/g, "")) || 0;
+  const numHigh = parseNum(high);
+  const numLow = parseNum(low);
+  const numPrice = parseNum(price);
 
-  // 기본 스파크라인 데이터가 없을 경우 rate에 기반한 8포인트 자연스러운 당일 장중 데이터 생성
-  const points = data && data.length >= 2 ? data : isUp
-    ? [10, 12, 11, 15, 14, 18, 17, 21]
-    : isDown
-    ? [21, 19, 20, 16, 17, 13, 14, 10]
-    : [15, 16, 15, 14, 15, 16, 15, 15];
+  let percent = 50;
+  if (numHigh > numLow) {
+    percent = Math.min(Math.max(((numPrice - numLow) / (numHigh - numLow)) * 100, 0), 100);
+  }
 
-  const min = Math.min(...points);
-  const max = Math.max(...points);
-  const range = max - min || 1;
-  const padY = 3;
-  const usableH = height - padY * 2;
+  const formatTag = (str: string) => {
+    if (currency === "USD") {
+      return str.startsWith("$") ? str : `$${str}`;
+    }
+    const n = parseNum(str);
+    if (n >= 1000000) return `${(n / 10000).toFixed(0)}만`;
+    return str;
+  };
 
-  const coords = points.map((val, idx) => {
-    const x = (idx / (points.length - 1)) * width;
-    const y = height - padY - ((val - min) / range) * usableH;
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  });
-
-  const linePath = `M ${coords.join(" L ")}`;
-  const areaPath = `M ${coords[0]} L ${coords.join(" L ")} L ${width},${height} L 0,${height} Z`;
+  const directionClass = rate > 0 ? "knob-up" : rate < 0 ? "knob-down" : "knob-flat";
+  const tooltipText = `당일 범위: 저 ${low} ~ 고 ${high} (현재 위치: ${Math.round(percent)}%)`;
 
   return (
-    <div className="mini-sparkline-wrap" title={`당일 주가 흐름 (${rate > 0 ? "+" : ""}${rate}%)`}>
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="mini-sparkline-svg">
-        <defs>
-          <linearGradient id={`spark-grad-${rate > 0 ? "up" : rate < 0 ? "down" : "flat"}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={strokeColor} stopOpacity={0.25} />
-            <stop offset="100%" stopColor={strokeColor} stopOpacity={0.0} />
-          </linearGradient>
-        </defs>
-        <path d={areaPath} fill={`url(#spark-grad-${rate > 0 ? "up" : rate < 0 ? "down" : "flat"})`} />
-        <path d={linePath} fill="none" stroke={strokeColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+    <div className="day-range-bar-wrap" title={tooltipText} role="img" aria-label={tooltipText}>
+      <div className="day-range-labels">
+        <span className="day-range-label low">
+          <span className="lbl-tag">L</span> {formatTag(low)}
+        </span>
+        <span className="day-range-label high">
+          <span className="lbl-tag">H</span> {formatTag(high)}
+        </span>
+      </div>
+      <div className="day-range-slider-track">
+        <div
+          className={`day-range-knob ${directionClass}`}
+          style={{ left: `${percent}%` }}
+        >
+          <span className="knob-core" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -3113,9 +3116,15 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               </div>
                             </div>
 
-                            {/* 당일 미니 스파크라인 차트 (종목명과 현재가 사이) */}
+                            {/* 당일 Price Range Bar (종목명과 현재가 사이 볼륨 슬라이더) */}
                             <div className="strip-col-chart" onClick={(e) => e.stopPropagation()}>
-                              <MiniSparkline data={stock.sparkline} rate={stock.rate} />
+                              <DayPriceRangeBar
+                                high={stock.high}
+                                low={stock.low}
+                                price={stock.price}
+                                rate={stock.rate}
+                                currency={stock.currency}
+                              />
                             </div>
 
                             {/* 시세 컬럼 (가격 / 등락폭 / 등락률 세로열 정렬) */}

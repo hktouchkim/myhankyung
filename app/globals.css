@@ -5634,27 +5634,110 @@ p {
   font-weight: 700;
 }
 
-/* 당일 미니 스파크라인 차트 컬럼 */
+/* 당일 Price Range Bar (볼륨 슬라이더 스타일) */
 .strip-col-chart {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 72px;
+  width: 92px;
   flex-shrink: 0;
-  margin: 0 4px;
+  margin: 0 6px;
 }
 
-.mini-sparkline-wrap {
+.day-range-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  cursor: default;
+  user-select: none;
+}
+
+.day-range-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 9px;
+  line-height: 1;
+  color: #64748b;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.day-range-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.day-range-label .lbl-tag {
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #94a3b8;
+}
+
+.day-range-label.low .lbl-tag {
+  color: #3b82f6;
+}
+
+.day-range-label.high .lbl-tag {
+  color: #ef4444;
+}
+
+/* 볼륨 슬라이더 음각 트랙 레일 */
+.day-range-slider-track {
+  position: relative;
+  width: 100%;
+  height: 5px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+/* 볼륨 슬라이더 원형 노브 (현재가 인디케이터) */
+.day-range-knob {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 11px;
+  height: 11px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.28), 0 0 0 1px rgba(15, 23, 42, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 68px;
-  height: 24px;
+  transition: left 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
 }
 
-.mini-sparkline-svg {
-  display: block;
-  overflow: visible;
+.day-range-knob .knob-core {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #64748b;
+  transition: transform 120ms ease;
+}
+
+.day-range-knob.knob-up .knob-core {
+  background: #dc2626;
+}
+
+.day-range-knob.knob-down .knob-core {
+  background: #2563eb;
+}
+
+.day-range-knob.knob-flat .knob-core {
+  background: #64748b;
+}
+
+.day-range-bar-wrap:hover .day-range-knob {
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.35), 0 0 0 1.5px rgba(15, 23, 42, 0.12);
+}
+
+.day-range-bar-wrap:hover .knob-core {
+  transform: scale(1.15);
 }
 
 /* 시세 컬럼 (가격 / 등락폭 / 등락률 세로열 정렬) */
@@ -6038,7 +6121,7 @@ p {
     flex: 1 1 100%;
   }
   .strip-col-chart {
-    width: 60px;
+    width: 78px;
     margin: 0;
   }
   .strip-col-price {
