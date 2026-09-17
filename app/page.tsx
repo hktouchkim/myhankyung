@@ -3742,12 +3742,6 @@ function Dashboard({
               <p className="dashboard-stock-empty">이 그룹에 등록된 관심종목이 없습니다.</p>
             ) : null}
           </div>
-          <div className="dashboard-watch-more-bar">
-            <button type="button" className="dashboard-watch-all-link" onClick={onOpenWatchlist}>
-              <span>전체 관심그룹 및 종목 보기</span>
-              <ChevronRight size={14} />
-            </button>
-          </div>
         </article>
 
         <article className="dashboard-card compact-dashboard-card">

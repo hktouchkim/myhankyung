@@ -2231,34 +2231,6 @@ p {
   margin-top: 14px;
 }
 
-.dashboard-watch-more-bar {
-  margin-top: 10px;
-  padding-top: 12px;
-  border-top: 1px solid #f1f5f9;
-}
-
-.dashboard-watch-all-link {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 8px 0;
-  border: none;
-  background: transparent;
-  color: #2563eb;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: background 120ms ease, color 120ms ease;
-}
-
-.dashboard-watch-all-link:hover {
-  background: #eff6ff;
-  color: #1d4ed8;
-}
-
 .dashboard-stock-list > button {
   display: flex;
   width: 100%;
