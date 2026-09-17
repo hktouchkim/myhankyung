@@ -3580,11 +3580,12 @@ function Dashboard({
   onOpenRecent: () => void;
   onOpenWatchlist: () => void;
 }) {
-  const selectedGroup = groups.find((group) => group.id === selectedGroupId) ?? groups[0];
-  const groupStocks = selectedGroup.stockIds
+  // 메인 대시보드 관심종목: 첫 번째 기본 그룹에서 최대 5개만 간결하게 노출
+  const firstGroup = groups[0];
+  const firstGroupStocks = (firstGroup?.stockIds ?? [])
     .map(stockById)
     .filter((stock): stock is Stock => Boolean(stock));
-  const visibleGroupStocks = groupStocks.slice(0, 5);
+  const visibleStocks = firstGroupStocks.slice(0, 5);
 
   return (
     <section className="dashboard-page">
@@ -3721,33 +3722,31 @@ function Dashboard({
 
         <article className="dashboard-card dashboard-watch-card">
           <div className="dashboard-card-title">
-            <div className="title-with-icon"><Star size={21} /><h2>관심종목</h2></div>
-            <button type="button" onClick={onOpenWatchlist} aria-label="관심종목 전체보기"><ChevronRight size={20} /></button>
-          </div>
-          <div className="group-tabs dashboard-group-tabs" role="group" aria-label="My한경 메인 관심그룹 선택">
-            {groups.map((group) => (
-              <button
-                key={group.id}
-                type="button"
-                aria-pressed={group.id === selectedGroup.id}
-                className={`group-tab ${group.id === selectedGroup.id ? "group-tab-active" : ""}`}
-                onClick={() => onSelectGroup(group.id)}
-              >
-                <span>{group.name}</span>
-                <em>{group.stockIds.length}</em>
-              </button>
-            ))}
+            <a className="title-with-icon dashboard-watch-heading-link" href="/watchlist">
+              <Star size={21} />
+              <h2>관심종목</h2>
+              <span className="dashboard-watch-group-badge">{firstGroup?.name ?? "기본그룹"}</span>
+            </a>
+            <button type="button" onClick={onOpenWatchlist} aria-label="관심종목 전체보기">
+              <ChevronRight size={20} />
+            </button>
           </div>
           <div className="dashboard-stock-list">
-            {visibleGroupStocks.map((stock) => (
+            {visibleStocks.map((stock) => (
               <button key={stock.id} type="button" onClick={onOpenWatchlist}>
                 <span><strong>{stock.name}</strong><small>{stock.code}</small></span>
                 <Movement stock={stock} compact />
               </button>
             ))}
-            {visibleGroupStocks.length === 0 ? (
+            {visibleStocks.length === 0 ? (
               <p className="dashboard-stock-empty">이 그룹에 등록된 관심종목이 없습니다.</p>
             ) : null}
+          </div>
+          <div className="dashboard-watch-more-bar">
+            <button type="button" className="dashboard-watch-all-link" onClick={onOpenWatchlist}>
+              <span>전체 관심그룹 및 종목 보기</span>
+              <ChevronRight size={14} />
+            </button>
           </div>
         </article>
 
