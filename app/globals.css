@@ -2215,18 +2215,6 @@ p {
   color: var(--navy);
 }
 
-.dashboard-watch-group-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: #f1f5f9;
-  color: #475569;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
 .dashboard-watch-card .dashboard-stock-list {
   margin-top: 14px;
 }

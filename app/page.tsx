@@ -3725,7 +3725,7 @@ function Dashboard({
             <a className="title-with-icon dashboard-watch-heading-link" href="/watchlist">
               <Star size={21} />
               <h2>관심종목</h2>
-              <span className="dashboard-watch-group-badge">{firstGroup?.name ?? "기본그룹"}</span>
+              <span>{firstGroupStocks.length}개</span>
             </a>
             <button type="button" onClick={onOpenWatchlist} aria-label="관심종목 전체보기">
               <ChevronRight size={20} />
