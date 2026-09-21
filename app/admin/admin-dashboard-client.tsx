@@ -995,87 +995,40 @@ function BadgesTab({
     return ALL_LIVE_BADGES.filter((b) => b.group === selectedGroup);
   }, [selectedGroup]);
 
+  const totalIssued = useMemo(() => {
+    return filteredBadges.reduce((acc, b) => acc + b.earners, 0);
+  }, [filteredBadges]);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-      {/* 사용자 요청 최소 배지 통계값 4종 KPI 카드 */}
+      {/* 4종 KPI 카드 */}
       <div className={styles.kpiGrid}>
         <div className={styles.kpiCard}>
-          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>운영 중인 배지 수</div>
+          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>운영중인 배지 수</div>
           <div className={styles.kpiValue}>10개</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>
-            웰컴 8종 + 프리미엄 2종 라이브
-          </div>
         </div>
 
         <div className={styles.kpiCard}>
-          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>사용자들에게 지급된 총 배지 수</div>
+          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>지급된 총 배지 수</div>
           <div className={styles.kpiValue} style={{ color: "#7e22ce" }}>142,380개</div>
-          <div style={{ fontSize: "11px", color: "#059669", fontWeight: 700, marginTop: "6px" }}>
-            최근 1주간 +6,020개 지급
-          </div>
         </div>
 
         <div className={styles.kpiCard}>
-          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>배지 1개 이상 획득 사용자 수</div>
+          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>배지 사용자 수</div>
           <div className={styles.kpiValue}>58,190명</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>
-            전체 회원 대비 달성률: <strong style={{ color: "#2563eb" }}>52.1%</strong>
-          </div>
         </div>
 
         <div className={styles.kpiCard}>
-          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>회원당 평균 배지 수</div>
+          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>인당 평균 배지 수</div>
           <div className={styles.kpiValue}>2.45개</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>
-            (보유자 기준 평균: <strong>2.82개</strong>)
-          </div>
         </div>
       </div>
 
-      {/* 5대 그룹별 현황 */}
+      {/* 배지 현황 상세 테이블 (전체 및 그룹별 필터 + 합계) */}
       <div className={styles.sectionCard}>
-        <div className={styles.sectionHeader}>
+        <div className={styles.sectionHeader} style={{ flexWrap: "wrap", gap: "12px" }}>
           <div>
-            <h3 className={styles.sectionTitle}>5대 배지 그룹별 운영 현황 및 지급량</h3>
-            <p className={styles.sectionSubtitle}>그룹별 라이브 배지 수량과 누적 획득 지표</p>
-          </div>
-          <span style={{ fontSize: "12px", color: "#64748b", backgroundColor: "#f8fafc", padding: "4px 10px", borderRadius: "6px", border: "1px solid #e2e8f0" }}>
-            총 5개 그룹
-          </span>
-        </div>
-
-        <div className={styles.badgeGroupGrid}>
-          {[
-            { id: "웰컴 스타터", name: "웰컴 스타터", status: "라이브 (8개)", totalIssued: "133,440개", activeUsers: "57,800명", active: true },
-            { id: "프리미엄9 라운지", name: "프리미엄9 라운지", status: "라이브 (2개)", totalIssued: "8,940개", activeUsers: "6,210명", active: true },
-            { id: "한경 탐험가", name: "한경 탐험가", status: "오픈 준비중", totalIssued: "0개", activeUsers: "-", active: false },
-            { id: "한경 헤리티지", name: "한경 헤리티지", status: "오픈 준비중", totalIssued: "0개", activeUsers: "-", active: false },
-            { id: "히든 배지", name: "히든 배지", status: "오픈 준비중", totalIssued: "0개", activeUsers: "-", active: false },
-          ].map((grp, idx) => (
-            <div
-              key={idx}
-              className={`${styles.badgeGroupCard} ${grp.active ? styles.bgActive : styles.bgInactive}`}
-            >
-              <div>
-                <div style={{ fontSize: "13px", fontWeight: 700, color: "#0f172a" }}>{grp.name}</div>
-                <div style={{ fontSize: "11px", color: "#64748b", marginTop: "2px" }}>{grp.status}</div>
-              </div>
-              <div style={{ marginTop: "16px", paddingTop: "10px", borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-                <div style={{ fontSize: "11px", color: "#64748b" }}>총 지급량</div>
-                <div style={{ fontSize: "17px", fontWeight: 800, color: "#0f172a" }}>{grp.totalIssued}</div>
-                <div style={{ fontSize: "10.5px", color: "#94a3b8", marginTop: "2px" }}>획득자: {grp.activeUsers}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 배지별 상세 테이블 (10종 전수) */}
-      <div className={styles.sectionCard}>
-        <div className={styles.sectionHeader}>
-          <div>
-            <h3 className={styles.sectionTitle}>운영 중인 배지별 획득자 수 및 획득률 (전수)</h3>
-            <p className={styles.sectionSubtitle}>획득자 수 기준 자동 내림차순 랭킹</p>
+            <h3 className={styles.sectionTitle}>배지 현황</h3>
           </div>
 
           <div className={styles.filterTabs}>
@@ -1103,44 +1056,47 @@ function BadgesTab({
           <table className={styles.dataTable}>
             <thead>
               <tr>
-                <th>순위</th>
+                <th style={{ width: "60px" }}>순위</th>
                 <th>배지명</th>
                 <th>소속 그룹</th>
-                <th style={{ textAlign: "right" }}>누적 획득자 수</th>
-                <th style={{ textAlign: "right" }}>전체 대비 획득률</th>
-                <th style={{ textAlign: "right" }}>주간 신규 획득 (증가 추이)</th>
+                <th style={{ textAlign: "right" }}>지급된 배지 수</th>
               </tr>
             </thead>
             <tbody>
               {filteredBadges.length > 0 ? (
-                filteredBadges.map((badge, idx) => (
-                  <tr key={idx} className={idx < 3 ? styles.highlightRow : ""}>
-                    <td style={{ fontWeight: 800, color: "#0f172a" }}>{idx + 1}</td>
-                    <td style={{ fontWeight: 700, color: "#0f172a" }}>
-                      <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                        <Award size={15} color="#7e22ce" />
-                        {badge.name}
-                      </span>
+                <>
+                  {filteredBadges.map((badge, idx) => (
+                    <tr key={idx} className={idx < 3 ? styles.highlightRow : ""}>
+                      <td style={{ fontWeight: 800, color: "#0f172a" }}>{idx + 1}</td>
+                      <td style={{ fontWeight: 700, color: "#0f172a" }}>
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                          <Award size={15} color="#7e22ce" />
+                          {badge.name}
+                        </span>
+                      </td>
+                      <td>
+                        <span style={{ fontSize: "11px", padding: "2px 8px", borderRadius: "4px", backgroundColor: badge.group === "프리미엄9 라운지" ? "#faf5ff" : "#eff6ff", color: badge.group === "프리미엄9 라운지" ? "#7e22ce" : "#1d4ed8", fontWeight: 600 }}>
+                          {badge.group}
+                        </span>
+                      </td>
+                      <td style={{ textAlign: "right", fontWeight: 800, color: "#0f172a" }}>
+                        {badge.earners.toLocaleString()}개
+                      </td>
+                    </tr>
+                  ))}
+                  {/* 합계 행 */}
+                  <tr style={{ backgroundColor: "#f8fafc", borderTop: "2px solid #cbd5e1" }}>
+                    <td colSpan={3} style={{ fontWeight: 800, color: "#1e293b", textAlign: "center", letterSpacing: "1px" }}>
+                      합계 ({selectedGroup === "all" ? "전체" : selectedGroup})
                     </td>
-                    <td>
-                      <span style={{ fontSize: "10.5px", padding: "2px 8px", borderRadius: "4px", backgroundColor: badge.group === "프리미엄9 라운지" ? "#faf5ff" : "#eff6ff", color: badge.group === "프리미엄9 라운지" ? "#7e22ce" : "#1d4ed8", fontWeight: 600 }}>
-                        {badge.group}
-                      </span>
-                    </td>
-                    <td style={{ textAlign: "right", fontWeight: 800, color: "#0f172a" }}>
-                      {badge.earners.toLocaleString()}명
-                    </td>
-                    <td style={{ textAlign: "right", fontWeight: 700, color: "#7e22ce" }}>
-                      {badge.rate}
-                    </td>
-                    <td style={{ textAlign: "right", color: "#059669", fontWeight: 700 }}>
-                      {badge.weekGain}
+                    <td style={{ textAlign: "right", fontWeight: 800, color: "#7e22ce", fontSize: "15px" }}>
+                      {totalIssued.toLocaleString()}개
                     </td>
                   </tr>
-                ))
+                </>
               ) : (
                 <tr>
-                  <td colSpan={6} style={{ padding: "32px", textAlign: "center", color: "#94a3b8" }}>
+                  <td colSpan={4} style={{ padding: "32px", textAlign: "center", color: "#94a3b8" }}>
                     현재 운영 중인 배지가 없는 그룹입니다. (오픈 준비중)
                   </td>
                 </tr>
