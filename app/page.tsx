@@ -3143,8 +3143,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               </div>
                             </div>
 
-                            {/* 8. 차트: 당일 Price Range Bar (볼륨 슬라이더) */}
-                            <div className="strip-col-chart" onClick={(e) => e.stopPropagation()}>
+                            {/* 8. 차트: 당일 Price Range Bar (임시 숨김 처리) */}
+                            {/* <div className="strip-col-chart" onClick={(e) => e.stopPropagation()}>
                               <DayPriceRangeBar
                                 high={stock.high}
                                 low={stock.low}
@@ -3152,7 +3152,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                 rate={stock.rate}
                                 currency={stock.currency}
                               />
-                            </div>
+                            </div> */}
 
                             {/* 우측 액션: 9. 펼침 버튼, 10. 핸들 */}
                             <div className="strip-col-right">

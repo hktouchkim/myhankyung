@@ -5613,8 +5613,6 @@ p {
   color: #0f172a;
   text-decoration: none;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .recent-watchlist-page .strip-stock-name { font-size: 16px; }
@@ -5743,50 +5741,51 @@ p {
   color: #334155;
 }
 
-/* 시세 컬럼 (가격 / 등락폭 / 등락률 세로열 정렬) */
+/* 시세 및 거래 정보 컬럼 (종목명 제외 전 데이터 14px 동일 크기 적용) */
 .strip-col-quotes {
   display: flex;
   align-items: center;
+  gap: 16px;
 }
 
 .strip-col-price {
-  width: 90px;
+  min-width: 95px;
   text-align: right;
   flex-shrink: 0;
 }
 
 .strip-col-price .price-number {
-  font-size: 15px;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 700;
   color: #0f172a;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
 }
 
-.recent-watchlist-page .strip-col-price .price-number { font-size: 16px; }
-
-.strip-col-diff {
-  width: 80px;
-  text-align: right;
-  flex-shrink: 0;
-  font-size: 13px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.recent-watchlist-page .strip-col-diff { font-size: 14px; }
+.recent-watchlist-page .strip-col-price .price-number { font-size: 14px; }
 
 .strip-col-rate {
-  width: 76px;
+  min-width: 76px;
   text-align: right;
   flex-shrink: 0;
-  font-size: 13px;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 700;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
 }
 
 .recent-watchlist-page .strip-col-rate { font-size: 14px; }
+
+.strip-col-diff {
+  min-width: 82px;
+  text-align: right;
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.recent-watchlist-page .strip-col-diff { font-size: 14px; }
 
 .strip-col-diff.rate-up,
 .strip-col-rate.rate-up {
@@ -5804,30 +5803,30 @@ p {
 }
 
 .strip-col-turnover {
-  width: 104px;
+  min-width: 130px;
   text-align: right;
   flex-shrink: 0;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: #334155;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-.recent-watchlist-page .strip-col-turnover { font-size: 13.5px; }
+.recent-watchlist-page .strip-col-turnover { font-size: 14px; }
 
 .strip-col-volume {
-  width: 104px;
+  min-width: 110px;
   text-align: right;
   flex-shrink: 0;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: #475569;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-.recent-watchlist-page .strip-col-volume { font-size: 13.5px; }
+.recent-watchlist-page .strip-col-volume { font-size: 14px; }
 
 /* 우측 정보: 펼침 아이콘 + 이동 핸들 */
 .strip-col-right {
