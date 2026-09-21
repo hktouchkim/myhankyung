@@ -3121,16 +3121,16 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               <div className="strip-col-price">
                                 <span className="price-number">{displayPrice}</span>
                               </div>
-                              {/* 4. 변동률 */}
+                              {/* 4. 변동률: +/- 부호 표현 */}
                               <div className={`strip-col-rate rate-${direction}`}>
                                 <span className="rate-percent-val">
-                                  {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : ""}{formatRate(stock.rate)}
+                                  {formatRate(stock.rate)}
                                 </span>
                               </div>
-                              {/* 5. 변동폭 */}
+                              {/* 5. 변동폭: 화살표(▲/▼) 표현 */}
                               <div className={`strip-col-diff rate-${direction}`}>
                                 <span className="rate-diff-val">
-                                  {stock.rate > 0 ? "+" : ""}{displayChange}
+                                  {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : ""}{displayChange}
                                 </span>
                               </div>
                               {/* 6. 거래대금 */}
