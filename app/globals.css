@@ -5756,7 +5756,7 @@ p {
 
 .strip-col-price .price-number {
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 400;
   color: #0f172a;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
@@ -5769,7 +5769,7 @@ p {
   text-align: right;
   flex-shrink: 0;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
 }
@@ -5781,7 +5781,7 @@ p {
   text-align: right;
   flex-shrink: 0;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   font-variant-numeric: tabular-nums;
 }
 
@@ -6185,7 +6185,7 @@ p {
   }
   .strip-col-price .price-number {
     font-size: 15.5px;
-    font-weight: 800;
+    font-weight: 400;
   }
   .strip-col-diff,
   .strip-col-turnover,
@@ -6196,6 +6196,7 @@ p {
     width: auto;
     text-align: right;
     font-size: 13px;
+    font-weight: 400;
   }
   .strip-col-right {
     display: flex;
