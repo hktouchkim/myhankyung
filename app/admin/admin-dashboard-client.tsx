@@ -802,24 +802,18 @@ function WatchlistTab() {
         <div className={styles.kpiCard}>
           <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>관심종목 이용 회원 수</div>
           <div className={styles.kpiValue}>31,420명</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>
-            전체 회원 침투율: <strong style={{ color: "#d97706" }}>28.1%</strong>
-          </div>
         </div>
         <div className={styles.kpiCard}>
           <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>총 담긴 관심종목 수</div>
           <div className={styles.kpiValue}>218,650건</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>사용자 등록 누적 합계</div>
         </div>
         <div className={styles.kpiCard}>
           <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>1인당 평균 보유 종목 수</div>
           <div className={styles.kpiValue}>7.0개</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>1인 최다: <strong>148개</strong></div>
         </div>
         <div className={styles.kpiCard}>
           <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>그룹당 평균 적재 종목 수</div>
           <div className={styles.kpiValue}>5.3개</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>그룹 밀도 지표</div>
         </div>
       </div>
 
@@ -827,7 +821,7 @@ function WatchlistTab() {
       <div className={styles.sectionCard}>
         <div className={styles.sectionHeader}>
           <div>
-            <h3 className={styles.sectionTitle}>관심종목 그룹 개수별 사용자 수 분포 (1~10개 전수 노출)</h3>
+            <h3 className={styles.sectionTitle}>관심종목 그룹 개수별 사용자 수 분포</h3>
           </div>
         </div>
 
@@ -843,7 +837,7 @@ function WatchlistTab() {
             { group: "7개", count: 390, pct: "1.2%", h: 3 },
             { group: "8개", count: 240, pct: "0.8%", h: 2 },
             { group: "9개", count: 150, pct: "0.5%", h: 1.5 },
-            { group: "10개(풀)", count: 110, pct: "0.3%", h: 1 },
+            { group: "10개", count: 110, pct: "0.3%", h: 1 },
           ].map((item, idx) => (
             <div key={idx} className={styles.barCol}>
               <span style={{ fontSize: "10px", color: "#64748b", marginBottom: "4px" }}>{item.pct}</span>
@@ -874,7 +868,7 @@ function WatchlistTab() {
             </thead>
             <tbody>
               {[
-                { g: "1개 그룹 (기본 사용자)", u: "14,200", p: "45.2%", s: "68,160" },
+                { g: "1개 그룹", u: "14,200", p: "45.2%", s: "68,160" },
                 { g: "2개 그룹", u: "8,100", p: "25.8%", s: "48,600" },
                 { g: "3개 그룹", u: "4,200", p: "13.4%", s: "35,280" },
                 { g: "4개 그룹", u: "2,100", p: "6.7%", s: "21,840" },
@@ -883,7 +877,7 @@ function WatchlistTab() {
                 { g: "7개 그룹", u: "390", p: "1.2%", s: "6,630" },
                 { g: "8개 그룹", u: "240", p: "0.8%", s: "4,560" },
                 { g: "9개 그룹", u: "150", p: "0.5%", s: "3,150" },
-                { g: "10개 그룹 (최대 한도 생성)", u: "110", p: "0.3%", s: "3,980" },
+                { g: "10개 그룹", u: "110", p: "0.3%", s: "3,980" },
               ].map((row, i) => (
                 <tr key={i} className={i < 2 ? styles.highlightRow : ""}>
                   <td style={{ fontWeight: 700, color: "#0f172a" }}>{row.g}</td>
