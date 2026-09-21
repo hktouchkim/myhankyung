@@ -5517,10 +5517,136 @@ p {
   transform: translateY(-1px);
 }
 
+.watchlist-intro-desc-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.watchlist-intro-desc-wrap p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.watchlist-info-tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.watchlist-info-btn {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.watchlist-info-btn:hover,
+.watchlist-info-btn.active {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.watchlist-info-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  width: 260px;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+  animation: tooltip-fade-in 0.15s ease-out;
+}
+
+.watchlist-info-tooltip strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.watchlist-info-tooltip p {
+  margin: 0;
+  color: #475569;
+  font-size: 11.5px;
+  line-height: 1.55;
+}
+
 /* 4. 스트립 리스트 (.watchlist-strip-list) */
 .watchlist-strip-list {
   display: flex;
   flex-direction: column;
+}
+
+/* 테이블 컬럼 헤더 */
+.watchlist-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 8px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 8px 8px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: -0.01em;
+  user-select: none;
+}
+
+.header-col-left {
+  flex: 1.2;
+  min-width: 0;
+  padding-left: 30px; /* 즐겨찾기 버튼 너비 + 간격만큼 정렬 */
+}
+
+.header-col-title {
+  color: #64748b;
+}
+
+.header-col-quotes {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-col-item {
+  color: #64748b;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.header-col-item.col-price { min-width: 95px; }
+.header-col-item.col-rate { min-width: 76px; }
+.header-col-item.col-diff { min-width: 82px; }
+.header-col-item.col-turnover { min-width: 130px; }
+.header-col-item.col-volume { min-width: 110px; }
+
+.header-col-right {
+  width: 52px;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 680px) {
+  .watchlist-table-header {
+    display: none;
+  }
 }
 
 .watchlist-item-wrapper {
@@ -5982,37 +6108,32 @@ p {
   box-sizing: border-box;
 }
 
-/* 2. 박스 자체의 색깔을 호재 악재로 표현 */
-.pointview-card.card-pos {
-  background: #fff5f5;
-  border: none;
+/* 2. AI 포인트뷰 카드 바탕색 동일 통일 (#f8fafc) */
+.pointview-card {
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
 }
 
-.pointview-card.card-pos:hover {
-  background: #ffe3e3;
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.08);
+.pointview-card:hover {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transform: translateY(-1px);
 }
 
-.pointview-card.card-neg {
-  background: #f0f7ff;
-  border: none;
-}
-
-.pointview-card.card-neg:hover {
-  background: #e0effe;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
-  transform: translateY(-1px);
-}
-
+.pointview-card.card-pos,
+.pointview-card.card-neg,
 .pointview-card.card-neutral {
   background: #f8fafc;
-  border: none;
+  border: 1px solid #edf2f7;
 }
 
+.pointview-card.card-pos:hover,
+.pointview-card.card-neg:hover,
 .pointview-card.card-neutral:hover {
   background: #f1f5f9;
-  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.08);
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transform: translateY(-1px);
 }
 
@@ -6041,7 +6162,7 @@ p {
 
 .recent-watchlist-page .pointview-card-comment { font-size: 14px; }
 
-/* 줄머리 감성 배지 공통 */
+/* 줄머리 감성 배지 공통 (스마일 아이콘으로만 호재/악재 구분) */
 .sentiment-tag {
   display: inline-flex;
   align-items: center;
@@ -6059,30 +6180,30 @@ p {
 .recent-watchlist-page .sentiment-tag { font-size: 11px; }
 
 .sentiment-tag .tag-emoji {
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1;
   display: inline-flex;
   align-items: center;
 }
 
-.recent-watchlist-page .sentiment-tag .tag-emoji { font-size: 12px; }
+.recent-watchlist-page .sentiment-tag .tag-emoji { font-size: 13px; }
 
 .sentiment-tag.tag-pos {
-  background: #ffffff;
+  background: #fef2f2;
   color: #dc2626;
-  border: 1px solid #fca5a5;
+  border: 1px solid #fecaca;
 }
 
 .sentiment-tag.tag-neg {
-  background: #ffffff;
+  background: #eff6ff;
   color: #2563eb;
-  border: 1px solid #93c5fd;
+  border: 1px solid #bfdbfe;
 }
 
 .sentiment-tag.tag-neutral {
-  background: #ffffff;
-  color: #475569;
-  border: 1px solid #cbd5e1;
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
 }
 
 .sentiment-tag.sentiment-tag-icon-only {
