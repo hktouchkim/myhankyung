@@ -2885,14 +2885,12 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
             />
           ) : (
             <section className="watchlist-page recent-watchlist-page">
-              {/* 상단 타이틀바 (최근 본 기사 동일 규격: h1 + p + 하단 안내 문구) */}
+              {/* 상단 타이틀바 (최근 본 기사 동일 규격: h1 + p 설명글 및 안내문구) */}
               <div className="watchlist-titlebar recent-page-titlebar">
                 <div>
                   <h1>관심종목</h1>
                   <p className="watchlist-main-desc">내가 등록한 관심종목의 주가변동과 핵심 이슈를 빠르게 확인하세요.</p>
-                  <p className="watchlist-delay-notice">
-                    • 국내 종목은 20분 지연 시세를 제공하며, 해외 종목은 전일 종가 기준으로 제공합니다.
-                  </p>
+                  <p className="watchlist-delay-notice">국내 종목은 20분 지연 시세를 제공하며, 해외 종목은 전일 종가 기준으로 제공합니다.</p>
                 </div>
               </div>
 
