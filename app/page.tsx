@@ -3014,6 +3014,12 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       const isExpanded = hasSubContent && (issueOverrides[stock.id] ?? expandAllIssues);
                       const displayPrice = stock.currency === "USD" ? stock.price : `${stock.price}원`;
                       const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
+                      const displayTurnover = stock.turnover
+                        ? stock.currency === "USD"
+                          ? `$ ${stock.turnover}백만`
+                          : `${stock.turnover}백만원`
+                        : "-";
+                      const displayVolume = stock.volume ? `${stock.volume}주` : "-";
 
                       const isDragging = draggedStockIndex === index;
                       const isDragOver = dragOverStockIndex === index;
@@ -3082,7 +3088,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               }
                             }}
                           >
-                            {/* 좌측: 별 아이콘 + 종목명/코드 */}
+                            {/* 1. 즐찾 버튼 & 2. 종목명 (티커 숨김) */}
                             <div className="strip-col-left">
                               <button
                                 type="button"
@@ -3106,13 +3112,38 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                                 >
                                   {stock.name}
                                 </a>
-                                <span className="strip-stock-ticker">
-                                  {stock.ticker || stock.code}
-                                </span>
                               </div>
                             </div>
 
-                            {/* 당일 Price Range Bar (종목명과 현재가 사이 볼륨 슬라이더) */}
+                            {/* 시세 및 거래 정보 컬럼: 3.현재가, 4.변동률, 5.변동폭, 6.거래대금, 7.거래량 */}
+                            <div className="strip-col-quotes">
+                              {/* 3. 현재가 */}
+                              <div className="strip-col-price">
+                                <span className="price-number">{displayPrice}</span>
+                              </div>
+                              {/* 4. 변동률 */}
+                              <div className={`strip-col-rate rate-${direction}`}>
+                                <span className="rate-percent-val">
+                                  {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : ""}{formatRate(stock.rate)}
+                                </span>
+                              </div>
+                              {/* 5. 변동폭 */}
+                              <div className={`strip-col-diff rate-${direction}`}>
+                                <span className="rate-diff-val">
+                                  {stock.rate > 0 ? "+" : ""}{displayChange}
+                                </span>
+                              </div>
+                              {/* 6. 거래대금 */}
+                              <div className="strip-col-turnover">
+                                <span className="turnover-val">{displayTurnover}</span>
+                              </div>
+                              {/* 7. 거래량 */}
+                              <div className="strip-col-volume">
+                                <span className="volume-val">{displayVolume}</span>
+                              </div>
+                            </div>
+
+                            {/* 8. 차트: 당일 Price Range Bar (볼륨 슬라이더) */}
                             <div className="strip-col-chart" onClick={(e) => e.stopPropagation()}>
                               <DayPriceRangeBar
                                 high={stock.high}
@@ -3123,24 +3154,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               />
                             </div>
 
-                            {/* 시세 컬럼 (가격 / 등락폭 / 등락률 세로열 정렬) */}
-                            <div className="strip-col-quotes">
-                              <div className="strip-col-price">
-                                <span className="price-number">{displayPrice}</span>
-                              </div>
-                              <div className={`strip-col-diff rate-${direction}`}>
-                                <span className="rate-diff-val">
-                                  {stock.rate > 0 ? "+" : ""}{displayChange}
-                                </span>
-                              </div>
-                              <div className={`strip-col-rate rate-${direction}`}>
-                                <span className="rate-percent-val">
-                                  {stock.rate > 0 ? "▲" : stock.rate < 0 ? "▼" : ""}{formatRate(stock.rate)}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* 우측: 펼침 아이콘 + 맨 우측 이동 핸들 (오직 핸들 mousedown 시에만 드래그 허용) */}
+                            {/* 우측 액션: 9. 펼침 버튼, 10. 핸들 */}
                             <div className="strip-col-right">
                               {hasSubContent ? (
                                 <span className={`strip-chevron ${isExpanded ? "open" : ""}`} aria-hidden="true">

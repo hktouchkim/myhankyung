@@ -5803,6 +5803,32 @@ p {
   color: #64748b;
 }
 
+.strip-col-turnover {
+  width: 104px;
+  text-align: right;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #334155;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.recent-watchlist-page .strip-col-turnover { font-size: 13.5px; }
+
+.strip-col-volume {
+  width: 104px;
+  text-align: right;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.recent-watchlist-page .strip-col-volume { font-size: 13.5px; }
+
 /* 우측 정보: 펼침 아이콘 + 이동 핸들 */
 .strip-col-right {
   display: flex;
@@ -6162,8 +6188,10 @@ p {
     font-size: 15.5px;
     font-weight: 800;
   }
-  .strip-col-diff {
-    display: none; /* 모바일에서는 등락률과 중복되므로 깔끔하게 숨김 */
+  .strip-col-diff,
+  .strip-col-turnover,
+  .strip-col-volume {
+    display: none; /* 모바일 1행에서는 가독성을 위해 현재가+등락률에 집중 */
   }
   .strip-col-rate {
     width: auto;
