@@ -44,7 +44,7 @@ interface NavMenuItem {
 }
 
 const MENU_ITEMS: NavMenuItem[] = [
-  { id: "overview", label: "대시보드 홈", icon: Home, ready: true },
+  { id: "overview", label: "대시보드 홈", icon: Home, ready: false, badge: "준비중" },
   { id: "briefing", label: "My 브리핑", icon: Newspaper, ready: true },
   { id: "recent-articles", label: "최근 본 기사", icon: Clock3, ready: true },
   { id: "watchlist", label: "관심종목", icon: Star, ready: true },
@@ -55,7 +55,7 @@ const MENU_ITEMS: NavMenuItem[] = [
 ];
 
 export default function AdminDashboardClient() {
-  const [currentTab, setCurrentTab] = useState<AdminTab>("overview");
+  const [currentTab, setCurrentTab] = useState<AdminTab>("briefing");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedBadgeGroup, setSelectedBadgeGroup] = useState<string>("all");
   const [lastRefreshed, setLastRefreshed] = useState("2026.09.18 17:05");
@@ -174,7 +174,6 @@ export default function AdminDashboardClient() {
 
         {/* 탭 본문 내용 */}
         <div className={styles.contentContainer}>
-          {currentTab === "overview" && <OverviewTab onNavigate={setCurrentTab} />}
           {currentTab === "briefing" && <BriefingTab />}
           {currentTab === "recent-articles" && <RecentArticlesTab />}
           {currentTab === "watchlist" && <WatchlistTab />}
@@ -184,7 +183,7 @@ export default function AdminDashboardClient() {
               onSelectGroup={setSelectedBadgeGroup}
             />
           )}
-          {["reporters", "scraps", "portfolio"].includes(currentTab) && (
+          {["overview", "reporters", "scraps", "portfolio"].includes(currentTab) && (
             <EmptyStateTab tab={currentTab} />
           )}
         </div>
