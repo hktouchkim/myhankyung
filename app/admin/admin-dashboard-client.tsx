@@ -870,28 +870,26 @@ function WatchlistTab() {
                 <th style={{ textAlign: "right" }}>사용자 수 (명)</th>
                 <th style={{ textAlign: "right" }}>비중 (%)</th>
                 <th style={{ textAlign: "right" }}>해당 그룹 총 종목수</th>
-                <th style={{ textAlign: "right" }}>전주 대비 증감</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { g: "1개 그룹 (기본 사용자)", u: "14,200", p: "45.2%", s: "68,160", diff: "+4.2%" },
-                { g: "2개 그룹", u: "8,100", p: "25.8%", s: "48,600", diff: "+6.1%" },
-                { g: "3개 그룹", u: "4,200", p: "13.4%", s: "35,280", diff: "+8.4%" },
-                { g: "4개 그룹", u: "2,100", p: "6.7%", s: "21,840", diff: "+5.0%" },
-                { g: "5개 그룹", u: "1,250", p: "4.0%", s: "16,250", diff: "+3.9%" },
-                { g: "6개 그룹", u: "680", p: "2.2%", s: "10,200", diff: "+2.1%" },
-                { g: "7개 그룹", u: "390", p: "1.2%", s: "6,630", diff: "+1.5%" },
-                { g: "8개 그룹", u: "240", p: "0.8%", s: "4,560", diff: "+0.8%" },
-                { g: "9개 그룹", u: "150", p: "0.5%", s: "3,150", diff: "+0.2%" },
-                { g: "10개 그룹 (최대 한도 생성)", u: "110", p: "0.3%", s: "3,980", diff: "+0.1%" },
+                { g: "1개 그룹 (기본 사용자)", u: "14,200", p: "45.2%", s: "68,160" },
+                { g: "2개 그룹", u: "8,100", p: "25.8%", s: "48,600" },
+                { g: "3개 그룹", u: "4,200", p: "13.4%", s: "35,280" },
+                { g: "4개 그룹", u: "2,100", p: "6.7%", s: "21,840" },
+                { g: "5개 그룹", u: "1,250", p: "4.0%", s: "16,250" },
+                { g: "6개 그룹", u: "680", p: "2.2%", s: "10,200" },
+                { g: "7개 그룹", u: "390", p: "1.2%", s: "6,630" },
+                { g: "8개 그룹", u: "240", p: "0.8%", s: "4,560" },
+                { g: "9개 그룹", u: "150", p: "0.5%", s: "3,150" },
+                { g: "10개 그룹 (최대 한도 생성)", u: "110", p: "0.3%", s: "3,980" },
               ].map((row, i) => (
                 <tr key={i} className={i < 2 ? styles.highlightRow : ""}>
                   <td style={{ fontWeight: 700, color: "#0f172a" }}>{row.g}</td>
                   <td style={{ textAlign: "right" }}>{row.u}</td>
                   <td style={{ textAlign: "right", fontWeight: 700, color: "#92400e" }}>{row.p}</td>
                   <td style={{ textAlign: "right", color: "#64748b" }}>{row.s}</td>
-                  <td style={{ textAlign: "right", color: "#059669", fontWeight: 600 }}>{row.diff}</td>
                 </tr>
               ))}
             </tbody>
@@ -931,31 +929,30 @@ function WatchlistTab() {
                 <th>종목코드</th>
                 <th>시장</th>
                 <th style={{ textAlign: "right" }}>담은 회원수</th>
-                <th style={{ textAlign: "right" }}>순위 변동</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { r: 1, name: "삼성전자", code: "005930", m: "국내 (코스피)", u: "19,840명", diff: "-" },
-                { r: 2, name: "엔비디아 (NVDA)", code: "NVDA", m: "해외 (나스닥)", u: "16,420명", diff: "+1" },
-                { r: 3, name: "SK하이닉스", code: "000660", m: "국내 (코스피)", u: "15,890명", diff: "-1" },
-                { r: 4, name: "애플 (AAPL)", code: "AAPL", m: "해외 (나스닥)", u: "13,100명", diff: "-" },
-                { r: 5, name: "테슬라 (TSLA)", code: "TSLA", m: "해외 (나스닥)", u: "12,450명", diff: "+2" },
-                { r: 6, name: "현대차", code: "005380", m: "국내 (코스피)", u: "9,820명", diff: "-" },
-                { r: 7, name: "마이크로소프트 (MSFT)", code: "MSFT", m: "해외 (나스닥)", u: "9,120명", diff: "-1" },
-                { r: 8, name: "NAVER", code: "035420", m: "국내 (코스피)", u: "7,840명", diff: "-" },
-                { r: 9, name: "카카오", code: "035720", m: "국내 (코스피)", u: "7,110명", diff: "+3" },
-                { r: 10, name: "알파벳 A (GOOGL)", code: "GOOGL", m: "해외 (나스닥)", u: "6,980명", diff: "-1" },
-                { r: 11, name: "LG에너지솔루션", code: "373220", m: "국내 (코스피)", u: "6,450명", diff: "+1" },
-                { r: 12, name: "아마존 (AMZN)", code: "AMZN", m: "해외 (나스닥)", u: "6,120명", diff: "-1" },
-                { r: 13, name: "기아", code: "000270", m: "국내 (코스피)", u: "5,840명", diff: "-" },
-                { r: 14, name: "메타 플랫폼스 (META)", code: "META", m: "해외 (나스닥)", u: "5,320명", diff: "+2" },
-                { r: 15, name: "셀트리온", code: "068270", m: "국내 (코스피)", u: "4,980명", diff: "-1" },
-                { r: 16, name: "브로드컴 (AVGO)", code: "AVGO", m: "해외 (나스닥)", u: "4,610명", diff: "+4" },
-                { r: 17, name: "삼성바이오로직스", code: "207940", m: "국내 (코스피)", u: "4,250명", diff: "-1" },
-                { r: 18, name: "AMD", code: "AMD", m: "해외 (나스닥)", u: "3,980명", diff: "-" },
-                { r: 19, name: "POSCO홀딩스", code: "005490", m: "국내 (코스피)", u: "3,750명", diff: "-2" },
-                { r: 20, name: "팔란티어 (PLTR)", code: "PLTR", m: "해외 (뉴욕)", u: "3,540명", diff: "NEW" },
+                { r: 1, name: "삼성전자", code: "005930", m: "국내 (코스피)", u: "19,840명" },
+                { r: 2, name: "엔비디아 (NVDA)", code: "NVDA", m: "해외 (나스닥)", u: "16,420명" },
+                { r: 3, name: "SK하이닉스", code: "000660", m: "국내 (코스피)", u: "15,890명" },
+                { r: 4, name: "애플 (AAPL)", code: "AAPL", m: "해외 (나스닥)", u: "13,100명" },
+                { r: 5, name: "테슬라 (TSLA)", code: "TSLA", m: "해외 (나스닥)", u: "12,450명" },
+                { r: 6, name: "현대차", code: "005380", m: "국내 (코스피)", u: "9,820명" },
+                { r: 7, name: "마이크로소프트 (MSFT)", code: "MSFT", m: "해외 (나스닥)", u: "9,120명" },
+                { r: 8, name: "NAVER", code: "035420", m: "국내 (코스피)", u: "7,840명" },
+                { r: 9, name: "카카오", code: "035720", m: "국내 (코스피)", u: "7,110명" },
+                { r: 10, name: "알파벳 A (GOOGL)", code: "GOOGL", m: "해외 (나스닥)", u: "6,980명" },
+                { r: 11, name: "LG에너지솔루션", code: "373220", m: "국내 (코스피)", u: "6,450명" },
+                { r: 12, name: "아마존 (AMZN)", code: "AMZN", m: "해외 (나스닥)", u: "6,120명" },
+                { r: 13, name: "기아", code: "000270", m: "국내 (코스피)", u: "5,840명" },
+                { r: 14, name: "메타 플랫폼스 (META)", code: "META", m: "해외 (나스닥)", u: "5,320명" },
+                { r: 15, name: "셀트리온", code: "068270", m: "국내 (코스피)", u: "4,980명" },
+                { r: 16, name: "브로드컴 (AVGO)", code: "AVGO", m: "해외 (나스닥)", u: "4,610명" },
+                { r: 17, name: "삼성바이오로직스", code: "207940", m: "국내 (코스피)", u: "4,250명" },
+                { r: 18, name: "AMD", code: "AMD", m: "해외 (나스닥)", u: "3,980명" },
+                { r: 19, name: "POSCO홀딩스", code: "005490", m: "국내 (코스피)", u: "3,750명" },
+                { r: 20, name: "팔란티어 (PLTR)", code: "PLTR", m: "해외 (뉴욕)", u: "3,540명" },
               ].map((stock, i) => (
                 <tr key={i} className={stock.r <= 3 ? styles.highlightRow : ""}>
                   <td style={{ fontWeight: 800, color: stock.r <= 3 ? "#1e40af" : "#0f172a" }}>{stock.r}</td>
@@ -967,17 +964,6 @@ function WatchlistTab() {
                     </span>
                   </td>
                   <td style={{ textAlign: "right", fontWeight: 700, color: "#0f172a" }}>{stock.u}</td>
-                  <td style={{ textAlign: "right" }}>
-                    {stock.diff === "-" ? (
-                      <span style={{ color: "#94a3b8" }}>-</span>
-                    ) : stock.diff === "NEW" ? (
-                      <span style={{ color: "#d97706", fontWeight: 700, backgroundColor: "#fef3c7", padding: "1px 6px", borderRadius: "3px", fontSize: "10px" }}>NEW</span>
-                    ) : stock.diff.startsWith("+") ? (
-                      <span style={{ color: "#dc2626", fontWeight: 700 }}>{stock.diff}</span>
-                    ) : (
-                      <span style={{ color: "#2563eb", fontWeight: 700 }}>{stock.diff}</span>
-                    )}
-                  </td>
                 </tr>
               ))}
             </tbody>
