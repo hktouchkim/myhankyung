@@ -828,11 +828,7 @@ function WatchlistTab() {
         <div className={styles.sectionHeader}>
           <div>
             <h3 className={styles.sectionTitle}>관심종목 그룹 개수별 사용자 수 분포 (1~10개 전수 노출)</h3>
-            <p className={styles.sectionSubtitle}>사용자가 생성해 둔 그룹 개수(1~10개)에 따른 회원수와 비중</p>
           </div>
-          <span style={{ fontSize: "12px", color: "#64748b", backgroundColor: "#f8fafc", padding: "4px 10px", borderRadius: "6px", border: "1px solid #e2e8f0" }}>
-            최대 허용 그룹수: 10개
-          </span>
         </div>
 
         {/* 바 차트 */}
@@ -903,105 +899,89 @@ function WatchlistTab() {
         </div>
       </div>
 
-      <div className={styles.grid3Col}>
-        {/* 시장별 담기 비중 */}
-        <div className={styles.sectionCard}>
-          <div className={styles.sectionHeader}>
-            <div>
-              <h3 className={styles.sectionTitle}>시장별 담기 비중</h3>
-              <p className={styles.sectionSubtitle}>국내 주식 vs 해외(미국 등) 주식</p>
-            </div>
-            <Globe2 size={18} color="#94a3b8" />
+      {/* 가장 많이 등록된 인기 종목 TOP 20 (시장별 비율 통합) */}
+      <div className={styles.sectionCard}>
+        <div className={styles.sectionHeader} style={{ flexWrap: "wrap", gap: "12px" }}>
+          <div>
+            <h3 className={styles.sectionTitle}>가장 많이 등록된 인기 종목 TOP 20</h3>
           </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "16px" }}>
-            <div style={{ padding: "16px", borderRadius: "10px", border: "1px solid #bfdbfe", backgroundColor: "#eff6ff", textAlign: "center" }}>
-              <div style={{ fontSize: "12px", fontWeight: 700, color: "#1e40af" }}>국내 주식</div>
-              <div style={{ fontSize: "24px", fontWeight: 800, color: "#1e3a8a", margin: "4px 0" }}>64.5%</div>
-              <div style={{ fontSize: "11px", color: "#64748b" }}>141,029건</div>
+          {/* 국내/해외 주식 등록 비율 바 */}
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "#f8fafc", padding: "6px 14px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "#475569" }}>시장별 등록 비중:</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px" }}>
+              <span style={{ display: "inline-block", width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#2563eb" }} />
+              <span style={{ color: "#1e40af", fontWeight: 700 }}>국내주식 64.5%</span>
+              <span style={{ color: "#94a3b8", fontSize: "11px" }}>(141,029건)</span>
             </div>
-            <div style={{ padding: "16px", borderRadius: "10px", border: "1px solid #c7d2fe", backgroundColor: "#eef2ff", textAlign: "center" }}>
-              <div style={{ fontSize: "12px", fontWeight: 700, color: "#3730a3" }}>해외 주식</div>
-              <div style={{ fontSize: "24px", fontWeight: 800, color: "#312e81", margin: "4px 0" }}>35.5%</div>
-              <div style={{ fontSize: "11px", color: "#64748b" }}>77,621건</div>
-            </div>
-          </div>
-
-          <div style={{ marginTop: "24px", fontSize: "12px", color: "#64748b", display: "flex", flexDirection: "column", gap: "8px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>국내 전용 그룹 보유자</span>
-              <strong style={{ color: "#0f172a" }}>54.2%</strong>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>국내+해외 혼합 보유자</span>
-              <strong style={{ color: "#0f172a" }}>38.1%</strong>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>해외 전용 그룹 보유자</span>
-              <strong style={{ color: "#0f172a" }}>7.7%</strong>
+            <span style={{ color: "#cbd5e1" }}>|</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px" }}>
+              <span style={{ display: "inline-block", width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#9333ea" }} />
+              <span style={{ color: "#6b21a8", fontWeight: 700 }}>해외주식 35.5%</span>
+              <span style={{ color: "#94a3b8", fontSize: "11px" }}>(77,621건)</span>
             </div>
           </div>
         </div>
 
-        {/* 인기 종목 TOP 10 */}
-        <div className={styles.sectionCard}>
-          <div className={styles.sectionHeader}>
-            <div>
-              <h3 className={styles.sectionTitle}>가장 많이 등록된 인기 종목 TOP 10</h3>
-              <p className={styles.sectionSubtitle}>전체 사용자 관심종목 등록 수 기준 랭킹</p>
-            </div>
-            <Flame size={18} color="#f59e0b" />
-          </div>
-
-          <div className={styles.tableResponsive}>
-            <table className={styles.dataTable}>
-              <thead>
-                <tr>
-                  <th>순위</th>
-                  <th>종목명</th>
-                  <th>종목코드</th>
-                  <th>시장</th>
-                  <th style={{ textAlign: "right" }}>담은 회원수</th>
-                  <th style={{ textAlign: "right" }}>순위 변동</th>
+        <div className={styles.tableResponsive}>
+          <table className={styles.dataTable}>
+            <thead>
+              <tr>
+                <th style={{ width: "60px" }}>순위</th>
+                <th>종목명</th>
+                <th>종목코드</th>
+                <th>시장</th>
+                <th style={{ textAlign: "right" }}>담은 회원수</th>
+                <th style={{ textAlign: "right" }}>순위 변동</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { r: 1, name: "삼성전자", code: "005930", m: "국내 (코스피)", u: "19,840명", diff: "-" },
+                { r: 2, name: "엔비디아 (NVDA)", code: "NVDA", m: "해외 (나스닥)", u: "16,420명", diff: "+1" },
+                { r: 3, name: "SK하이닉스", code: "000660", m: "국내 (코스피)", u: "15,890명", diff: "-1" },
+                { r: 4, name: "애플 (AAPL)", code: "AAPL", m: "해외 (나스닥)", u: "13,100명", diff: "-" },
+                { r: 5, name: "테슬라 (TSLA)", code: "TSLA", m: "해외 (나스닥)", u: "12,450명", diff: "+2" },
+                { r: 6, name: "현대차", code: "005380", m: "국내 (코스피)", u: "9,820명", diff: "-" },
+                { r: 7, name: "마이크로소프트 (MSFT)", code: "MSFT", m: "해외 (나스닥)", u: "9,120명", diff: "-1" },
+                { r: 8, name: "NAVER", code: "035420", m: "국내 (코스피)", u: "7,840명", diff: "-" },
+                { r: 9, name: "카카오", code: "035720", m: "국내 (코스피)", u: "7,110명", diff: "+3" },
+                { r: 10, name: "알파벳 A (GOOGL)", code: "GOOGL", m: "해외 (나스닥)", u: "6,980명", diff: "-1" },
+                { r: 11, name: "LG에너지솔루션", code: "373220", m: "국내 (코스피)", u: "6,450명", diff: "+1" },
+                { r: 12, name: "아마존 (AMZN)", code: "AMZN", m: "해외 (나스닥)", u: "6,120명", diff: "-1" },
+                { r: 13, name: "기아", code: "000270", m: "국내 (코스피)", u: "5,840명", diff: "-" },
+                { r: 14, name: "메타 플랫폼스 (META)", code: "META", m: "해외 (나스닥)", u: "5,320명", diff: "+2" },
+                { r: 15, name: "셀트리온", code: "068270", m: "국내 (코스피)", u: "4,980명", diff: "-1" },
+                { r: 16, name: "브로드컴 (AVGO)", code: "AVGO", m: "해외 (나스닥)", u: "4,610명", diff: "+4" },
+                { r: 17, name: "삼성바이오로직스", code: "207940", m: "국내 (코스피)", u: "4,250명", diff: "-1" },
+                { r: 18, name: "AMD", code: "AMD", m: "해외 (나스닥)", u: "3,980명", diff: "-" },
+                { r: 19, name: "POSCO홀딩스", code: "005490", m: "국내 (코스피)", u: "3,750명", diff: "-2" },
+                { r: 20, name: "팔란티어 (PLTR)", code: "PLTR", m: "해외 (뉴욕)", u: "3,540명", diff: "NEW" },
+              ].map((stock, i) => (
+                <tr key={i} className={stock.r <= 3 ? styles.highlightRow : ""}>
+                  <td style={{ fontWeight: 800, color: stock.r <= 3 ? "#1e40af" : "#0f172a" }}>{stock.r}</td>
+                  <td style={{ fontWeight: 700, color: "#0f172a" }}>{stock.name}</td>
+                  <td style={{ fontFamily: "monospace", color: "#64748b" }}>{stock.code}</td>
+                  <td>
+                    <span style={{ fontSize: "11px", padding: "2px 8px", borderRadius: "4px", backgroundColor: stock.m.includes("국내") ? "#eff6ff" : "#faf5ff", color: stock.m.includes("국내") ? "#1d4ed8" : "#7e22ce", fontWeight: 600 }}>
+                      {stock.m}
+                    </span>
+                  </td>
+                  <td style={{ textAlign: "right", fontWeight: 700, color: "#0f172a" }}>{stock.u}</td>
+                  <td style={{ textAlign: "right" }}>
+                    {stock.diff === "-" ? (
+                      <span style={{ color: "#94a3b8" }}>-</span>
+                    ) : stock.diff === "NEW" ? (
+                      <span style={{ color: "#d97706", fontWeight: 700, backgroundColor: "#fef3c7", padding: "1px 6px", borderRadius: "3px", fontSize: "10px" }}>NEW</span>
+                    ) : stock.diff.startsWith("+") ? (
+                      <span style={{ color: "#dc2626", fontWeight: 700 }}>{stock.diff}</span>
+                    ) : (
+                      <span style={{ color: "#2563eb", fontWeight: 700 }}>{stock.diff}</span>
+                    )}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {[
-                  { r: 1, name: "삼성전자", code: "005930", m: "국내 (코스피)", u: "19,840명", diff: "-" },
-                  { r: 2, name: "엔비디아 (NVDA)", code: "NVDA", m: "해외 (나스닥)", u: "16,420명", diff: "+1" },
-                  { r: 3, name: "SK하이닉스", code: "000660", m: "국내 (코스피)", u: "15,890명", diff: "-1" },
-                  { r: 4, name: "애플 (AAPL)", code: "AAPL", m: "해외 (나스닥)", u: "13,100명", diff: "-" },
-                  { r: 5, name: "테슬라 (TSLA)", code: "TSLA", m: "해외 (나스닥)", u: "12,450명", diff: "+2" },
-                  { r: 6, name: "현대차", code: "005380", m: "국내 (코스피)", u: "9,820명", diff: "-" },
-                  { r: 7, name: "마이크로소프트 (MSFT)", code: "MSFT", m: "해외 (나스닥)", u: "9,120명", diff: "-1" },
-                  { r: 8, name: "NAVER", code: "035420", m: "국내 (코스피)", u: "7,840명", diff: "-" },
-                  { r: 9, name: "카카오", code: "035720", m: "국내 (코스피)", u: "7,110명", diff: "+3" },
-                  { r: 10, name: "알파벳 A (GOOGL)", code: "GOOGL", m: "해외 (나스닥)", u: "6,980명", diff: "-1" },
-                ].map((stock, i) => (
-                  <tr key={i} className={stock.r <= 3 ? styles.highlightRow : ""}>
-                    <td style={{ fontWeight: 800, color: "#0f172a" }}>{stock.r}</td>
-                    <td style={{ fontWeight: 700, color: "#0f172a" }}>{stock.name}</td>
-                    <td style={{ fontFamily: "monospace", color: "#64748b" }}>{stock.code}</td>
-                    <td>
-                      <span style={{ fontSize: "10px", padding: "2px 6px", borderRadius: "4px", backgroundColor: stock.m.includes("국내") ? "#eff6ff" : "#faf5ff", color: stock.m.includes("국내") ? "#1d4ed8" : "#7e22ce" }}>
-                        {stock.m}
-                      </span>
-                    </td>
-                    <td style={{ textAlign: "right", fontWeight: 700, color: "#0f172a" }}>{stock.u}</td>
-                    <td style={{ textAlign: "right" }}>
-                      {stock.diff === "-" ? (
-                        <span style={{ color: "#94a3b8" }}>-</span>
-                      ) : stock.diff.startsWith("+") ? (
-                        <span style={{ color: "#dc2626", fontWeight: 700 }}>{stock.diff}</span>
-                      ) : (
-                        <span style={{ color: "#2563eb", fontWeight: 700 }}>{stock.diff}</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
