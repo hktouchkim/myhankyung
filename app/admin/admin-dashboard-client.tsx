@@ -727,49 +727,62 @@ function RecentArticlesTab() {
         </div>
       </div>
 
-      {/* 16개 AI 읽기 유형 카드 점유율 */}
+      {/* AI 읽기 성향 분포도 */}
       <div className={styles.sectionCard}>
         <div className={styles.sectionHeader}>
           <div>
-            <h3 className={styles.sectionTitle}>16개 AI 읽기 유형 카드 점유율 (전수 순위)</h3>
+            <h3 className={styles.sectionTitle}>AI 읽기 성향 분포도</h3>
           </div>
           <span style={{ fontSize: "11px", backgroundColor: "#eef2ff", color: "#4338ca", padding: "4px 10px", borderRadius: "999px", fontWeight: 700 }}>
-            16종 카드 분류 체계
+            16종 페르소나
           </span>
         </div>
 
         <div className={styles.cardPersonaGrid}>
           {[
-            { rank: 1, name: "얼리버드 개척자", desc: "출근길 증시 속보 중심", pct: "16.8%", count: "13,180명", color: "#2563eb" },
-            { rank: 2, name: "마켓 네비게이터", desc: "시장 전반 균형 투자자", pct: "14.2%", count: "11,140명", color: "#3b82f6" },
-            { rank: 3, name: "헤지펀드 분석가", desc: "심층 기업 보고서 독파", pct: "11.5%", count: "9,020명", color: "#6366f1" },
-            { rank: 4, name: "부동산 나침반", desc: "청약/재건축 정책 집중", pct: "9.8%", count: "7,690명", color: "#10b981" },
-            { rank: 5, name: "올빼미 모니터링", desc: "심야 미국장 실시간 체크", pct: "8.4%", count: "6,590명", color: "#8b5cf6" },
-            { rank: 6, name: "글로벌 매크로", desc: "환율/금리/원자재 통찰", pct: "7.1%", count: "5,570명", color: "#06b6d4" },
-            { rank: 7, name: "테크 이노베이터", desc: "반도체/AI 신기술 탐독", pct: "6.5%", count: "5,100명", color: "#0ea5e9" },
-            { rank: 8, name: "배당 안정 추구", desc: "고배당 금융/지주사 중심", pct: "5.4%", count: "4,230명", color: "#f59e0b" },
-            { rank: 9, name: "퇴근길 서머라이저", desc: "하루 경제 종합 요약형", pct: "4.8%", count: "3,760명", color: "#64748b" },
-            { rank: 10, name: "점심 핑거스캐너", desc: "10분 컷 핵심 이슈 파악", pct: "4.2%", count: "3,290명", color: "#94a3b8" },
-            { rank: 11, name: "성장주 모멘텀", desc: "2차전지/바이오 급등주", pct: "3.5%", count: "2,740명", color: "#f43f5e" },
-            { rank: 12, name: "정책 규제 헌터", desc: "정부 법안/세제 개편 집중", pct: "2.8%", count: "2,190명", color: "#14b8a6" },
-            { rank: 13, name: "컬처&라이프스타일", desc: "문화/예술/소비 트렌드", pct: "1.9%", count: "1,490명", color: "#ec4899" },
-            { rank: 14, name: "슈퍼 차티스트", desc: "기술적 분석 및 수급 동향", pct: "1.5%", count: "1,170명", color: "#f97316" },
-            { rank: 15, name: "그린 에너지 탐험", desc: "ESG/신재생 산업 관심", pct: "1.0%", count: "780명", color: "#22c55e" },
-            { rank: 16, name: "스타트업 드리머", desc: "벤처 투자/유니콘 발굴", pct: "0.6%", count: "470명", color: "#a855f7" },
+            { rank: 1, name: "독수리형 독자", time: "오전형", field: "집중형", target: "대상형", img: "/aicard/독수리.svg", pct: "16.8%", count: "13,180명" },
+            { rank: 2, name: "비버형 독자", time: "오전형", field: "집중형", target: "흐름형", img: "/aicard/비버.svg", pct: "14.2%", count: "11,140명" },
+            { rank: 3, name: "올빼미형 독자", time: "야간형", field: "집중형", target: "대상형", img: "/aicard/올빼미.svg", pct: "11.5%", count: "9,020명" },
+            { rank: 4, name: "치타형 독자", time: "오후형", field: "집중형", target: "대상형", img: "/aicard/치타.svg", pct: "9.8%", count: "7,690명" },
+            { rank: 5, name: "고양이형 독자", time: "저녁형", field: "집중형", target: "대상형", img: "/aicard/고양이.svg", pct: "8.4%", count: "6,590명" },
+            { rank: 6, name: "다람쥐형 독자", time: "오전형", field: "탐험형", target: "대상형", img: "/aicard/다람쥐.svg", pct: "7.1%", count: "5,570명" },
+            { rank: 7, name: "꿀벌형 독자", time: "오전형", field: "탐험형", target: "흐름형", img: "/aicard/꿀벌.svg", pct: "6.5%", count: "5,100명" },
+            { rank: 8, name: "코끼리형 독자", time: "오후형", field: "집중형", target: "흐름형", img: "/aicard/코끼리.svg", pct: "5.4%", count: "4,230명" },
+            { rank: 9, name: "늑대형 독자", time: "저녁형", field: "집중형", target: "흐름형", img: "/aicard/늑대.svg", pct: "4.8%", count: "3,760명" },
+            { rank: 10, name: "반딧불이형 독자", time: "야간형", field: "집중형", target: "흐름형", img: "/aicard/반딧불이.svg", pct: "4.2%", count: "3,290명" },
+            { rank: 11, name: "미어캣형 독자", time: "오후형", field: "탐험형", target: "대상형", img: "/aicard/미어캣.svg", pct: "3.5%", count: "2,740명" },
+            { rank: 12, name: "기린형 독자", time: "오후형", field: "탐험형", target: "흐름형", img: "/aicard/기린.svg", pct: "2.8%", count: "2,190명" },
+            { rank: 13, name: "수달형 독자", time: "저녁형", field: "탐험형", target: "대상형", img: "/aicard/수달.svg", pct: "1.9%", count: "1,490명" },
+            { rank: 14, name: "돌고래형 독자", time: "저녁형", field: "탐험형", target: "흐름형", img: "/aicard/돌고래.svg", pct: "1.5%", count: "1,170명" },
+            { rank: 15, name: "너구리형 독자", time: "야간형", field: "탐험형", target: "대상형", img: "/aicard/너구리.svg", pct: "1.0%", count: "780명" },
+            { rank: 16, name: "여우형 독자", time: "야간형", field: "탐험형", target: "흐름형", img: "/aicard/여우.svg", pct: "0.6%", count: "470명" },
           ].map((card, i) => (
-            <div
-              key={i}
-              className={styles.personaCard}
-              style={{ borderLeftColor: card.color }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div key={i} className={styles.personaCard}>
+              <div className={styles.personaTop}>
                 <span className={styles.personaRank}>TOP {card.rank}</span>
                 <span className={styles.personaPct}>{card.pct}</span>
               </div>
-              <div className={styles.personaName}>{card.name}</div>
-              <div className={styles.personaDesc}>{card.desc}</div>
-              <div style={{ fontSize: "11px", color: "#94a3b8", textAlign: "right", marginTop: "4px" }}>
-                {card.count}
+              <div className={styles.personaBody}>
+                <div className={styles.personaImgBox}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={card.img}
+                    alt={card.name}
+                    className={styles.personaImg}
+                    loading="lazy"
+                  />
+                </div>
+                <div className={styles.personaInfo}>
+                  <div className={styles.personaName}>{card.name}</div>
+                  <div className={styles.personaTags}>
+                    <span className={styles.personaTag}>{card.time}</span>
+                    <span className={styles.personaTag}>{card.field}</span>
+                    <span className={styles.personaTag}>{card.target}</span>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.personaBottom}>
+                <span>{card.count}</span>
               </div>
             </div>
           ))}
