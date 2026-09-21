@@ -2927,10 +2927,10 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       {showInfoTooltip ? (
                         <div className="watchlist-info-tooltip" role="tooltip">
                           <strong>시세 제공 기준 안내</strong>
-                          <p>
-                            • <strong>국내종목</strong>: 20분 지연 시세<br />
-                            • <strong>해외종목</strong>: 전일 종가 기준
-                          </p>
+                          <ul className="watchlist-info-list">
+                            <li>국내 종목은 20분 지연 시세를 제공합니다.</li>
+                            <li>해외 종목은 전일 종가 기준으로 제공합니다.</li>
+                          </ul>
                         </div>
                       ) : null}
                     </div>

@@ -5562,7 +5562,8 @@ p {
   top: calc(100% + 8px);
   left: 0;
   z-index: 50;
-  width: 260px;
+  width: max-content;
+  max-width: 320px;
   padding: 12px 14px;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
@@ -5575,16 +5576,35 @@ p {
   display: block;
   margin-bottom: 6px;
   color: #0f172a;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
 
-.watchlist-info-tooltip p {
+.watchlist-info-list {
   margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.watchlist-info-list li {
+  position: relative;
+  padding-left: 10px;
   color: #475569;
-  font-size: 11.5px;
-  line-height: 1.55;
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
+.watchlist-info-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #94a3b8;
+  font-size: 11px;
 }
 
 /* 4. 스트립 리스트 (.watchlist-strip-list) */
