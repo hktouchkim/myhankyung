@@ -306,9 +306,24 @@
   gap: 16px;
 }
 
+.kpiGrid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
 @media (max-width: 1100px) {
   .kpiGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .kpiGrid3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .kpiGrid3 {
+    grid-template-columns: 1fr;
   }
 }
 

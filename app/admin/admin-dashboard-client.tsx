@@ -592,29 +592,24 @@ function BriefingTab() {
 function RecentArticlesTab() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-      {/* 4대 대표값 통계 카드 */}
-      <div className={styles.kpiGrid}>
+      {/* 3대 핵심 통계 카드 */}
+      <div className={styles.kpiGrid3}>
         <div className={styles.kpiCard}>
-          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>1인당 평균 읽은 기사량</div>
-          <div className={styles.kpiValue}>18.4건</div>
+          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>총 열람 수</div>
+          <div className={styles.kpiValue}>788,200건</div>
           <div style={{ fontSize: "11px", color: "#059669", fontWeight: 600, marginTop: "6px" }}>
-            전주 대비 +1.2건 증가
+            전주 대비 +6.5% 증가
           </div>
         </div>
         <div className={styles.kpiCard}>
-          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>중앙값 (Median)</div>
-          <div className={styles.kpiValue}>11.0건</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>일반 독자 표준 기준</div>
+          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>전체 열람 평균</div>
+          <div className={styles.kpiValue}>18.4건</div>
+          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>1인당 평균 읽은 기사량</div>
         </div>
         <div className={styles.kpiCard}>
-          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>최고 열람량 (다독자)</div>
-          <div className={styles.kpiValue} style={{ color: "#4f46e5" }}>342건</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>증권/산업 분야 중심</div>
-        </div>
-        <div className={styles.kpiCard}>
-          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>최저 열람량</div>
-          <div className={styles.kpiValue}>1.0건</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>단일 기사 조회 유입</div>
+          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>상위 10% 열람 평균</div>
+          <div className={styles.kpiValue} style={{ color: "#2563eb" }}>74.2건</div>
+          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>충성·헤비 독자층 평균 소비량</div>
         </div>
       </div>
 
@@ -624,41 +619,38 @@ function RecentArticlesTab() {
           <div className={styles.sectionHeader}>
             <div>
               <h3 className={styles.sectionTitle}>시간대별 기사 소비 집중도 (24H)</h3>
-              <p className={styles.sectionSubtitle}>6개 시간대별 독자 유입량 및 피크 타임</p>
             </div>
             <Clock3 size={18} color="#94a3b8" />
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "10px", marginTop: "16px" }}>
             {[
-              { time: "06~10시", name: "아침/출근", count: "312,400건", pct: 39.6, peak: true },
-              { time: "10~14시", name: "오전/점심", count: "168,200건", pct: 21.3 },
-              { time: "18~22시", name: "저녁/퇴근", count: "142,500건", pct: 18.1 },
-              { time: "14~18시", name: "오후", count: "98,300건", pct: 12.5 },
-              { time: "22~02시", name: "심야/야간", count: "48,100건", pct: 6.1 },
-              { time: "02~06시", name: "새벽", count: "18,500건", pct: 2.4, low: true },
+              { time: "06~10시", count: "312,400건", pct: 39.6, peak: true },
+              { time: "10~14시", count: "168,200건", pct: 21.3 },
+              { time: "18~22시", count: "142,500건", pct: 18.1 },
+              { time: "14~18시", count: "98,300건", pct: 12.5 },
+              { time: "22~02시", count: "48,100건", pct: 6.1 },
+              { time: "02~06시", count: "18,500건", pct: 2.4, low: true },
             ].map((slot, idx) => (
               <div
                 key={idx}
                 style={{
-                  padding: "12px 6px",
+                  padding: "16px 8px",
                   borderRadius: "8px",
-                  border: slot.peak ? "1px solid #bfdbfe" : "1px solid #e2e8f0",
-                  backgroundColor: slot.peak ? "#eff6ff" : slot.low ? "#f8fafc" : "#ffffff",
+                  border: slot.peak ? "1px solid #dbeafe" : slot.low ? "1px solid #f1f5f9" : "1px solid #e2e8f0",
+                  backgroundColor: slot.peak ? "#f0f7ff" : slot.low ? "#f8fafc" : "#ffffff",
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: "11px", fontWeight: 700, color: "#1e293b" }}>{slot.time}</div>
-                <div style={{ fontSize: "10px", color: "#64748b" }}>{slot.name}</div>
-                {slot.peak && (
-                  <span style={{ fontSize: "9px", padding: "1px 4px", borderRadius: "3px", backgroundColor: "#2563eb", color: "#ffffff", fontWeight: 700 }}>
-                    피크
-                  </span>
-                )}
-                <div style={{ fontSize: "15px", fontWeight: 800, color: "#0f172a", marginTop: "10px" }}>
+                <div style={{ fontSize: "12px", fontWeight: slot.peak ? 700 : 600, color: slot.peak ? "#1e40af" : slot.low ? "#64748b" : "#1e293b" }}>
+                  {slot.time}
+                </div>
+                <div style={{ fontSize: "16px", fontWeight: 800, color: slot.peak ? "#1e3a8a" : slot.low ? "#64748b" : "#0f172a", marginTop: "12px" }}>
                   {slot.pct}%
                 </div>
-                <div style={{ fontSize: "10px", color: "#94a3b8" }}>{slot.count}</div>
+                <div style={{ fontSize: "11px", color: slot.low ? "#94a3b8" : "#64748b", marginTop: "2px" }}>
+                  {slot.count}
+                </div>
               </div>
             ))}
           </div>
@@ -666,7 +658,7 @@ function RecentArticlesTab() {
           {/* 소비량 구간 분포 */}
           <div style={{ marginTop: "28px", paddingTop: "20px", borderTop: "1px solid #f1f5f9" }}>
             <h4 style={{ fontSize: "13px", fontWeight: 700, color: "#0f172a", marginBottom: "12px" }}>
-              회원 1인당 기사 소비량 구간 분포 (로그정규 롱테일)
+              회원 1인당 기사 소비량 구간 분포
             </h4>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {[
@@ -690,12 +682,11 @@ function RecentArticlesTab() {
           </div>
         </div>
 
-        {/* 카테고리 전수 소비 비중 */}
+        {/* 카테고리 전수 소비 비중 (10개 카테고리) */}
         <div className={styles.sectionCard}>
           <div className={styles.sectionHeader}>
             <div>
               <h3 className={styles.sectionTitle}>전체 카테고리 소비</h3>
-              <p className={styles.sectionSubtitle}>전 섹션 누적 열람 건수/비중</p>
             </div>
             <Layers size={18} color="#94a3b8" />
           </div>
@@ -704,21 +695,23 @@ function RecentArticlesTab() {
             <table className={styles.dataTable}>
               <thead>
                 <tr>
-                  <th>섹션명</th>
+                  <th>카테고리</th>
                   <th style={{ textAlign: "right" }}>열람 건수</th>
                   <th style={{ textAlign: "right" }}>점유율</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { name: "증권", count: "342,100", pct: "43.4%", hot: true },
-                  { name: "부동산", count: "165,400", pct: "21.0%", hot: true },
-                  { name: "경제", count: "112,800", pct: "14.3%" },
-                  { name: "산업", count: "68,200", pct: "8.7%" },
-                  { name: "정치", count: "39,100", pct: "5.0%" },
-                  { name: "국제", count: "28,400", pct: "3.6%" },
-                  { name: "라이프/문화", count: "19,200", pct: "2.4%" },
-                  { name: "스포츠/연예", count: "12,800", pct: "1.6%" },
+                  { name: "증권", count: "328,600", pct: "41.7%", hot: true },
+                  { name: "부동산", count: "159,200", pct: "20.2%", hot: true },
+                  { name: "경제", count: "108,700", pct: "13.8%" },
+                  { name: "IT/과학", count: "58,300", pct: "7.4%" },
+                  { name: "오피니언", count: "39,400", pct: "5.0%" },
+                  { name: "정치", count: "33,100", pct: "4.2%" },
+                  { name: "사회", count: "24,400", pct: "3.1%" },
+                  { name: "국제", count: "19,700", pct: "2.5%" },
+                  { name: "생활/문화", count: "10,800", pct: "1.4%" },
+                  { name: "스포츠", count: "6,000", pct: "0.7%" },
                 ].map((sec, idx) => (
                   <tr key={idx} className={sec.hot ? styles.highlightRow : ""}>
                     <td style={{ fontWeight: sec.hot ? 700 : 500, color: sec.hot ? "#1e3a8a" : "#334155" }}>
@@ -739,7 +732,6 @@ function RecentArticlesTab() {
         <div className={styles.sectionHeader}>
           <div>
             <h3 className={styles.sectionTitle}>16개 AI 읽기 유형 카드 점유율 (전수 순위)</h3>
-            <p className={styles.sectionSubtitle}>활동 시간대 × 관심 분야 × 읽기 성향 조합 페르소나 분석</p>
           </div>
           <span style={{ fontSize: "11px", backgroundColor: "#eef2ff", color: "#4338ca", padding: "4px 10px", borderRadius: "999px", fontWeight: 700 }}>
             16종 카드 분류 체계
