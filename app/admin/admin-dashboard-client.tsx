@@ -99,7 +99,6 @@ export default function AdminDashboardClient() {
 
         {/* 내비게이션 메뉴 */}
         <nav className={styles.navContainer}>
-          <div className={styles.navSectionTitle}>모니터링 대시보드</div>
           {MENU_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
@@ -144,13 +143,6 @@ export default function AdminDashboardClient() {
         {/* 상단 헤더 */}
         <header className={styles.mainHeader}>
           <div>
-            <div className={styles.breadcrumb}>
-              <span>관리자 콘솔</span>
-              <ChevronRight size={12} />
-              <strong style={{ color: "#334155" }}>
-                {MENU_ITEMS.find((m) => m.id === currentTab)?.label}
-              </strong>
-            </div>
             <h2 className={styles.pageHeading}>
               {MENU_ITEMS.find((m) => m.id === currentTab)?.label} 모니터링
             </h2>
@@ -161,14 +153,6 @@ export default function AdminDashboardClient() {
               <span className={styles.statusDot}></span>
               <span>기준일시: <strong style={{ color: "#0f172a" }}>{lastRefreshed}</strong> (오늘 기준)</span>
             </div>
-            <button
-              onClick={refreshData}
-              title="데이터 새로고침"
-              type="button"
-              className={styles.refreshBtn}
-            >
-              <RefreshCw size={15} />
-            </button>
           </div>
         </header>
 
