@@ -5517,94 +5517,18 @@ p {
   transform: translateY(-1px);
 }
 
-.watchlist-intro-desc-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.watchlist-intro-desc-wrap p {
+.watchlist-main-desc {
   margin: 0;
   color: var(--muted);
   font-size: 14px;
 }
 
-.watchlist-info-tooltip-wrap {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-}
-
-.watchlist-info-btn {
-  display: inline-flex;
-  width: 24px;
-  height: 24px;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: #94a3b8;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  padding: 0;
-}
-
-.watchlist-info-btn:hover,
-.watchlist-info-btn.active {
-  background: #f1f5f9;
-  color: #0f172a;
-}
-
-.watchlist-info-tooltip {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  z-index: 50;
-  width: max-content;
-  max-width: 320px;
-  padding: 12px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
-  animation: tooltip-fade-in 0.15s ease-out;
-}
-
-.watchlist-info-tooltip strong {
-  display: block;
-  margin-bottom: 6px;
-  color: #0f172a;
+.watchlist-delay-notice {
+  margin: 4px 0 0 0;
+  color: #64748b;
   font-size: 12.5px;
-  font-weight: 700;
+  line-height: 1.5;
   letter-spacing: -0.01em;
-}
-
-.watchlist-info-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.watchlist-info-list li {
-  position: relative;
-  padding-left: 10px;
-  color: #475569;
-  font-size: 12px;
-  line-height: 1.45;
-  white-space: nowrap;
-}
-
-.watchlist-info-list li::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  color: #94a3b8;
-  font-size: 11px;
 }
 
 /* 4. 스트립 리스트 (.watchlist-strip-list) */

@@ -16,7 +16,6 @@ import {
   FileText,
   GripVertical,
   Home,
-  Info,
   LogOut,
   Menu,
   MessageSquareText,
@@ -2450,7 +2449,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const suppressTabClickRef = useRef(false);
   const [expandAllIssues, setExpandAllIssues] = useState(true);
   const [issueOverrides, setIssueOverrides] = useState<Record<string, boolean>>({});
-  const [showInfoTooltip, setShowInfoTooltip] = useState(false);
 
   const [newGroupName, setNewGroupName] = useState("");
   const [editingGroupId, setEditingGroupId] = useState<string | null>(null);
@@ -2582,27 +2580,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
     if (saved === null) return;
     window.requestAnimationFrame(() => setShowArticleAnalysis(saved === "true"));
   }, []);
-
-  useEffect(() => {
-    if (!showInfoTooltip) return;
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (!target?.closest(".watchlist-info-tooltip-wrap")) {
-        setShowInfoTooltip(false);
-      }
-    };
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setShowInfoTooltip(false);
-      }
-    };
-    window.addEventListener("click", handleClickOutside);
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("click", handleClickOutside);
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [showInfoTooltip]);
 
   useEffect(() => {
     if (!dialog && !preview) return;
@@ -2908,33 +2885,14 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
             />
           ) : (
             <section className="watchlist-page recent-watchlist-page">
-              {/* 상단 타이틀바 (최근 본 기사 동일 규격: h1 + p + 우측 안내 툴팁 버튼) */}
+              {/* 상단 타이틀바 (최근 본 기사 동일 규격: h1 + p + 하단 안내 문구) */}
               <div className="watchlist-titlebar recent-page-titlebar">
                 <div>
                   <h1>관심종목</h1>
-                  <div className="watchlist-intro-desc-wrap">
-                    <p>내가 등록한 관심종목의 주가변동과 핵심 이슈를 빠르게 확인하세요.</p>
-                    <div className="watchlist-info-tooltip-wrap">
-                      <button
-                        type="button"
-                        className={`watchlist-info-btn ${showInfoTooltip ? "active" : ""}`}
-                        onClick={() => setShowInfoTooltip((prev) => !prev)}
-                        aria-label="시세 제공 기준 안내"
-                        title="시세 제공 기준 안내"
-                      >
-                        <Info size={15} />
-                      </button>
-                      {showInfoTooltip ? (
-                        <div className="watchlist-info-tooltip" role="tooltip">
-                          <strong>시세 제공 기준 안내</strong>
-                          <ul className="watchlist-info-list">
-                            <li>국내 종목은 20분 지연 시세를 제공합니다.</li>
-                            <li>해외 종목은 전일 종가 기준으로 제공합니다.</li>
-                          </ul>
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
+                  <p className="watchlist-main-desc">내가 등록한 관심종목의 주가변동과 핵심 이슈를 빠르게 확인하세요.</p>
+                  <p className="watchlist-delay-notice">
+                    • 국내 종목은 20분 지연 시세를 제공하며, 해외 종목은 전일 종가 기준으로 제공합니다.
+                  </p>
                 </div>
               </div>
 
@@ -3060,8 +3018,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                         <span className="header-col-item col-price">현재가</span>
                         <span className="header-col-item col-rate">등락률</span>
                         <span className="header-col-item col-diff">전일대비</span>
-                        <span className="header-col-item col-turnover">거래대금</span>
-                        <span className="header-col-item col-volume">거래량</span>
+                        <span className="header-col-item col-turnover">거래대금(백만)</span>
+                        <span className="header-col-item col-volume">거래량(주)</span>
                       </div>
                       <div className="header-col-right" />
                     </div>
@@ -3076,10 +3034,10 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       const displayChange = stock.currency === "USD" ? stock.change : `${stock.change}원`;
                       const displayTurnover = stock.turnover
                         ? stock.currency === "USD"
-                          ? `$ ${stock.turnover}백만`
-                          : `${stock.turnover}백만원`
+                          ? `$${stock.turnover}`
+                          : stock.turnover
                         : "-";
-                      const displayVolume = stock.volume ? `${stock.volume}주` : "-";
+                      const displayVolume = stock.volume ? stock.volume : "-";
                       const tickerText = stock.ticker || stock.code;
 
                       const isDragging = draggedStockIndex === index;
