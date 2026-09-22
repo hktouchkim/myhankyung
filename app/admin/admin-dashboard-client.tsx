@@ -422,38 +422,27 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) {
 function BriefingTab() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-      <div className={styles.kpiGrid}>
+      <div className={styles.kpiGrid3}>
         <div className={styles.kpiCard}>
           <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>1개 이상 등록 사용자 수</div>
           <div className={styles.kpiValue}>42,850명</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>
-            전체 회원 침투율: <strong style={{ color: "#2563eb" }}>38.4%</strong>
-          </div>
         </div>
         <div className={styles.kpiCard}>
           <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>등록된 총 브리핑 수</div>
           <div className={styles.kpiValue}>94,270개</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>일일 자동 발행 대상</div>
         </div>
         <div className={styles.kpiCard}>
           <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>사용자 평균 등록 브리핑 수</div>
           <div className={styles.kpiValue}>2.2개</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>브리핑 등록 회원 기준</div>
-        </div>
-        <div className={styles.kpiCard}>
-          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>1인 최다 등록 브리핑 수</div>
-          <div className={styles.kpiValue}>8개</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>헤비 에이전트 유저</div>
         </div>
       </div>
 
       <div className={styles.grid2Col}>
-        {/* 주제별 비중 (4대 주제) */}
+        {/* 주제별 브리핑 수 */}
         <div className={styles.sectionCard}>
           <div className={styles.sectionHeader}>
             <div>
-              <h3 className={styles.sectionTitle}>브리핑 주제별 선호 비중</h3>
-              <p className={styles.sectionSubtitle}>4개 핵심 주제 설정 현황</p>
+              <h3 className={styles.sectionTitle}>주제별 브리핑 수</h3>
             </div>
             <PieChart size={18} color="#94a3b8" />
           </div>
@@ -481,45 +470,29 @@ function BriefingTab() {
           </div>
 
           <div style={{ marginTop: "24px", padding: "12px", borderRadius: "8px", backgroundColor: "#f8fafc", fontSize: "12px", color: "#475569" }}>
-            💡 <strong>인사이트</strong>: 글로벌 증시 변동성 확대로 인해 <strong>미국 증시 브리핑(42%)</strong>에 대한 선호가 압도적으로 높습니다.
+            💡 <strong>인사이트</strong>: 글로벌 증시 변동성 확대로 인해 <strong>미국 증시 브리핑(42%)</strong>에 대한 선호가 가장 높습니다.
           </div>
         </div>
 
-        {/* 수신 시간대별 설정 비중 */}
+        {/* 시간대별 브리핑 수 */}
         <div className={styles.sectionCard}>
           <div className={styles.sectionHeader}>
             <div>
-              <h3 className={styles.sectionTitle}>수신 시간대별 설정 비중</h3>
-              <p className={styles.sectionSubtitle}>출근길 vs 오후 장 마감 리포트</p>
+              <h3 className={styles.sectionTitle}>시간대별 브리핑 수</h3>
             </div>
             <Clock3 size={18} color="#94a3b8" />
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginTop: "20px" }}>
-            <div style={{ padding: "18px", borderRadius: "10px", border: "1px solid #bfdbfe", backgroundColor: "#eff6ff", textAlign: "center" }}>
-              <div style={{ fontSize: "12px", fontWeight: 700, color: "#1e40af" }}>오전 08:00 (출근길)</div>
-              <div style={{ fontSize: "30px", fontWeight: 800, color: "#1e3a8a", margin: "6px 0" }}>68%</div>
-              <div style={{ fontSize: "11px", color: "#64748b" }}>64,103건 등록</div>
+            <div style={{ padding: "20px 16px", borderRadius: "10px", border: "1px solid #bfdbfe", backgroundColor: "#eff6ff", textAlign: "center" }}>
+              <div style={{ fontSize: "13px", fontWeight: 700, color: "#1e40af" }}>오전</div>
+              <div style={{ fontSize: "32px", fontWeight: 800, color: "#1e3a8a", margin: "6px 0" }}>68%</div>
+              <div style={{ fontSize: "13px", fontWeight: 700, color: "#2563eb" }}>64,103건</div>
             </div>
-            <div style={{ padding: "18px", borderRadius: "10px", border: "1px solid #fde68a", backgroundColor: "#fffbeb", textAlign: "center" }}>
-              <div style={{ fontSize: "12px", fontWeight: 700, color: "#92400e" }}>오후 17:00 (오후)</div>
-              <div style={{ fontSize: "30px", fontWeight: 800, color: "#78350f", margin: "6px 0" }}>32%</div>
-              <div style={{ fontSize: "11px", color: "#64748b" }}>30,167건 등록</div>
-            </div>
-          </div>
-
-          <div style={{ marginTop: "24px", fontSize: "12px", color: "#64748b", display: "flex", flexDirection: "column", gap: "10px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "6px", borderBottom: "1px solid #f1f5f9" }}>
-              <span>매일(월~일) 자동 발행 비율</span>
-              <strong style={{ color: "#0f172a" }}>89.4%</strong>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "6px", borderBottom: "1px solid #f1f5f9" }}>
-              <span>평일만 수신 비율</span>
-              <strong style={{ color: "#0f172a" }}>10.6%</strong>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>AI 브리핑 정상 생성 성공률</span>
-              <strong style={{ color: "#059669" }}>99.8% (정상 가동)</strong>
+            <div style={{ padding: "20px 16px", borderRadius: "10px", border: "1px solid #fde68a", backgroundColor: "#fffbeb", textAlign: "center" }}>
+              <div style={{ fontSize: "13px", fontWeight: 700, color: "#92400e" }}>오후</div>
+              <div style={{ fontSize: "32px", fontWeight: 800, color: "#78350f", margin: "6px 0" }}>32%</div>
+              <div style={{ fontSize: "13px", fontWeight: 700, color: "#d97706" }}>30,167건</div>
             </div>
           </div>
         </div>
