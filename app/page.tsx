@@ -3021,7 +3021,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       aria-label="현재 그룹에 종목 추가"
                     >
                       <Plus size={16} />
-                      <span>종목 추가</span>
+                      <span>추가</span>
                     </button>
                     <button
                       className="watchlist-edit-stocks-btn"
@@ -3031,7 +3031,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       aria-label="현재 그룹의 종목 편집 (삭제 및 순서 변경)"
                     >
                       <Pencil size={15} />
-                      <span>종목 편집</span>
+                      <span>편집</span>
                     </button>
                   </div>
                 </div>
@@ -3194,7 +3194,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                   <div className="empty-panel">
                     <Star size={26} />
                     <strong>등록된 관심종목이 없습니다.</strong>
-                    <p>상단의 '+ 종목 추가' 버튼을 눌러 관심 있는 종목을 등록해보세요.</p>
+                    <p>상단의 '+ 추가' 버튼을 눌러 관심 있는 종목을 등록해보세요.</p>
                   </div>
                 )}
               </section>
