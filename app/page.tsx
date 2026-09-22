@@ -2437,10 +2437,14 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
   const groupDragRef = useRef<{ id: string; startY: number; active: boolean } | null>(null);
   const [selectedGroupId, setSelectedGroupId] = useState(INITIAL_GROUPS[0].id);
   const [showArticleAnalysis, setShowArticleAnalysis] = useState(true);
-  const [dialog, setDialog] = useState<"add" | "alerts" | "manage" | null>(null);
+  const [dialog, setDialog] = useState<"add" | "alerts" | "manage" | "edit_stocks" | null>(null);
   const [toast, setToast] = useState("");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [collapsedModules, setCollapsedModules] = useState<CollapsedModules>(DEFAULT_COLLAPSED_MODULES);
+
+  const [editStockIds, setEditStockIds] = useState<string[]>([]);
+  const [draggedEditStockId, setDraggedEditStockId] = useState<string | null>(null);
+  const editStockDragRef = useRef<{ id: string; startY: number; active: boolean } | null>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedAddStockIds, setSelectedAddStockIds] = useState<string[]>([]);
@@ -2800,24 +2804,41 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
     showToast(`${stock.name}을(를) 관심종목에서 해제했습니다.`);
   };
 
-  const [draggedStockIndex, setDraggedStockIndex] = useState<number | null>(null);
-  const [dragOverStockIndex, setDragOverStockIndex] = useState<number | null>(null);
-  const [canDragStock, setCanDragStock] = useState<boolean>(false);
+  const openEditStocksDialog = () => {
+    setEditStockIds([...selectedGroup.stockIds]);
+    setDraggedEditStockId(null);
+    editStockDragRef.current = null;
+    setDialog("edit_stocks");
+  };
 
-  const reorderStocksInSelectedGroup = (fromIndex: number, toIndex: number) => {
-    if (fromIndex === toIndex) return;
-    const targetGroup = groups.find((g) => g.id === selectedGroupId);
-    if (!targetGroup) return;
+  const reorderEditStock = (stockId: string, targetId: string) => {
+    setEditStockIds((current) => {
+      const from = current.indexOf(stockId);
+      const to = current.indexOf(targetId);
+      if (from < 0 || to < 0 || from === to) return current;
+      const next = [...current];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved);
+      return next;
+    });
+  };
 
-    const nextStockIds = [...targetGroup.stockIds];
-    const [moved] = nextStockIds.splice(fromIndex, 1);
-    nextStockIds.splice(toIndex, 0, moved);
+  const endEditStockDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    editStockDragRef.current = null;
+    setDraggedEditStockId(null);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  };
 
+  const saveEditStocks = () => {
     setGroups((current) =>
-      current.map((g) =>
-        g.id === selectedGroupId ? { ...g, stockIds: nextStockIds } : g,
+      current.map((group) =>
+        group.id === selectedGroupId ? { ...group, stockIds: [...editStockIds] } : group,
       ),
     );
+    setDialog(null);
+    showToast("종목 순서 및 삭제 변경사항을 저장했습니다.");
   };
 
   const handleNav = (id: string) => {
@@ -3002,6 +3023,16 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       <Plus size={16} />
                       <span>종목 추가</span>
                     </button>
+                    <button
+                      className="watchlist-edit-stocks-btn"
+                      type="button"
+                      disabled={!selectedGroup.stockIds.length}
+                      onClick={openEditStocksDialog}
+                      aria-label="현재 그룹의 종목 편집 (삭제 및 순서 변경)"
+                    >
+                      <Pencil size={15} />
+                      <span>종목 편집</span>
+                    </button>
                   </div>
                 </div>
 
@@ -3038,9 +3069,6 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       const displayVolume = stock.volume ? stock.volume : "-";
                       const tickerText = stock.ticker || stock.code;
 
-                      const isDragging = draggedStockIndex === index;
-                      const isDragOver = dragOverStockIndex === index;
-
                       const toggleItem = () => {
                         if (hasSubContent) {
                           setIssueOverrides((prev) => ({
@@ -3053,43 +3081,7 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       return (
                         <div
                           key={stock.id}
-                          className={`watchlist-item-wrapper ${isExpanded ? "expanded" : ""} ${isDragging ? "dragging" : ""} ${isDragOver ? "dragover" : ""}`}
-                          draggable={canDragStock}
-                          onDragStart={(e) => {
-                            if (!canDragStock) {
-                              e.preventDefault();
-                              return;
-                            }
-                            setDraggedStockIndex(index);
-                            e.dataTransfer.effectAllowed = "move";
-                            e.dataTransfer.setData("text/plain", `${index}`);
-                          }}
-                          onDragOver={(e) => {
-                            e.preventDefault();
-                            e.dataTransfer.dropEffect = "move";
-                            if (dragOverStockIndex !== index) {
-                              setDragOverStockIndex(index);
-                            }
-                          }}
-                          onDragLeave={() => {
-                            if (dragOverStockIndex === index) {
-                              setDragOverStockIndex(null);
-                            }
-                          }}
-                          onDrop={(e) => {
-                            e.preventDefault();
-                            if (draggedStockIndex !== null && draggedStockIndex !== index) {
-                              reorderStocksInSelectedGroup(draggedStockIndex, index);
-                            }
-                            setDraggedStockIndex(null);
-                            setDragOverStockIndex(null);
-                            setCanDragStock(false);
-                          }}
-                          onDragEnd={() => {
-                            setDraggedStockIndex(null);
-                            setDragOverStockIndex(null);
-                            setCanDragStock(false);
-                          }}
+                          className={`watchlist-item-wrapper ${isExpanded ? "expanded" : ""}`}
                         >
                           {/* 메인 종목 스트립 행 */}
                           <div
@@ -3174,25 +3166,13 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                               />
                             </div> */}
 
-                            {/* 우측 액션: 9. 펼침 버튼, 10. 핸들 */}
+                            {/* 우측 액션: 9. 펼침 버튼 */}
                             <div className="strip-col-right">
                               {hasSubContent ? (
                                 <span className={`strip-chevron ${isExpanded ? "open" : ""}`} aria-hidden="true">
                                   <ChevronDown size={16} />
                                 </span>
                               ) : <span className="strip-chevron-spacer" />}
-                              <div
-                                className="watchlist-drag-grip"
-                                title="드래그하여 순서 변경"
-                                onClick={(e) => e.stopPropagation()}
-                                onMouseDown={(e) => {
-                                  e.stopPropagation();
-                                  setCanDragStock(true);
-                                }}
-                                onMouseUp={() => setCanDragStock(false)}
-                              >
-                                <GripVertical size={16} />
-                              </div>
                             </div>
                           </div>
 
@@ -3538,6 +3518,114 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
           <div className="dialog-actions manage-dialog-actions">
             <p>현재 그룹 {groups.length}/{UserInputPolicy.MAX_GROUPS}개 (최소 1개 유지)</p>
             <button className="button button-primary" type="button" onClick={() => setDialog(null)}>완료</button>
+          </div>
+        </AppDialog>
+      ) : null}
+
+      {dialog === "edit_stocks" ? (
+        <AppDialog
+          title="종목 편집"
+          description={`'${selectedGroup.name}' 그룹의 종목 순서를 변경하거나 불필요한 종목을 삭제할 수 있습니다.`}
+          onClose={() => setDialog(null)}
+        >
+          <div className="manage-layout">
+            <section className="manage-groups" aria-label="종목 순서 및 삭제 관리">
+              {editStockIds.length === 0 ? (
+                <div className="manage-stock-empty">
+                  <p>등록된 종목이 없습니다.</p>
+                </div>
+              ) : (
+                <div
+                  className="manage-stock-list"
+                  onPointerMove={(event) => {
+                    const drag = editStockDragRef.current;
+                    if (!drag) return;
+                    if (!drag.active && Math.abs(event.clientY - drag.startY) < 4) return;
+                    drag.active = true;
+                    setDraggedEditStockId(drag.id);
+                    const list = event.currentTarget;
+                    if (!list) return;
+                    const bounds = list.getBoundingClientRect();
+                    if (event.clientY < bounds.top + 28) list.scrollTop -= 12;
+                    if (event.clientY > bounds.bottom - 28) list.scrollTop += 12;
+                    const row = document.elementFromPoint(event.clientX, event.clientY)?.closest<HTMLElement>(".manage-stock-row");
+                    if (row && list.contains(row) && row.dataset.stockId) {
+                      reorderEditStock(drag.id, row.dataset.stockId);
+                    }
+                  }}
+                  onPointerUp={endEditStockDrag}
+                  onPointerCancel={endEditStockDrag}
+                  onLostPointerCapture={endEditStockDrag}
+                >
+                  {editStockIds.map((stockId, index) => {
+                    const st = stockById(stockId);
+                    if (!st) return null;
+                    const isOverseas = st.market !== "KRX";
+                    const ticker = isOverseas
+                      ? st.id.toUpperCase()
+                      : (st.code || "").padStart(6, "0");
+
+                    return (
+                      <div
+                        key={st.id}
+                        className={`manage-stock-row ${draggedEditStockId === st.id ? "stock-dragging" : ""}`}
+                        data-stock-id={st.id}
+                      >
+                        <div className="stock-select-area">
+                          <button
+                            type="button"
+                            className="group-drag-handle"
+                            aria-label={`${st.name} 순서 변경`}
+                            title="끌어서 순서 변경"
+                            onPointerDown={(event) => {
+                              if (event.button !== 0) return;
+                              editStockDragRef.current = { id: st.id, startY: event.clientY, active: false };
+                              event.currentTarget.closest(".manage-stock-list")?.setPointerCapture(event.pointerId);
+                            }}
+                            onKeyDown={(event) => {
+                              if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
+                              event.preventDefault();
+                              const targetId = editStockIds[index + (event.key === "ArrowUp" ? -1 : 1)];
+                              if (targetId) reorderEditStock(st.id, targetId);
+                            }}
+                          >
+                            <GripVertical size={17} />
+                          </button>
+                          <div className="manage-stock-info">
+                            <span className="manage-stock-name">{st.name}</span>
+                            {ticker ? <span className="manage-stock-ticker">{ticker}</span> : null}
+                          </div>
+                        </div>
+                        <div className="group-row-actions">
+                          <button
+                            className="danger-icon"
+                            type="button"
+                            onClick={() => {
+                              setEditStockIds((prev) => prev.filter((id) => id !== st.id));
+                            }}
+                            aria-label={`${st.name} 종목 삭제`}
+                            title="목록에서 삭제"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </section>
+          </div>
+          <div className="dialog-actions edit-stocks-dialog-actions">
+            <p className="edit-stocks-counter">총 <strong>{editStockIds.length}</strong>개 종목</p>
+            <div className="dialog-buttons">
+              <button className="button button-ghost" type="button" onClick={() => setDialog(null)}>
+                취소
+              </button>
+              <button className="button button-primary" type="button" onClick={saveEditStocks}>
+                저장
+              </button>
+            </div>
           </div>
         </AppDialog>
       ) : null}
