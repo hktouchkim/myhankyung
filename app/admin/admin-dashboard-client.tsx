@@ -439,7 +439,7 @@ function BriefingTab() {
 
       <div className={styles.grid2Col}>
         {/* 주제별 브리핑 수 */}
-        <div className={styles.sectionCard}>
+        <div className={styles.sectionCard} style={{ display: "flex", flexDirection: "column" }}>
           <div className={styles.sectionHeader}>
             <div>
               <h3 className={styles.sectionTitle}>주제별 브리핑 수</h3>
@@ -447,7 +447,7 @@ function BriefingTab() {
             <PieChart size={18} color="#94a3b8" />
           </div>
 
-          <div className={styles.progressList}>
+          <div className={styles.progressList} style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
             {[
               { name: "미국 증시", count: "39,593건", pct: 42, color: "#2563eb" },
               { name: "국내 증시", count: "29,223건", pct: 31, color: "#4f46e5" },
@@ -468,14 +468,10 @@ function BriefingTab() {
               </div>
             ))}
           </div>
-
-          <div style={{ marginTop: "24px", padding: "12px", borderRadius: "8px", backgroundColor: "#f8fafc", fontSize: "12px", color: "#475569" }}>
-            💡 <strong>인사이트</strong>: 글로벌 증시 변동성 확대로 인해 <strong>미국 증시 브리핑(42%)</strong>에 대한 선호가 가장 높습니다.
-          </div>
         </div>
 
         {/* 시간대별 브리핑 수 */}
-        <div className={styles.sectionCard}>
+        <div className={styles.sectionCard} style={{ display: "flex", flexDirection: "column" }}>
           <div className={styles.sectionHeader}>
             <div>
               <h3 className={styles.sectionTitle}>시간대별 브리핑 수</h3>
@@ -483,16 +479,18 @@ function BriefingTab() {
             <Clock3 size={18} color="#94a3b8" />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginTop: "20px" }}>
-            <div style={{ padding: "20px 16px", borderRadius: "10px", border: "1px solid #bfdbfe", backgroundColor: "#eff6ff", textAlign: "center" }}>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: "#1e40af" }}>오전</div>
-              <div style={{ fontSize: "32px", fontWeight: 800, color: "#1e3a8a", margin: "6px 0" }}>68%</div>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: "#2563eb" }}>64,103건</div>
-            </div>
-            <div style={{ padding: "20px 16px", borderRadius: "10px", border: "1px solid #fde68a", backgroundColor: "#fffbeb", textAlign: "center" }}>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: "#92400e" }}>오후</div>
-              <div style={{ fontSize: "32px", fontWeight: 800, color: "#78350f", margin: "6px 0" }}>32%</div>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: "#d97706" }}>30,167건</div>
+          <div style={{ flex: 1, display: "flex", alignItems: "center" }}>
+            <div style={{ width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+              <div style={{ padding: "32px 16px", borderRadius: "10px", border: "1px solid #bfdbfe", backgroundColor: "#eff6ff", textAlign: "center" }}>
+                <div style={{ fontSize: "14px", fontWeight: 700, color: "#1e40af" }}>오전</div>
+                <div style={{ fontSize: "36px", fontWeight: 800, color: "#1e3a8a", margin: "10px 0 6px 0" }}>68%</div>
+                <div style={{ fontSize: "14px", fontWeight: 700, color: "#2563eb" }}>64,103건</div>
+              </div>
+              <div style={{ padding: "32px 16px", borderRadius: "10px", border: "1px solid #fde68a", backgroundColor: "#fffbeb", textAlign: "center" }}>
+                <div style={{ fontSize: "14px", fontWeight: 700, color: "#92400e" }}>오후</div>
+                <div style={{ fontSize: "36px", fontWeight: 800, color: "#78350f", margin: "10px 0 6px 0" }}>32%</div>
+                <div style={{ fontSize: "14px", fontWeight: 700, color: "#d97706" }}>30,167건</div>
+              </div>
             </div>
           </div>
         </div>
