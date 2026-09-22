@@ -934,16 +934,16 @@ function BadgesTab({
   onSelectGroup: (g: string) => void;
 }) {
   const ALL_LIVE_BADGES = [
-    { name: "ALICE Q의 초대", group: "웰컴 스타터", earners: 38240, rate: "65.7%", weekGain: "+1,240" },
-    { name: "오늘부터 한경인", group: "웰컴 스타터", earners: 34100, rate: "58.6%", weekGain: "+1,180" },
-    { name: "이게 바로 나", group: "웰컴 스타터", earners: 24890, rate: "42.8%", weekGain: "+890" },
-    { name: "마이 뉴스룸", group: "웰컴 스타터", earners: 18450, rate: "31.7%", weekGain: "+740" },
-    { name: "소통의 첫걸음", group: "웰컴 스타터", earners: 14200, rate: "24.4%", weekGain: "+590" },
-    { name: "공감 맛집", group: "웰컴 스타터", earners: 11300, rate: "19.4%", weekGain: "+420" },
-    { name: "알림은 못 참지", group: "웰컴 스타터", earners: 9840, rate: "16.9%", weekGain: "+380" },
-    { name: "좋은 건 함께", group: "웰컴 스타터", earners: 7420, rate: "12.7%", weekGain: "+290" },
-    { name: "한경 프레스티지", group: "프리미엄9 라운지", earners: 5820, rate: "10.0%", weekGain: "+180" },
-    { name: "AI 투자 고수", group: "프리미엄9 라운지", earners: 3120, rate: "5.4%", weekGain: "+110" },
+    { name: "ALICE Q의 초대", group: "웰컴 스타터", w1: 34200, w2: 35600, w3: 37000, current: 38240, diff: "+3.4%" },
+    { name: "오늘부터 한경인", group: "웰컴 스타터", w1: 30500, w2: 31700, w3: 32920, current: 34100, diff: "+3.6%" },
+    { name: "이게 바로 나", group: "웰컴 스타터", w1: 22100, w2: 23100, w3: 24000, current: 24890, diff: "+3.7%" },
+    { name: "마이 뉴스룸", group: "웰컴 스타터", w1: 16100, w2: 16900, w3: 17710, current: 18450, diff: "+4.2%" },
+    { name: "소통의 첫걸음", group: "웰컴 스타터", w1: 12400, w2: 13000, w3: 13610, current: 14200, diff: "+4.3%" },
+    { name: "공감 맛집", group: "웰컴 스타터", w1: 9900, w2: 10400, w3: 10880, current: 11300, diff: "+3.9%" },
+    { name: "알림은 못 참지", group: "웰컴 스타터", w1: 8600, w2: 9000, w3: 9460, current: 9840, diff: "+4.0%" },
+    { name: "좋은 건 함께", group: "웰컴 스타터", w1: 6500, w2: 6800, w3: 7130, current: 7420, diff: "+4.1%" },
+    { name: "한경 프레스티지", group: "프리미엄9 라운지", w1: 5200, w2: 5400, w3: 5640, current: 5820, diff: "+3.2%" },
+    { name: "AI 투자 고수", group: "프리미엄9 라운지", w1: 2700, w2: 2850, w3: 3010, current: 3120, diff: "+3.7%" },
   ];
 
   const filteredBadges = useMemo(() => {
@@ -951,9 +951,23 @@ function BadgesTab({
     return ALL_LIVE_BADGES.filter((b) => b.group === selectedGroup);
   }, [selectedGroup]);
 
-  const totalIssued = useMemo(() => {
-    return filteredBadges.reduce((acc, b) => acc + b.earners, 0);
+  const weeklySums = useMemo(() => {
+    return filteredBadges.reduce(
+      (acc, b) => ({
+        w1: acc.w1 + b.w1,
+        w2: acc.w2 + b.w2,
+        w3: acc.w3 + b.w3,
+        current: acc.current + b.current,
+      }),
+      { w1: 0, w2: 0, w3: 0, current: 0 }
+    );
   }, [filteredBadges]);
+
+  const totalDiff = useMemo(() => {
+    if (weeklySums.w3 === 0) return "-";
+    const gain = ((weeklySums.current - weeklySums.w3) / weeklySums.w3) * 100;
+    return `+${gain.toFixed(1)}%`;
+  }, [weeklySums]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
@@ -980,11 +994,11 @@ function BadgesTab({
         </div>
       </div>
 
-      {/* 배지 현황 상세 테이블 (전체 및 그룹별 필터 + 합계) */}
+      {/* 배지 추이 상세 테이블 (방식 B) */}
       <div className={styles.sectionCard}>
         <div className={styles.sectionHeader} style={{ flexWrap: "wrap", gap: "12px" }}>
           <div>
-            <h3 className={styles.sectionTitle}>배지 현황</h3>
+            <h3 className={styles.sectionTitle}>배지 추이</h3>
           </div>
 
           <div className={styles.filterTabs}>
@@ -1012,10 +1026,14 @@ function BadgesTab({
           <table className={styles.dataTable}>
             <thead>
               <tr>
-                <th style={{ width: "60px" }}>순위</th>
+                <th style={{ width: "50px" }}>순위</th>
                 <th>배지명</th>
                 <th>소속 그룹</th>
-                <th style={{ textAlign: "right" }}>지급된 배지 수</th>
+                <th style={{ textAlign: "right" }}>08.4주</th>
+                <th style={{ textAlign: "right" }}>09.1주</th>
+                <th style={{ textAlign: "right" }}>09.2주</th>
+                <th style={{ textAlign: "right", backgroundColor: "#faf5ff", color: "#6b21a8" }}>09.3주 (현재)</th>
+                <th style={{ textAlign: "right" }}>전주 대비 증감</th>
               </tr>
             </thead>
             <tbody>
@@ -1035,8 +1053,14 @@ function BadgesTab({
                           {badge.group}
                         </span>
                       </td>
-                      <td style={{ textAlign: "right", fontWeight: 800, color: "#0f172a" }}>
-                        {badge.earners.toLocaleString()}개
+                      <td style={{ textAlign: "right" }}>{badge.w1.toLocaleString()}개</td>
+                      <td style={{ textAlign: "right" }}>{badge.w2.toLocaleString()}개</td>
+                      <td style={{ textAlign: "right" }}>{badge.w3.toLocaleString()}개</td>
+                      <td style={{ textAlign: "right", fontWeight: 800, color: "#7e22ce", backgroundColor: "#faf5ff" }}>
+                        {badge.current.toLocaleString()}개
+                      </td>
+                      <td style={{ textAlign: "right", color: "#059669", fontWeight: 700 }}>
+                        {badge.diff}
                       </td>
                     </tr>
                   ))}
@@ -1045,14 +1069,20 @@ function BadgesTab({
                     <td colSpan={3} style={{ fontWeight: 800, color: "#1e293b", textAlign: "center", letterSpacing: "1px" }}>
                       합계 ({selectedGroup === "all" ? "전체" : selectedGroup})
                     </td>
-                    <td style={{ textAlign: "right", fontWeight: 800, color: "#7e22ce", fontSize: "15px" }}>
-                      {totalIssued.toLocaleString()}개
+                    <td style={{ textAlign: "right", fontWeight: 700 }}>{weeklySums.w1.toLocaleString()}개</td>
+                    <td style={{ textAlign: "right", fontWeight: 700 }}>{weeklySums.w2.toLocaleString()}개</td>
+                    <td style={{ textAlign: "right", fontWeight: 700 }}>{weeklySums.w3.toLocaleString()}개</td>
+                    <td style={{ textAlign: "right", fontWeight: 800, color: "#7e22ce", fontSize: "15px", backgroundColor: "#faf5ff" }}>
+                      {weeklySums.current.toLocaleString()}개
+                    </td>
+                    <td style={{ textAlign: "right", fontWeight: 800, color: "#059669" }}>
+                      {totalDiff}
                     </td>
                   </tr>
                 </>
               ) : (
                 <tr>
-                  <td colSpan={4} style={{ padding: "32px", textAlign: "center", color: "#94a3b8" }}>
+                  <td colSpan={8} style={{ padding: "32px", textAlign: "center", color: "#94a3b8" }}>
                     현재 운영 중인 배지가 없는 그룹입니다. (오픈 준비중)
                   </td>
                 </tr>
