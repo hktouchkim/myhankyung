@@ -496,40 +496,41 @@ function BriefingTab() {
         </div>
       </div>
 
-      {/* 브리핑 주간 성장 추이 표 */}
+      {/* 브리핑 추이 표 */}
       <div className={styles.sectionCard}>
-        <h3 className={styles.sectionTitle}>My 브리핑 주간 성장 추이 히스토리</h3>
-        <p className={styles.sectionSubtitle}>주차별 신규 에이전트 생성 건수 및 누적 등록수</p>
+        <h3 className={styles.sectionTitle}>My 브리핑 추이</h3>
 
-        <div className={styles.tableResponsive}>
+        <div className={styles.tableResponsive} style={{ marginTop: "16px" }}>
           <table className={styles.dataTable}>
             <thead>
               <tr>
                 <th>주차</th>
-                <th>등록 유저수</th>
-                <th>총 브리핑수</th>
-                <th>주간 신규 생성</th>
-                <th>미국증시(%)</th>
-                <th>국내증시(%)</th>
-                <th>전주 대비 증감</th>
+                <th>등록유저</th>
+                <th>총 브리핑</th>
+                <th>전주대비증감</th>
+                <th>미국증시</th>
+                <th>국내증시</th>
+                <th>부동산 시장</th>
+                <th>주요 이슈</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { w: "09.3주 (현재)", u: "42,850", b: "94,270", n: "+8,210", us: "42%", kr: "31%", diff: "+9.5%" },
-                { w: "09.2주", u: "40,100", b: "86,060", n: "+7,890", us: "41%", kr: "31%", diff: "+10.1%" },
-                { w: "09.1주", u: "37,800", b: "78,170", n: "+7,220", us: "40%", kr: "32%", diff: "+10.2%" },
-                { w: "08.4주", u: "34,500", b: "70,950", n: "+6,750", us: "39%", kr: "33%", diff: "+10.5%" },
-                { w: "08.3주", u: "31,200", b: "64,200", n: "+6,100", us: "39%", kr: "33%", diff: "+10.5%" },
+                { w: "09.3주 (현재)", u: "42,850", b: "94,270", diff: "+9.5%", us: "42%", kr: "31%", real: "16%", issue: "11%" },
+                { w: "09.2주", u: "40,100", b: "86,060", diff: "+10.1%", us: "41%", kr: "31%", real: "17%", issue: "11%" },
+                { w: "09.1주", u: "37,800", b: "78,170", diff: "+10.2%", us: "40%", kr: "32%", real: "17%", issue: "11%" },
+                { w: "08.4주", u: "34,500", b: "70,950", diff: "+10.5%", us: "39%", kr: "33%", real: "17%", issue: "11%" },
+                { w: "08.3주", u: "31,200", b: "64,200", diff: "+10.5%", us: "39%", kr: "33%", real: "16%", issue: "12%" },
               ].map((row, idx) => (
                 <tr key={idx} className={idx === 0 ? styles.highlightRow : ""}>
                   <td style={{ fontWeight: 700, color: "#0f172a" }}>{row.w}</td>
-                  <td>{row.u}</td>
-                  <td>{row.b}</td>
-                  <td style={{ color: "#2563eb", fontWeight: 700 }}>{row.n}</td>
+                  <td>{row.u}명</td>
+                  <td style={{ fontWeight: 700 }}>{row.b}건</td>
+                  <td style={{ color: "#059669", fontWeight: 700 }}>{row.diff}</td>
                   <td>{row.us}</td>
                   <td>{row.kr}</td>
-                  <td style={{ color: "#059669", fontWeight: 700 }}>{row.diff}</td>
+                  <td>{row.real}</td>
+                  <td>{row.issue}</td>
                 </tr>
               ))}
             </tbody>
