@@ -2987,7 +2987,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                     aria-label="관심그룹 설정 및 관리"
                     title="관심그룹 관리"
                   >
-                    <Settings size={18} />
+                    <Settings size={15} />
+                    <span>그룹</span>
                   </button>
                 </div>
               </section>
@@ -3030,8 +3031,8 @@ export function MyHankyungClient({ initialView = "home" }: { initialView?: "home
                       onClick={openEditStocksDialog}
                       aria-label="현재 그룹의 종목 편집 (삭제 및 순서 변경)"
                     >
-                      <Pencil size={15} />
-                      <span>편집</span>
+                      <Settings size={15} />
+                      <span>종목</span>
                     </button>
                   </div>
                 </div>

@@ -5348,15 +5348,17 @@ p {
 
 .watchlist-group-manage-btn {
   display: inline-flex;
-  width: 36px;
   height: 36px;
-  flex: 0 0 36px;
+  padding: 0 11px;
+  flex: 0 0 auto;
   align-items: center;
-  justify-content: center;
+  gap: 5px;
   border-radius: 10px;
   border: 1px solid #e2e8f0;
   background: #ffffff;
-  color: #64748b;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 140ms ease;
 }
