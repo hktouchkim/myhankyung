@@ -22,7 +22,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import styles from "./admin.module.css";
 
 type AdminTab =
@@ -420,6 +420,14 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) {
 // 2. My 브리핑 상세 모니터링
 // -------------------------------------------------------------
 function BriefingTab() {
+  const tableScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (tableScrollRef.current) {
+      tableScrollRef.current.scrollLeft = tableScrollRef.current.scrollWidth;
+    }
+  }, []);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       <div className={styles.kpiGrid3}>
@@ -496,21 +504,11 @@ function BriefingTab() {
         </div>
       </div>
 
-      {/* 브리핑 추이 표 (20주차 시뮬레이션: 가로 스크롤 및 첫 열 고정) */}
+      {/* 브리핑 추이 표 */}
       <div className={styles.sectionCard}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <h3 className={styles.sectionTitle}>My 브리핑 추이</h3>
-            <p style={{ fontSize: "12px", color: "#64748b", marginTop: "4px" }}>
-              💡 20주차 누적 데이터 시뮬레이션 (표를 가로로 스크롤하여 이전 주차를 확인할 수 있으며, 첫 열은 고정됩니다)
-            </p>
-          </div>
-          <span style={{ fontSize: "12px", color: "#64748b", backgroundColor: "#f1f5f9", padding: "4px 8px", borderRadius: "4px" }}>
-            ← 좌우 가로 스크롤 가능 (총 20개 주차) →
-          </span>
-        </div>
+        <h3 className={styles.sectionTitle}>My 브리핑 추이</h3>
 
-        <div className={styles.tableResponsive} style={{ marginTop: "16px", border: "1px solid #e2e8f0", borderRadius: "8px" }}>
+        <div ref={tableScrollRef} className={styles.tableResponsive} style={{ marginTop: "16px", border: "1px solid #e2e8f0", borderRadius: "8px" }}>
           <table className={styles.dataTable}>
             <thead>
               <tr>
@@ -1006,17 +1004,33 @@ function BadgesTab({
   selectedGroup: string;
   onSelectGroup: (g: string) => void;
 }) {
+  const tableScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (tableScrollRef.current) {
+      tableScrollRef.current.scrollLeft = tableScrollRef.current.scrollWidth;
+    }
+  }, [selectedGroup]);
+
+  const WEEKS = [
+    "05.1주", "05.2주", "05.3주", "05.4주",
+    "06.1주", "06.2주", "06.3주", "06.4주",
+    "07.1주", "07.2주", "07.3주", "07.4주",
+    "08.1주", "08.2주", "08.3주", "08.4주",
+    "09.1주", "09.2주", "09.3주 (현재)"
+  ];
+
   const ALL_LIVE_BADGES = [
-    { name: "ALICE Q의 초대", group: "웰컴 스타터", w1: 34200, w2: 35600, w3: 37000, current: 38240, diff: "+3.4%" },
-    { name: "오늘부터 한경인", group: "웰컴 스타터", w1: 30500, w2: 31700, w3: 32920, current: 34100, diff: "+3.6%" },
-    { name: "이게 바로 나", group: "웰컴 스타터", w1: 22100, w2: 23100, w3: 24000, current: 24890, diff: "+3.7%" },
-    { name: "마이 뉴스룸", group: "웰컴 스타터", w1: 16100, w2: 16900, w3: 17710, current: 18450, diff: "+4.2%" },
-    { name: "소통의 첫걸음", group: "웰컴 스타터", w1: 12400, w2: 13000, w3: 13610, current: 14200, diff: "+4.3%" },
-    { name: "공감 맛집", group: "웰컴 스타터", w1: 9900, w2: 10400, w3: 10880, current: 11300, diff: "+3.9%" },
-    { name: "알림은 못 참지", group: "웰컴 스타터", w1: 8600, w2: 9000, w3: 9460, current: 9840, diff: "+4.0%" },
-    { name: "좋은 건 함께", group: "웰컴 스타터", w1: 6500, w2: 6800, w3: 7130, current: 7420, diff: "+4.1%" },
-    { name: "한경 프레스티지", group: "프리미엄9 라운지", w1: 5200, w2: 5400, w3: 5640, current: 5820, diff: "+3.2%" },
-    { name: "AI 투자 고수", group: "프리미엄9 라운지", w1: 2700, w2: 2850, w3: 3010, current: 3120, diff: "+3.7%" },
+    { name: "ALICE Q의 초대", group: "웰컴 스타터", values: [14200, 16800, 19100, 21500, 23800, 25900, 27800, 29600, 31100, 32400, 33500, 34200, 35100, 35600, 36300, 37000, 37500, 37900, 38240] },
+    { name: "오늘부터 한경인", group: "웰컴 스타터", values: [12100, 14300, 16500, 18700, 20900, 23000, 24800, 26500, 27900, 29100, 30100, 30500, 31200, 31700, 32300, 32920, 33400, 33800, 34100] },
+    { name: "이게 바로 나", group: "웰컴 스타터", values: [8200, 9900, 11600, 13400, 15100, 16800, 18200, 19500, 20600, 21500, 22100, 22600, 23100, 23500, 24000, 24300, 24600, 24800, 24890] },
+    { name: "마이 뉴스룸", group: "웰컴 스타터", values: [5400, 6800, 8100, 9500, 10900, 12200, 13300, 14400, 15300, 16100, 16500, 16900, 17300, 17710, 18000, 18200, 18350, 18400, 18450] },
+    { name: "소통의 첫걸음", group: "웰컴 스타터", values: [3900, 4900, 6000, 7100, 8200, 9300, 10300, 11200, 11900, 12400, 12700, 13000, 13300, 13610, 13850, 14000, 14100, 14150, 14200] },
+    { name: "공감 맛집", group: "웰컴 스타터", values: [2800, 3600, 4500, 5400, 6300, 7200, 8100, 8800, 9400, 9900, 10150, 10400, 10650, 10880, 11050, 11150, 11220, 11270, 11300] },
+    { name: "알림은 못 참지", group: "웰컴 스타터", values: [2200, 2900, 3700, 4500, 5300, 6100, 6900, 7600, 8200, 8600, 8850, 9000, 9240, 9460, 9600, 9700, 9760, 9810, 9840] },
+    { name: "좋은 건 함께", group: "웰컴 스타터", values: [1500, 2000, 2600, 3200, 3800, 4500, 5100, 5700, 6150, 6500, 6650, 6800, 6980, 7130, 7250, 7320, 7370, 7400, 7420] },
+    { name: "한경 프레스티지", group: "프리미엄9 라운지", values: [900, 1300, 1800, 2300, 2800, 3400, 3900, 4400, 4850, 5200, 5320, 5400, 5530, 5640, 5710, 5750, 5780, 5800, 5820] },
+    { name: "AI 투자 고수", group: "프리미엄9 라운지", values: [400, 650, 950, 1250, 1550, 1850, 2150, 2450, 2600, 2700, 2780, 2850, 2940, 3010, 3060, 3090, 3105, 3115, 3120] },
   ];
 
   const filteredBadges = useMemo(() => {
@@ -1025,16 +1039,14 @@ function BadgesTab({
   }, [selectedGroup]);
 
   const weeklySums = useMemo(() => {
-    return filteredBadges.reduce(
-      (acc, b) => ({
-        w1: acc.w1 + b.w1,
-        w2: acc.w2 + b.w2,
-        w3: acc.w3 + b.w3,
-        current: acc.current + b.current,
-      }),
-      { w1: 0, w2: 0, w3: 0, current: 0 }
-    );
-  }, [filteredBadges]);
+    const sums = new Array(WEEKS.length).fill(0);
+    filteredBadges.forEach((b) => {
+      b.values.forEach((v, idx) => {
+        sums[idx] += v;
+      });
+    });
+    return sums;
+  }, [filteredBadges, WEEKS.length]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
@@ -1061,7 +1073,7 @@ function BadgesTab({
         </div>
       </div>
 
-      {/* 배지 추이 상세 테이블 (방식 B) */}
+      {/* 배지 추이 상세 테이블 */}
       <div className={styles.sectionCard}>
         <div className={styles.sectionHeader} style={{ flexWrap: "wrap", gap: "12px" }}>
           <div>
@@ -1089,60 +1101,107 @@ function BadgesTab({
           </div>
         </div>
 
-        <div className={styles.tableResponsive}>
+        <div ref={tableScrollRef} className={styles.tableResponsive} style={{ border: "1px solid #e2e8f0", borderRadius: "8px" }}>
           <table className={styles.dataTable}>
             <thead>
               <tr>
-                <th style={{ width: "50px" }}>순위</th>
-                <th>배지명</th>
-                <th>소속 그룹</th>
-                <th style={{ textAlign: "right" }}>08.4주</th>
-                <th style={{ textAlign: "right" }}>09.1주</th>
-                <th style={{ textAlign: "right" }}>09.2주</th>
-                <th style={{ textAlign: "right", backgroundColor: "#faf5ff", color: "#6b21a8" }}>09.3주 (현재)</th>
+                <th style={{ width: "45px", position: "sticky", left: 0, zIndex: 2, backgroundColor: "#f8fafc" }}>순위</th>
+                <th style={{ minWidth: "150px", position: "sticky", left: "45px", zIndex: 2, backgroundColor: "#f8fafc" }}>배지명</th>
+                <th style={{ minWidth: "120px", position: "sticky", left: "195px", zIndex: 2, backgroundColor: "#f8fafc", boxShadow: "2px 0 5px rgba(0,0,0,0.05)" }}>소속 그룹</th>
+                {WEEKS.map((w, idx) => {
+                  const isLatest = idx === WEEKS.length - 1;
+                  return (
+                    <th
+                      key={w}
+                      style={{
+                        textAlign: "right",
+                        minWidth: "90px",
+                        ...(isLatest ? { backgroundColor: "#faf5ff", color: "#6b21a8", fontWeight: 800 } : {})
+                      }}
+                    >
+                      {w}
+                    </th>
+                  );
+                })}
               </tr>
             </thead>
             <tbody>
               {filteredBadges.length > 0 ? (
                 <>
-                  {filteredBadges.map((badge, idx) => (
-                    <tr key={idx} className={idx < 3 ? styles.highlightRow : ""}>
-                      <td style={{ fontWeight: 800, color: "#0f172a" }}>{idx + 1}</td>
-                      <td style={{ fontWeight: 700, color: "#0f172a" }}>
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                          <Award size={15} color="#7e22ce" />
-                          {badge.name}
-                        </span>
-                      </td>
-                      <td>
-                        <span style={{ fontSize: "11px", padding: "2px 8px", borderRadius: "4px", backgroundColor: badge.group === "프리미엄9 라운지" ? "#faf5ff" : "#eff6ff", color: badge.group === "프리미엄9 라운지" ? "#7e22ce" : "#1d4ed8", fontWeight: 600 }}>
-                          {badge.group}
-                        </span>
-                      </td>
-                      <td style={{ textAlign: "right" }}>{badge.w1.toLocaleString()}개</td>
-                      <td style={{ textAlign: "right" }}>{badge.w2.toLocaleString()}개</td>
-                      <td style={{ textAlign: "right" }}>{badge.w3.toLocaleString()}개</td>
-                      <td style={{ textAlign: "right", fontWeight: 800, color: "#7e22ce", backgroundColor: "#faf5ff" }}>
-                        {badge.current.toLocaleString()}개
-                      </td>
-                    </tr>
-                  ))}
+                  {filteredBadges.map((badge, idx) => {
+                    const isTop3 = idx < 3;
+                    const bg = isTop3 ? "#f0f7ff" : "#ffffff";
+                    return (
+                      <tr key={idx} className={isTop3 ? styles.highlightRow : ""}>
+                        <td style={{ fontWeight: 800, color: "#0f172a", position: "sticky", left: 0, zIndex: 1, backgroundColor: bg }}>
+                          {idx + 1}
+                        </td>
+                        <td style={{ fontWeight: 700, color: "#0f172a", position: "sticky", left: "45px", zIndex: 1, backgroundColor: bg }}>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                            <Award size={15} color="#7e22ce" />
+                            {badge.name}
+                          </span>
+                        </td>
+                        <td style={{ position: "sticky", left: "195px", zIndex: 1, backgroundColor: bg, boxShadow: "2px 0 5px rgba(0,0,0,0.05)" }}>
+                          <span style={{ fontSize: "11px", padding: "2px 8px", borderRadius: "4px", backgroundColor: badge.group === "프리미엄9 라운지" ? "#faf5ff" : "#eff6ff", color: badge.group === "프리미엄9 라운지" ? "#7e22ce" : "#1d4ed8", fontWeight: 600 }}>
+                            {badge.group}
+                          </span>
+                        </td>
+                        {badge.values.map((v, vIdx) => {
+                          const isLatest = vIdx === badge.values.length - 1;
+                          return (
+                            <td
+                              key={vIdx}
+                              style={{
+                                textAlign: "right",
+                                ...(isLatest ? { fontWeight: 800, color: "#7e22ce", backgroundColor: "#faf5ff" } : {})
+                              }}
+                            >
+                              {v.toLocaleString()}개
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
                   {/* 합계 행 */}
                   <tr style={{ backgroundColor: "#f8fafc", borderTop: "2px solid #cbd5e1" }}>
-                    <td colSpan={3} style={{ fontWeight: 800, color: "#1e293b", textAlign: "center", letterSpacing: "1px" }}>
+                    <td
+                      colSpan={3}
+                      style={{
+                        fontWeight: 800,
+                        color: "#1e293b",
+                        textAlign: "center",
+                        letterSpacing: "1px",
+                        position: "sticky",
+                        left: 0,
+                        zIndex: 1,
+                        backgroundColor: "#f8fafc",
+                        boxShadow: "2px 0 5px rgba(0,0,0,0.05)"
+                      }}
+                    >
                       합계 ({selectedGroup === "all" ? "전체" : selectedGroup})
                     </td>
-                    <td style={{ textAlign: "right", fontWeight: 700 }}>{weeklySums.w1.toLocaleString()}개</td>
-                    <td style={{ textAlign: "right", fontWeight: 700 }}>{weeklySums.w2.toLocaleString()}개</td>
-                    <td style={{ textAlign: "right", fontWeight: 700 }}>{weeklySums.w3.toLocaleString()}개</td>
-                    <td style={{ textAlign: "right", fontWeight: 800, color: "#7e22ce", fontSize: "15px", backgroundColor: "#faf5ff" }}>
-                      {weeklySums.current.toLocaleString()}개
-                    </td>
+                    {weeklySums.map((sum, sIdx) => {
+                      const isLatest = sIdx === weeklySums.length - 1;
+                      return (
+                        <td
+                          key={sIdx}
+                          style={{
+                            textAlign: "right",
+                            fontWeight: isLatest ? 800 : 700,
+                            ...(isLatest ? { color: "#7e22ce", fontSize: "14px", backgroundColor: "#faf5ff" } : {})
+                          }}
+                        >
+                          {sum.toLocaleString()}개
+                        </td>
+                      );
+                    })}
                   </tr>
                 </>
               ) : (
                 <tr>
-                  <td colSpan={7} style={{ padding: "32px", textAlign: "center", color: "#94a3b8" }}>
+                  <td colSpan={3 + WEEKS.length} style={{ padding: "32px", textAlign: "center", color: "#94a3b8" }}>
                     현재 운영 중인 배지가 없는 그룹입니다. (오픈 준비중)
                   </td>
                 </tr>
