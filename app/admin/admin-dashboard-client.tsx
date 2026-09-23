@@ -496,42 +496,114 @@ function BriefingTab() {
         </div>
       </div>
 
-      {/* 브리핑 추이 표 (배지처럼 행열 반전) */}
+      {/* 브리핑 추이 표 (20주차 시뮬레이션: 가로 스크롤 및 첫 열 고정) */}
       <div className={styles.sectionCard}>
-        <h3 className={styles.sectionTitle}>My 브리핑 추이</h3>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <h3 className={styles.sectionTitle}>My 브리핑 추이</h3>
+            <p style={{ fontSize: "12px", color: "#64748b", marginTop: "4px" }}>
+              💡 20주차 누적 데이터 시뮬레이션 (표를 가로로 스크롤하여 이전 주차를 확인할 수 있으며, 첫 열은 고정됩니다)
+            </p>
+          </div>
+          <span style={{ fontSize: "12px", color: "#64748b", backgroundColor: "#f1f5f9", padding: "4px 8px", borderRadius: "4px" }}>
+            ← 좌우 가로 스크롤 가능 (총 20개 주차) →
+          </span>
+        </div>
 
-        <div className={styles.tableResponsive} style={{ marginTop: "16px" }}>
+        <div className={styles.tableResponsive} style={{ marginTop: "16px", border: "1px solid #e2e8f0", borderRadius: "8px" }}>
           <table className={styles.dataTable}>
             <thead>
               <tr>
-                <th style={{ width: "160px" }}>구분</th>
-                <th style={{ textAlign: "right" }}>08.3주</th>
-                <th style={{ textAlign: "right" }}>08.4주</th>
-                <th style={{ textAlign: "right" }}>09.1주</th>
-                <th style={{ textAlign: "right" }}>09.2주</th>
-                <th style={{ textAlign: "right", backgroundColor: "#eff6ff", color: "#1e3a8a" }}>09.3주 (현재)</th>
+                <th style={{ width: "160px", position: "sticky", left: 0, zIndex: 2, backgroundColor: "#f8fafc", boxShadow: "2px 0 5px rgba(0,0,0,0.05)" }}>
+                  구분
+                </th>
+                {[
+                  "05.1주", "05.2주", "05.3주", "05.4주",
+                  "06.1주", "06.2주", "06.3주", "06.4주",
+                  "07.1주", "07.2주", "07.3주", "07.4주",
+                  "08.1주", "08.2주", "08.3주", "08.4주",
+                  "09.1주", "09.2주", "09.3주 (현재)"
+                ].map((w, idx, arr) => (
+                  <th
+                    key={w}
+                    style={{
+                      textAlign: "right",
+                      minWidth: "95px",
+                      ...(idx === arr.length - 1 ? { backgroundColor: "#eff6ff", color: "#1e3a8a", fontWeight: 800 } : {})
+                    }}
+                  >
+                    {w}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
               {[
-                { name: "등록유저", w1: "31,200명", w2: "34,500명", w3: "37,800명", w4: "40,100명", current: "42,850명", isMajor: true },
-                { name: "총 브리핑", w1: "64,200건", w2: "70,950건", w3: "78,170건", w4: "86,060건", current: "94,270건", isMajor: true },
-                { name: "미국증시 비중", w1: "39%", w2: "39%", w3: "40%", w4: "41%", current: "42%", isMajor: false },
-                { name: "국내증시 비중", w1: "33%", w2: "33%", w3: "32%", w4: "31%", current: "31%", isMajor: false },
-                { name: "부동산 시장 비중", w1: "16%", w2: "17%", w3: "17%", w4: "17%", current: "16%", isMajor: false },
-                { name: "주요 이슈 비중", w1: "12%", w2: "11%", w3: "11%", w4: "11%", current: "11%", isMajor: false },
+                {
+                  name: "등록유저",
+                  values: ["8,200", "9,800", "11,500", "13,400", "15,800", "18,200", "20,500", "22,900", "25,100", "27,300", "29,400", "31,200", "32,800", "34,500", "36,200", "37,800", "39,200", "40,100", "42,850"],
+                  unit: "명",
+                  isMajor: true,
+                },
+                {
+                  name: "총 브리핑",
+                  values: ["14,200", "17,500", "21,100", "25,800", "31,200", "37,100", "42,800", "48,500", "53,900", "59,100", "64,200", "68,100", "72,400", "76,200", "80,100", "83,500", "87,200", "90,400", "94,270"],
+                  unit: "건",
+                  isMajor: true,
+                },
+                {
+                  name: "미국증시 비중",
+                  values: ["32%", "33%", "34%", "34%", "35%", "35%", "36%", "37%", "37%", "38%", "38%", "39%", "39%", "40%", "40%", "41%", "41%", "41%", "42%"],
+                  unit: "",
+                  isMajor: false,
+                },
+                {
+                  name: "국내증시 비중",
+                  values: ["41%", "40%", "39%", "38%", "37%", "37%", "36%", "35%", "35%", "34%", "34%", "33%", "33%", "32%", "32%", "31%", "31%", "31%", "31%"],
+                  unit: "",
+                  isMajor: false,
+                },
+                {
+                  name: "부동산 시장 비중",
+                  values: ["14%", "14%", "15%", "15%", "15%", "16%", "16%", "16%", "17%", "17%", "17%", "16%", "16%", "16%", "16%", "17%", "17%", "17%", "16%"],
+                  unit: "",
+                  isMajor: false,
+                },
+                {
+                  name: "주요 이슈 비중",
+                  values: ["13%", "13%", "12%", "13%", "13%", "12%", "12%", "12%", "11%", "11%", "11%", "12%", "12%", "12%", "12%", "11%", "11%", "11%", "11%"],
+                  unit: "",
+                  isMajor: false,
+                },
               ].map((row, idx) => (
                 <tr key={idx} className={row.isMajor ? styles.highlightRow : ""}>
-                  <td style={{ fontWeight: 700, color: row.isMajor ? "#1e3a8a" : "#0f172a" }}>
+                  <td
+                    style={{
+                      fontWeight: 700,
+                      color: row.isMajor ? "#1e3a8a" : "#0f172a",
+                      position: "sticky",
+                      left: 0,
+                      zIndex: 1,
+                      backgroundColor: row.isMajor ? "#f0f7ff" : "#ffffff",
+                      boxShadow: "2px 0 5px rgba(0,0,0,0.05)"
+                    }}
+                  >
                     {row.name}
                   </td>
-                  <td style={{ textAlign: "right" }}>{row.w1}</td>
-                  <td style={{ textAlign: "right" }}>{row.w2}</td>
-                  <td style={{ textAlign: "right" }}>{row.w3}</td>
-                  <td style={{ textAlign: "right" }}>{row.w4}</td>
-                  <td style={{ textAlign: "right", fontWeight: 800, color: "#1e3a8a", backgroundColor: "#eff6ff" }}>
-                    {row.current}
-                  </td>
+                  {row.values.map((val, vIdx) => {
+                    const isLatest = vIdx === row.values.length - 1;
+                    return (
+                      <td
+                        key={vIdx}
+                        style={{
+                          textAlign: "right",
+                          ...(isLatest ? { fontWeight: 800, color: "#1e3a8a", backgroundColor: "#eff6ff" } : {})
+                        }}
+                      >
+                        {val}{row.unit}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
