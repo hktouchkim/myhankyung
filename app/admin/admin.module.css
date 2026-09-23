@@ -660,6 +660,27 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
+.excelDownloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #047857;
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.excelDownloadBtn:hover {
+  background-color: #d1fae5;
+  border-color: #6ee7b7;
+  color: #065f46;
+}
+
 /* 16개 AI 카드 그리드 */
 .cardPersonaGrid {
   display: grid;

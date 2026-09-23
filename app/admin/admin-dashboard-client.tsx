@@ -6,6 +6,7 @@ import {
   Bookmark,
   ChevronRight,
   Clock3,
+  Download,
   ExternalLink,
   Flame,
   Globe2,
@@ -506,7 +507,17 @@ function BriefingTab() {
 
       {/* 브리핑 추이 표 */}
       <div className={styles.sectionCard}>
-        <h3 className={styles.sectionTitle}>My 브리핑 추이</h3>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h3 className={styles.sectionTitle}>My 브리핑 추이</h3>
+          <button
+            type="button"
+            className={styles.excelDownloadBtn}
+            onClick={() => alert("엑셀 다운로드 준비 중입니다.")}
+          >
+            <Download size={14} />
+            <span>엑셀 다운로드</span>
+          </button>
+        </div>
 
         <div ref={tableScrollRef} className={styles.tableResponsive} style={{ marginTop: "16px", border: "1px solid #e2e8f0", borderRadius: "8px" }}>
           <table className={styles.dataTable}>
@@ -1079,8 +1090,16 @@ function BadgesTab({
       {/* 배지 추이 상세 테이블 */}
       <div className={styles.sectionCard}>
         <div className={styles.sectionHeader} style={{ flexWrap: "wrap", gap: "12px" }}>
-          <div>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
             <h3 className={styles.sectionTitle}>배지 추이</h3>
+            <button
+              type="button"
+              className={styles.excelDownloadBtn}
+              onClick={() => alert("엑셀 다운로드 준비 중입니다.")}
+            >
+              <Download size={14} />
+              <span>엑셀 다운로드</span>
+            </button>
           </div>
 
           <div className={styles.filterTabs}>
