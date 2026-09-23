@@ -852,21 +852,24 @@ function WatchlistTab() {
         </div>
 
         {/* 바 차트 */}
-        <div className={styles.barChartWrapper}>
+        <div className={styles.barChartWrapper} style={{ height: "235px" }}>
           {[
-            { group: "1개", count: 14200, pct: "45.2%", h: 100 },
-            { group: "2개", count: 8100, pct: "25.8%", h: 57 },
-            { group: "3개", count: 4200, pct: "13.4%", h: 30 },
-            { group: "4개", count: 2100, pct: "6.7%", h: 15 },
-            { group: "5개", count: 1250, pct: "4.0%", h: 9 },
-            { group: "6개", count: 680, pct: "2.2%", h: 5 },
-            { group: "7개", count: 390, pct: "1.2%", h: 3 },
-            { group: "8개", count: 240, pct: "0.8%", h: 2 },
-            { group: "9개", count: 150, pct: "0.5%", h: 1.5 },
-            { group: "10개", count: 110, pct: "0.3%", h: 1 },
+            { group: "1개", count: "14,200명", pct: "45.2%", h: 100 },
+            { group: "2개", count: "8,100명", pct: "25.8%", h: 57 },
+            { group: "3개", count: "4,200명", pct: "13.4%", h: 30 },
+            { group: "4개", count: "2,100명", pct: "6.7%", h: 15 },
+            { group: "5개", count: "1,250명", pct: "4.0%", h: 9 },
+            { group: "6개", count: "680명", pct: "2.2%", h: 5 },
+            { group: "7개", count: "390명", pct: "1.2%", h: 3 },
+            { group: "8개", count: "240명", pct: "0.8%", h: 2 },
+            { group: "9개", count: "150명", pct: "0.5%", h: 1.5 },
+            { group: "10개", count: "110명", pct: "0.3%", h: 1 },
           ].map((item, idx) => (
             <div key={idx} className={styles.barCol}>
-              <span style={{ fontSize: "10px", color: "#64748b", marginBottom: "4px" }}>{item.pct}</span>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "6px" }}>
+                <span style={{ fontSize: "11px", fontWeight: 700, color: "#0f172a", whiteSpace: "nowrap" }}>{item.count}</span>
+                <span style={{ fontSize: "10px", color: "#64748b", whiteSpace: "nowrap" }}>({item.pct})</span>
+              </div>
               <div
                 style={{
                   height: `${item.h}%`,
