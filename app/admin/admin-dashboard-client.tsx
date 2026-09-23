@@ -510,17 +510,16 @@ function BriefingTab() {
                 <th style={{ textAlign: "right" }}>09.1주</th>
                 <th style={{ textAlign: "right" }}>09.2주</th>
                 <th style={{ textAlign: "right", backgroundColor: "#eff6ff", color: "#1e3a8a" }}>09.3주 (현재)</th>
-                <th style={{ textAlign: "right" }}>전주 대비 증감</th>
               </tr>
             </thead>
             <tbody>
               {[
-                { name: "등록유저", w1: "31,200명", w2: "34,500명", w3: "37,800명", w4: "40,100명", current: "42,850명", diff: "+6.9%", isMajor: true },
-                { name: "총 브리핑", w1: "64,200건", w2: "70,950건", w3: "78,170건", w4: "86,060건", current: "94,270건", diff: "+9.5%", isMajor: true },
-                { name: "미국증시 비중", w1: "39%", w2: "39%", w3: "40%", w4: "41%", current: "42%", diff: "+1.0%p", isMajor: false },
-                { name: "국내증시 비중", w1: "33%", w2: "33%", w3: "32%", w4: "31%", current: "31%", diff: "0.0%p", isMajor: false },
-                { name: "부동산 시장 비중", w1: "16%", w2: "17%", w3: "17%", w4: "17%", current: "16%", diff: "-1.0%p", isMajor: false },
-                { name: "주요 이슈 비중", w1: "12%", w2: "11%", w3: "11%", w4: "11%", current: "11%", diff: "0.0%p", isMajor: false },
+                { name: "등록유저", w1: "31,200명", w2: "34,500명", w3: "37,800명", w4: "40,100명", current: "42,850명", isMajor: true },
+                { name: "총 브리핑", w1: "64,200건", w2: "70,950건", w3: "78,170건", w4: "86,060건", current: "94,270건", isMajor: true },
+                { name: "미국증시 비중", w1: "39%", w2: "39%", w3: "40%", w4: "41%", current: "42%", isMajor: false },
+                { name: "국내증시 비중", w1: "33%", w2: "33%", w3: "32%", w4: "31%", current: "31%", isMajor: false },
+                { name: "부동산 시장 비중", w1: "16%", w2: "17%", w3: "17%", w4: "17%", current: "16%", isMajor: false },
+                { name: "주요 이슈 비중", w1: "12%", w2: "11%", w3: "11%", w4: "11%", current: "11%", isMajor: false },
               ].map((row, idx) => (
                 <tr key={idx} className={row.isMajor ? styles.highlightRow : ""}>
                   <td style={{ fontWeight: 700, color: row.isMajor ? "#1e3a8a" : "#0f172a" }}>
@@ -532,9 +531,6 @@ function BriefingTab() {
                   <td style={{ textAlign: "right" }}>{row.w4}</td>
                   <td style={{ textAlign: "right", fontWeight: 800, color: "#1e3a8a", backgroundColor: "#eff6ff" }}>
                     {row.current}
-                  </td>
-                  <td style={{ textAlign: "right", color: row.diff.startsWith("+") ? "#059669" : row.diff.startsWith("-") ? "#dc2626" : "#64748b", fontWeight: 700 }}>
-                    {row.diff}
                   </td>
                 </tr>
               ))}
@@ -968,12 +964,6 @@ function BadgesTab({
     );
   }, [filteredBadges]);
 
-  const totalDiff = useMemo(() => {
-    if (weeklySums.w3 === 0) return "-";
-    const gain = ((weeklySums.current - weeklySums.w3) / weeklySums.w3) * 100;
-    return `+${gain.toFixed(1)}%`;
-  }, [weeklySums]);
-
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       {/* 4종 KPI 카드 */}
@@ -1038,7 +1028,6 @@ function BadgesTab({
                 <th style={{ textAlign: "right" }}>09.1주</th>
                 <th style={{ textAlign: "right" }}>09.2주</th>
                 <th style={{ textAlign: "right", backgroundColor: "#faf5ff", color: "#6b21a8" }}>09.3주 (현재)</th>
-                <th style={{ textAlign: "right" }}>전주 대비 증감</th>
               </tr>
             </thead>
             <tbody>
@@ -1064,9 +1053,6 @@ function BadgesTab({
                       <td style={{ textAlign: "right", fontWeight: 800, color: "#7e22ce", backgroundColor: "#faf5ff" }}>
                         {badge.current.toLocaleString()}개
                       </td>
-                      <td style={{ textAlign: "right", color: "#059669", fontWeight: 700 }}>
-                        {badge.diff}
-                      </td>
                     </tr>
                   ))}
                   {/* 합계 행 */}
@@ -1080,14 +1066,11 @@ function BadgesTab({
                     <td style={{ textAlign: "right", fontWeight: 800, color: "#7e22ce", fontSize: "15px", backgroundColor: "#faf5ff" }}>
                       {weeklySums.current.toLocaleString()}개
                     </td>
-                    <td style={{ textAlign: "right", fontWeight: 800, color: "#059669" }}>
-                      {totalDiff}
-                    </td>
                   </tr>
                 </>
               ) : (
                 <tr>
-                  <td colSpan={8} style={{ padding: "32px", textAlign: "center", color: "#94a3b8" }}>
+                  <td colSpan={7} style={{ padding: "32px", textAlign: "center", color: "#94a3b8" }}>
                     현재 운영 중인 배지가 없는 그룹입니다. (오픈 준비중)
                   </td>
                 </tr>
