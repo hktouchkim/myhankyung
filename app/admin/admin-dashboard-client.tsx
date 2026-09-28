@@ -826,16 +826,22 @@ function RecentArticlesTab() {
             ))}
           </div>
 
-          {/* 우측: 성향 분포 도넛차트 및 범례 */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "20px", background: "#f8fafc", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "24px 20px" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <span style={{ fontSize: "14px", fontWeight: 700, color: "#0f172a" }}>성향 점유율 도넛 차트</span>
-              <span style={{ fontSize: "12px", color: "#64748b" }}>상위 5종 집중도 60.7%</span>
+          {/* 우측: 도넛과 순위가 완벽히 결합된 통합 랭킹 모듈 */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px", background: "#f8fafc", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "22px 20px" }}>
+            {/* 상단 헤더: 타이틀 + 집중도 배지 */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #e2e8f0", paddingBottom: "14px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "#0f172a" }}>성향 점유율 & 순위</span>
+                <span style={{ fontSize: "11px", fontWeight: 700, color: "#2563eb", backgroundColor: "#eff6ff", padding: "2px 8px", borderRadius: "4px" }}>
+                  TOP 8 + 기타
+                </span>
+              </div>
+              <span style={{ fontSize: "12px", color: "#64748b" }}>상위 5종 집중도 <strong>60.7%</strong></span>
             </div>
 
-            {/* 도넛 SVG 차트 */}
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative", padding: "16px 0" }}>
-              <svg width="220" height="220" viewBox="0 0 42 42" style={{ transform: "rotate(-90deg)" }}>
+            {/* 중앙 도넛 SVG 차트 */}
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative", padding: "8px 0" }}>
+              <svg width="200" height="200" viewBox="0 0 42 42" style={{ transform: "rotate(-90deg)" }}>
                 {/* 배경 트랙 */}
                 <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f1f5f9" strokeWidth="6.5" />
                 {/* 1. 독수리 (16.8%) */}
@@ -852,39 +858,91 @@ function RecentArticlesTab() {
                 <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f59e0b" strokeWidth="6.5" strokeDasharray="7.1 92.9" strokeDashoffset="-60.7" />
                 {/* 7. 꿀벌 (6.5%) */}
                 <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#10b981" strokeWidth="6.5" strokeDasharray="6.5 93.5" strokeDashoffset="-67.8" />
-                {/* 8. 기타 9종 (25.7%) */}
-                <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#cbd5e1" strokeWidth="6.5" strokeDasharray="25.7 74.3" strokeDashoffset="-74.3" />
+                {/* 8. 코끼리 (5.4%) */}
+                <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#06b6d4" strokeWidth="6.5" strokeDasharray="5.4 94.6" strokeDashoffset="-74.3" />
+                {/* 9. 기타 8종 (20.3%) */}
+                <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#cbd5e1" strokeWidth="6.5" strokeDasharray="20.3 79.7" strokeDashoffset="-79.7" />
               </svg>
 
               {/* 도넛 중앙 텍스트 */}
               <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center" }}>
                 <div style={{ fontSize: "11px", color: "#64748b", fontWeight: 600 }}>전체 분석 독자</div>
                 <div style={{ fontSize: "20px", fontWeight: 800, color: "#0f172a" }}>42,850명</div>
-                <div style={{ fontSize: "11px", color: "#2563eb", fontWeight: 700 }}>16개 유형</div>
+                <div style={{ fontSize: "11px", color: "#2563eb", fontWeight: 700 }}>16개 유형 전수</div>
               </div>
             </div>
 
-            {/* 하단 세부 범례 리스트 */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px", borderTop: "1px solid #e2e8f0", paddingTop: "16px" }}>
+            {/* 도넛 바로 아래 순위 리스트 (순위 뱃지 + 미니 진행바 + 수치 결합) */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               {[
-                { name: "독수리형 독자", pct: "16.8%", count: "13,180명", color: "#2563eb" },
-                { name: "비버형 독자", pct: "14.2%", count: "11,140명", color: "#3b82f6" },
-                { name: "올빼미형 독자", pct: "11.5%", count: "9,020명", color: "#6366f1" },
-                { name: "치타형 독자", pct: "9.8%", count: "7,690명", color: "#8b5cf6" },
-                { name: "고양이형 독자", pct: "8.4%", count: "6,590명", color: "#ec4899" },
-                { name: "다람쥐형 독자", pct: "7.1%", count: "5,570명", color: "#f59e0b" },
-                { name: "꿀벌형 독자", pct: "6.5%", count: "5,100명", color: "#10b981" },
-                { name: "기타 9개 유형", pct: "25.7%", count: "20,100명", color: "#94a3b8" },
+                { rank: 1, name: "독수리형 독자", pct: 16.8, pctStr: "16.8%", count: "13,180명", color: "#2563eb", isTop3: true },
+                { rank: 2, name: "비버형 독자", pct: 14.2, pctStr: "14.2%", count: "11,140명", color: "#3b82f6", isTop3: true },
+                { rank: 3, name: "올빼미형 독자", pct: 11.5, pctStr: "11.5%", count: "9,020명", color: "#6366f1", isTop3: true },
+                { rank: 4, name: "치타형 독자", pct: 9.8, pctStr: "9.8%", count: "7,690명", color: "#8b5cf6" },
+                { rank: 5, name: "고양이형 독자", pct: 8.4, pctStr: "8.4%", count: "6,590명", color: "#ec4899" },
+                { rank: 6, name: "다람쥐형 독자", pct: 7.1, pctStr: "7.1%", count: "5,570명", color: "#f59e0b" },
+                { rank: 7, name: "꿀벌형 독자", pct: 6.5, pctStr: "6.5%", count: "5,100명", color: "#10b981" },
+                { rank: 8, name: "코끼리형 독자", pct: 5.4, pctStr: "5.4%", count: "4,230명", color: "#06b6d4" },
+                { rank: "-", name: "기타 8개 유형", pct: 20.3, pctStr: "20.3%", count: "15,870명", color: "#94a3b8" },
               ].map((item, idx) => (
-                <div key={idx} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "12px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ width: "9px", height: "9px", borderRadius: "50%", backgroundColor: item.color, flexShrink: 0 }} />
-                    <span style={{ color: "#334155", fontWeight: 500 }}>{item.name}</span>
+                <div
+                  key={idx}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    padding: "7px 10px",
+                    borderRadius: "8px",
+                    backgroundColor: item.isTop3 ? "#ffffff" : "transparent",
+                    border: item.isTop3 ? "1px solid #e2e8f0" : "1px solid transparent",
+                    boxShadow: item.isTop3 ? "0 1px 2px rgba(0,0,0,0.02)" : "none",
+                  }}
+                >
+                  {/* 순위 배지 */}
+                  <span
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      borderRadius: "4px",
+                      backgroundColor: item.isTop3 ? item.color : "#f1f5f9",
+                      color: item.isTop3 ? "#ffffff" : "#64748b",
+                      fontSize: "11px",
+                      fontWeight: 800,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {item.rank}
+                  </span>
+
+                  {/* 성향 이름 */}
+                  <span style={{ fontSize: "12px", fontWeight: item.isTop3 ? 700 : 500, color: "#1e293b", minWidth: "85px" }}>
+                    {item.name}
+                  </span>
+
+                  {/* 미니 가로 막대 (비중 시각화) */}
+                  <div style={{ flex: 1, height: "6px", backgroundColor: "#f1f5f9", borderRadius: "999px", overflow: "hidden" }}>
+                    <div
+                      style={{
+                        width: `${(item.pct / 20) * 100}%`,
+                        height: "100%",
+                        backgroundColor: item.color,
+                        borderRadius: "999px",
+                      }}
+                    />
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ color: "#64748b", fontSize: "11px" }}>{item.count}</span>
-                    <span style={{ fontWeight: 700, color: "#0f172a", width: "42px", textAlign: "right" }}>{item.pct}</span>
-                  </div>
+
+                  {/* 인원수 */}
+                  <span style={{ fontSize: "11px", color: "#64748b", minWidth: "52px", textAlign: "right" }}>
+                    {item.count}
+                  </span>
+
+                  {/* 점유율 % */}
+                  <span style={{ fontSize: "12px", fontWeight: 700, color: item.isTop3 ? item.color : "#0f172a", width: "42px", textAlign: "right" }}>
+                    {item.pctStr}
+                  </span>
                 </div>
               ))}
             </div>
