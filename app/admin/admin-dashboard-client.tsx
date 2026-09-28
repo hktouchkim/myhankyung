@@ -629,24 +629,23 @@ function BriefingTab() {
 function RecentArticlesTab() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-      {/* 3대 핵심 통계 카드 */}
-      <div className={styles.kpiGrid3}>
+      {/* 4대 핵심 통계 카드 */}
+      <div className={styles.kpiGrid}>
+        <div className={styles.kpiCard}>
+          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>총 사용자 수</div>
+          <div className={styles.kpiValue}>42,850명</div>
+        </div>
         <div className={styles.kpiCard}>
           <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>총 열람 수</div>
           <div className={styles.kpiValue}>788,200건</div>
-          <div style={{ fontSize: "11px", color: "#059669", fontWeight: 600, marginTop: "6px" }}>
-            전주 대비 +6.5% 증가
-          </div>
         </div>
         <div className={styles.kpiCard}>
-          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>전체 열람 평균</div>
+          <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>1인당 평균 열람</div>
           <div className={styles.kpiValue}>18.4건</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>1인당 평균 읽은 기사량</div>
         </div>
         <div className={styles.kpiCard}>
           <div style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>상위 10% 열람 평균</div>
           <div className={styles.kpiValue} style={{ color: "#2563eb" }}>74.2건</div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "6px" }}>충성·헤비 독자층 평균 소비량</div>
         </div>
       </div>
 
