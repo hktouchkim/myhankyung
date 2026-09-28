@@ -763,7 +763,7 @@ function RecentArticlesTab() {
         </div>
       </div>
 
-      {/* AI 읽기 성향 분포도 */}
+      {/* AI 읽기 성향 분포도 (좌측 카드 + 우측 도넛차트) */}
       <div className={styles.sectionCard}>
         <div className={styles.sectionHeader}>
           <div>
@@ -774,54 +774,121 @@ function RecentArticlesTab() {
           </span>
         </div>
 
-        <div className={styles.cardPersonaGrid}>
-          {[
-            { rank: 1, name: "독수리형 독자", time: "오전형", field: "집중형", target: "대상형", img: "/aicard/독수리.svg", pct: "16.8%", count: "13,180명" },
-            { rank: 2, name: "비버형 독자", time: "오전형", field: "집중형", target: "흐름형", img: "/aicard/비버.svg", pct: "14.2%", count: "11,140명" },
-            { rank: 3, name: "올빼미형 독자", time: "야간형", field: "집중형", target: "대상형", img: "/aicard/올빼미.svg", pct: "11.5%", count: "9,020명" },
-            { rank: 4, name: "치타형 독자", time: "오후형", field: "집중형", target: "대상형", img: "/aicard/치타.svg", pct: "9.8%", count: "7,690명" },
-            { rank: 5, name: "고양이형 독자", time: "저녁형", field: "집중형", target: "대상형", img: "/aicard/고양이.svg", pct: "8.4%", count: "6,590명" },
-            { rank: 6, name: "다람쥐형 독자", time: "오전형", field: "탐험형", target: "대상형", img: "/aicard/다람쥐.svg", pct: "7.1%", count: "5,570명" },
-            { rank: 7, name: "꿀벌형 독자", time: "오전형", field: "탐험형", target: "흐름형", img: "/aicard/꿀벌.svg", pct: "6.5%", count: "5,100명" },
-            { rank: 8, name: "코끼리형 독자", time: "오후형", field: "집중형", target: "흐름형", img: "/aicard/코끼리.svg", pct: "5.4%", count: "4,230명" },
-            { rank: 9, name: "늑대형 독자", time: "저녁형", field: "집중형", target: "흐름형", img: "/aicard/늑대.svg", pct: "4.8%", count: "3,760명" },
-            { rank: 10, name: "반딧불이형 독자", time: "야간형", field: "집중형", target: "흐름형", img: "/aicard/반딧불이.svg", pct: "4.2%", count: "3,290명" },
-            { rank: 11, name: "미어캣형 독자", time: "오후형", field: "탐험형", target: "대상형", img: "/aicard/미어캣.svg", pct: "3.5%", count: "2,740명" },
-            { rank: 12, name: "기린형 독자", time: "오후형", field: "탐험형", target: "흐름형", img: "/aicard/기린.svg", pct: "2.8%", count: "2,190명" },
-            { rank: 13, name: "수달형 독자", time: "저녁형", field: "탐험형", target: "대상형", img: "/aicard/수달.svg", pct: "1.9%", count: "1,490명" },
-            { rank: 14, name: "돌고래형 독자", time: "저녁형", field: "탐험형", target: "흐름형", img: "/aicard/돌고래.svg", pct: "1.5%", count: "1,170명" },
-            { rank: 15, name: "너구리형 독자", time: "야간형", field: "탐험형", target: "대상형", img: "/aicard/너구리.svg", pct: "1.0%", count: "780명" },
-            { rank: 16, name: "여우형 독자", time: "야간형", field: "탐험형", target: "흐름형", img: "/aicard/여우.svg", pct: "0.6%", count: "470명" },
-          ].map((card, i) => (
-            <div key={i} className={styles.personaCard}>
-              <div className={styles.personaTop}>
-                <span className={styles.personaRank}>TOP {card.rank}</span>
-                <span className={styles.personaPct}>{card.pct}</span>
-              </div>
-              <div className={styles.personaBody}>
-                <div className={styles.personaImgBox}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={card.img}
-                    alt={card.name}
-                    className={styles.personaImg}
-                    loading="lazy"
-                  />
+        <div className={styles.personaSplitLayout}>
+          {/* 좌측: 16종 페르소나 카드 그리드 (2열 정렬) */}
+          <div className={styles.personaGrid2Col}>
+            {[
+              { rank: 1, name: "독수리형 독자", time: "오전형", field: "집중형", target: "대상형", img: "/aicard/독수리.svg", pct: "16.8%", count: "13,180명" },
+              { rank: 2, name: "비버형 독자", time: "오전형", field: "집중형", target: "흐름형", img: "/aicard/비버.svg", pct: "14.2%", count: "11,140명" },
+              { rank: 3, name: "올빼미형 독자", time: "야간형", field: "집중형", target: "대상형", img: "/aicard/올빼미.svg", pct: "11.5%", count: "9,020명" },
+              { rank: 4, name: "치타형 독자", time: "오후형", field: "집중형", target: "대상형", img: "/aicard/치타.svg", pct: "9.8%", count: "7,690명" },
+              { rank: 5, name: "고양이형 독자", time: "저녁형", field: "집중형", target: "대상형", img: "/aicard/고양이.svg", pct: "8.4%", count: "6,590명" },
+              { rank: 6, name: "다람쥐형 독자", time: "오전형", field: "탐험형", target: "대상형", img: "/aicard/다람쥐.svg", pct: "7.1%", count: "5,570명" },
+              { rank: 7, name: "꿀벌형 독자", time: "오전형", field: "탐험형", target: "흐름형", img: "/aicard/꿀벌.svg", pct: "6.5%", count: "5,100명" },
+              { rank: 8, name: "코끼리형 독자", time: "오후형", field: "집중형", target: "흐름형", img: "/aicard/코끼리.svg", pct: "5.4%", count: "4,230명" },
+              { rank: 9, name: "늑대형 독자", time: "저녁형", field: "집중형", target: "흐름형", img: "/aicard/늑대.svg", pct: "4.8%", count: "3,760명" },
+              { rank: 10, name: "반딧불이형 독자", time: "야간형", field: "집중형", target: "흐름형", img: "/aicard/반딧불이.svg", pct: "4.2%", count: "3,290명" },
+              { rank: 11, name: "미어캣형 독자", time: "오후형", field: "탐험형", target: "대상형", img: "/aicard/미어캣.svg", pct: "3.5%", count: "2,740명" },
+              { rank: 12, name: "기린형 독자", time: "오후형", field: "탐험형", target: "흐름형", img: "/aicard/기린.svg", pct: "2.8%", count: "2,190명" },
+              { rank: 13, name: "수달형 독자", time: "저녁형", field: "탐험형", target: "대상형", img: "/aicard/수달.svg", pct: "1.9%", count: "1,490명" },
+              { rank: 14, name: "돌고래형 독자", time: "저녁형", field: "탐험형", target: "흐름형", img: "/aicard/돌고래.svg", pct: "1.5%", count: "1,170명" },
+              { rank: 15, name: "너구리형 독자", time: "야간형", field: "탐험형", target: "대상형", img: "/aicard/너구리.svg", pct: "1.0%", count: "780명" },
+              { rank: 16, name: "여우형 독자", time: "야간형", field: "탐험형", target: "흐름형", img: "/aicard/여우.svg", pct: "0.6%", count: "470명" },
+            ].map((card, i) => (
+              <div key={i} className={styles.personaCard}>
+                <div className={styles.personaTop}>
+                  <span className={styles.personaRank}>TOP {card.rank}</span>
+                  <span className={styles.personaPct}>{card.pct}</span>
                 </div>
-                <div className={styles.personaInfo}>
-                  <div className={styles.personaName}>{card.name}</div>
-                  <div className={styles.personaTags}>
-                    <span className={styles.personaTag}>{card.time}</span>
-                    <span className={styles.personaTag}>{card.field}</span>
-                    <span className={styles.personaTag}>{card.target}</span>
+                <div className={styles.personaBody}>
+                  <div className={styles.personaImgBox}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={card.img}
+                      alt={card.name}
+                      className={styles.personaImg}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className={styles.personaInfo}>
+                    <div className={styles.personaName}>{card.name}</div>
+                    <div className={styles.personaTags}>
+                      <span className={styles.personaTag}>{card.time}</span>
+                      <span className={styles.personaTag}>{card.field}</span>
+                      <span className={styles.personaTag}>{card.target}</span>
+                    </div>
                   </div>
                 </div>
+                <div className={styles.personaBottom}>
+                  <span>{card.count}</span>
+                </div>
               </div>
-              <div className={styles.personaBottom}>
-                <span>{card.count}</span>
+            ))}
+          </div>
+
+          {/* 우측: 성향 분포 도넛차트 및 범례 */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px", background: "#f8fafc", borderRadius: "12px", border: "1px solid #e2e8f0", padding: "24px 20px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: "14px", fontWeight: 700, color: "#0f172a" }}>성향 점유율 도넛 차트</span>
+              <span style={{ fontSize: "12px", color: "#64748b" }}>상위 5종 집중도 60.7%</span>
+            </div>
+
+            {/* 도넛 SVG 차트 */}
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative", padding: "16px 0" }}>
+              <svg width="220" height="220" viewBox="0 0 42 42" style={{ transform: "rotate(-90deg)" }}>
+                {/* 배경 트랙 */}
+                <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f1f5f9" strokeWidth="6.5" />
+                {/* 1. 독수리 (16.8%) */}
+                <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#2563eb" strokeWidth="6.5" strokeDasharray="16.8 83.2" strokeDashoffset="0" />
+                {/* 2. 비버 (14.2%) */}
+                <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#3b82f6" strokeWidth="6.5" strokeDasharray="14.2 85.8" strokeDashoffset="-16.8" />
+                {/* 3. 올빼미 (11.5%) */}
+                <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#6366f1" strokeWidth="6.5" strokeDasharray="11.5 88.5" strokeDashoffset="-31.0" />
+                {/* 4. 치타 (9.8%) */}
+                <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#8b5cf6" strokeWidth="6.5" strokeDasharray="9.8 90.2" strokeDashoffset="-42.5" />
+                {/* 5. 고양이 (8.4%) */}
+                <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#ec4899" strokeWidth="6.5" strokeDasharray="8.4 91.6" strokeDashoffset="-52.3" />
+                {/* 6. 다람쥐 (7.1%) */}
+                <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f59e0b" strokeWidth="6.5" strokeDasharray="7.1 92.9" strokeDashoffset="-60.7" />
+                {/* 7. 꿀벌 (6.5%) */}
+                <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#10b981" strokeWidth="6.5" strokeDasharray="6.5 93.5" strokeDashoffset="-67.8" />
+                {/* 8. 기타 9종 (25.7%) */}
+                <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#cbd5e1" strokeWidth="6.5" strokeDasharray="25.7 74.3" strokeDashoffset="-74.3" />
+              </svg>
+
+              {/* 도넛 중앙 텍스트 */}
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center" }}>
+                <div style={{ fontSize: "11px", color: "#64748b", fontWeight: 600 }}>전체 분석 독자</div>
+                <div style={{ fontSize: "20px", fontWeight: 800, color: "#0f172a" }}>42,850명</div>
+                <div style={{ fontSize: "11px", color: "#2563eb", fontWeight: 700 }}>16개 유형</div>
               </div>
             </div>
-          ))}
+
+            {/* 하단 세부 범례 리스트 */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px", borderTop: "1px solid #e2e8f0", paddingTop: "16px" }}>
+              {[
+                { name: "독수리형 독자", pct: "16.8%", count: "13,180명", color: "#2563eb" },
+                { name: "비버형 독자", pct: "14.2%", count: "11,140명", color: "#3b82f6" },
+                { name: "올빼미형 독자", pct: "11.5%", count: "9,020명", color: "#6366f1" },
+                { name: "치타형 독자", pct: "9.8%", count: "7,690명", color: "#8b5cf6" },
+                { name: "고양이형 독자", pct: "8.4%", count: "6,590명", color: "#ec4899" },
+                { name: "다람쥐형 독자", pct: "7.1%", count: "5,570명", color: "#f59e0b" },
+                { name: "꿀벌형 독자", pct: "6.5%", count: "5,100명", color: "#10b981" },
+                { name: "기타 9개 유형", pct: "25.7%", count: "20,100명", color: "#94a3b8" },
+              ].map((item, idx) => (
+                <div key={idx} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "12px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span style={{ width: "9px", height: "9px", borderRadius: "50%", backgroundColor: item.color, flexShrink: 0 }} />
+                    <span style={{ color: "#334155", fontWeight: 500 }}>{item.name}</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span style={{ color: "#64748b", fontSize: "11px" }}>{item.count}</span>
+                    <span style={{ fontWeight: 700, color: "#0f172a", width: "42px", textAlign: "right" }}>{item.pct}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -681,6 +681,33 @@
   color: #065f46;
 }
 
+/* AI 읽기 성향 좌우 2분할 레이아웃 */
+.personaSplitLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+@media (max-width: 1200px) {
+  .personaSplitLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.personaGrid2Col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+@media (max-width: 640px) {
+  .personaGrid2Col {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* 16개 AI 카드 그리드 */
 .cardPersonaGrid {
   display: grid;
