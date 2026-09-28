@@ -957,6 +957,63 @@ function RecentArticlesTab() {
 // 4. 관심종목 모니터링
 // -------------------------------------------------------------
 function WatchlistTab() {
+  const [stockMarketFilter, setStockMarketFilter] = useState<"all" | "domestic" | "overseas">("all");
+
+  const ALL_STOCKS = [
+    { name: "삼성전자", code: "005930", m: "국내 (코스피)", marketType: "domestic" as const, u: "19,840명", rawU: 19840 },
+    { name: "엔비디아 (NVDA)", code: "NVDA", m: "해외 (나스닥)", marketType: "overseas" as const, u: "16,420명", rawU: 16420 },
+    { name: "SK하이닉스", code: "000660", m: "국내 (코스피)", marketType: "domestic" as const, u: "15,890명", rawU: 15890 },
+    { name: "애플 (AAPL)", code: "AAPL", m: "해외 (나스닥)", marketType: "overseas" as const, u: "13,100명", rawU: 13100 },
+    { name: "테슬라 (TSLA)", code: "TSLA", m: "해외 (나스닥)", marketType: "overseas" as const, u: "12,450명", rawU: 12450 },
+    { name: "현대차", code: "005380", m: "국내 (코스피)", marketType: "domestic" as const, u: "9,820명", rawU: 9820 },
+    { name: "마이크로소프트 (MSFT)", code: "MSFT", m: "해외 (나스닥)", marketType: "overseas" as const, u: "9,120명", rawU: 9120 },
+    { name: "NAVER", code: "035420", m: "국내 (코스피)", marketType: "domestic" as const, u: "7,840명", rawU: 7840 },
+    { name: "카카오", code: "035720", m: "국내 (코스피)", marketType: "domestic" as const, u: "7,110명", rawU: 7110 },
+    { name: "알파벳 A (GOOGL)", code: "GOOGL", m: "해외 (나스닥)", marketType: "overseas" as const, u: "6,980명", rawU: 6980 },
+    { name: "LG에너지솔루션", code: "373220", m: "국내 (코스피)", marketType: "domestic" as const, u: "6,450명", rawU: 6450 },
+    { name: "아마존 (AMZN)", code: "AMZN", m: "해외 (나스닥)", marketType: "overseas" as const, u: "6,120명", rawU: 6120 },
+    { name: "기아", code: "000270", m: "국내 (코스피)", marketType: "domestic" as const, u: "5,840명", rawU: 5840 },
+    { name: "메타 플랫폼스 (META)", code: "META", m: "해외 (나스닥)", marketType: "overseas" as const, u: "5,320명", rawU: 5320 },
+    { name: "셀트리온", code: "068270", m: "국내 (코스피)", marketType: "domestic" as const, u: "4,980명", rawU: 4980 },
+    { name: "브로드컴 (AVGO)", code: "AVGO", m: "해외 (나스닥)", marketType: "overseas" as const, u: "4,610명", rawU: 4610 },
+    { name: "삼성바이오로직스", code: "207940", m: "국내 (코스피)", marketType: "domestic" as const, u: "4,250명", rawU: 4250 },
+    { name: "AMD", code: "AMD", m: "해외 (나스닥)", marketType: "overseas" as const, u: "3,980명", rawU: 3980 },
+    { name: "POSCO홀딩스", code: "005490", m: "국내 (코스피)", marketType: "domestic" as const, u: "3,750명", rawU: 3750 },
+    { name: "팔란티어 (PLTR)", code: "PLTR", m: "해외 (뉴욕)", marketType: "overseas" as const, u: "3,540명", rawU: 3540 },
+    // 국내 추가 종목
+    { name: "KB금융", code: "105560", m: "국내 (코스피)", marketType: "domestic" as const, u: "3,410명", rawU: 3410 },
+    { name: "신한지주", code: "055550", m: "국내 (코스피)", marketType: "domestic" as const, u: "3,120명", rawU: 3120 },
+    { name: "에코프로비엠", code: "247540", m: "국내 (코스닥)", marketType: "domestic" as const, u: "2,980명", rawU: 2980 },
+    { name: "삼성SDI", code: "006400", m: "국내 (코스피)", marketType: "domestic" as const, u: "2,840명", rawU: 2840 },
+    { name: "크래프톤", code: "259960", m: "국내 (코스피)", marketType: "domestic" as const, u: "2,650명", rawU: 2650 },
+    { name: "카카오뱅크", code: "323410", m: "국내 (코스피)", marketType: "domestic" as const, u: "2,420명", rawU: 2420 },
+    { name: "LG전자", code: "066570", m: "국내 (코스피)", marketType: "domestic" as const, u: "2,280명", rawU: 2280 },
+    { name: "HMM", code: "011200", m: "국내 (코스피)", marketType: "domestic" as const, u: "2,150명", rawU: 2150 },
+    { name: "SK이노베이션", code: "096770", m: "국내 (코스피)", marketType: "domestic" as const, u: "1,980명", rawU: 1980 },
+    { name: "두산에너빌리티", code: "034020", m: "국내 (코스피)", marketType: "domestic" as const, u: "1,870명", rawU: 1870 },
+    // 해외 추가 종목
+    { name: "버크셔 해서웨이 (BRK.B)", code: "BRK.B", m: "해외 (뉴욕)", marketType: "overseas" as const, u: "3,390명", rawU: 3390 },
+    { name: "일라이 릴리 (LLY)", code: "LLY", m: "해외 (뉴욕)", marketType: "overseas" as const, u: "3,180명", rawU: 3180 },
+    { name: "TSMC (TSM)", code: "TSM", m: "해외 (뉴욕)", marketType: "overseas" as const, u: "2,950명", rawU: 2950 },
+    { name: "넷플릭스 (NFLX)", code: "NFLX", m: "해외 (나스닥)", marketType: "overseas" as const, u: "2,760명", rawU: 2760 },
+    { name: "코스트코 (COST)", code: "COST", m: "해외 (나스닥)", marketType: "overseas" as const, u: "2,540명", rawU: 2540 },
+    { name: "퀄컴 (QCOM)", code: "QCOM", m: "해외 (나스닥)", marketType: "overseas" as const, u: "2,380명", rawU: 2380 },
+    { name: "월마트 (WMT)", code: "WMT", m: "해외 (뉴욕)", marketType: "overseas" as const, u: "2,190명", rawU: 2190 },
+    { name: "인텔 (INTC)", code: "INTC", m: "해외 (나스닥)", marketType: "overseas" as const, u: "2,050명", rawU: 2050 },
+    { name: "ASML 홀딩 (ASML)", code: "ASML", m: "해외 (나스닥)", marketType: "overseas" as const, u: "1,920명", rawU: 1920 },
+    { name: "ARM 홀딩스 (ARM)", code: "ARM", m: "해외 (나스닥)", marketType: "overseas" as const, u: "1,810명", rawU: 1810 },
+  ];
+
+  const filteredStocks = useMemo(() => {
+    let list = ALL_STOCKS;
+    if (stockMarketFilter === "domestic") {
+      list = ALL_STOCKS.filter((s) => s.marketType === "domestic");
+    } else if (stockMarketFilter === "overseas") {
+      list = ALL_STOCKS.filter((s) => s.marketType === "overseas");
+    }
+    return list.slice(0, 20).map((s, idx) => ({ ...s, r: idx + 1 }));
+  }, [stockMarketFilter]);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       <div className={styles.kpiGrid}>
@@ -989,12 +1046,12 @@ function WatchlistTab() {
         {/* 바 차트 */}
         <div className={styles.barChartWrapper} style={{ height: "235px" }}>
           {[
-            { group: "1개", count: "14,200명", pct: "45.2%", h: 100 },
-            { group: "2개", count: "8,100명", pct: "25.8%", h: 57 },
-            { group: "3개", count: "4,200명", pct: "13.4%", h: 30 },
-            { group: "4개", count: "2,100명", pct: "6.7%", h: 15 },
-            { group: "5개", count: "1,250명", pct: "4.0%", h: 9 },
-            { group: "6개", count: "680명", pct: "2.2%", h: 5 },
+            { group: "1개", count: "14,200명", pct: "45.2%", h: 90 },
+            { group: "2개", count: "8,100명", pct: "25.8%", h: 52 },
+            { group: "3개", count: "4,200명", pct: "13.4%", h: 28 },
+            { group: "4개", count: "2,100명", pct: "6.7%", h: 14 },
+            { group: "5개", count: "1,250명", pct: "4.0%", h: 8 },
+            { group: "6개", count: "680명", pct: "2.2%", h: 4.5 },
             { group: "7개", count: "390명", pct: "1.2%", h: 3 },
             { group: "8개", count: "240명", pct: "0.8%", h: 2 },
             { group: "9개", count: "150명", pct: "0.5%", h: 1.5 },
@@ -1055,15 +1112,38 @@ function WatchlistTab() {
         </div>
       </div>
 
-      {/* 가장 많이 등록된 인기 종목 TOP 20 (시장별 비율 통합) */}
+      {/* 가장 많이 등록된 인기 종목 TOP 20 (시장별 필터 및 비율 통합) */}
       <div className={styles.sectionCard}>
-        <div className={styles.sectionHeader} style={{ flexWrap: "wrap", gap: "12px" }}>
-          <div>
-            <h3 className={styles.sectionTitle}>가장 많이 등록된 인기 종목 TOP 20</h3>
+        <div className={styles.sectionHeader} style={{ flexWrap: "wrap", gap: "16px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap" }}>
+            <h3 className={styles.sectionTitle}>
+              가장 많이 등록된 인기 종목 TOP 20
+              {stockMarketFilter === "domestic" && " (국내주식)"}
+              {stockMarketFilter === "overseas" && " (해외주식)"}
+            </h3>
+
+            {/* 시장별 필터 탭 (전체 / 국내 / 해외) */}
+            <div className={styles.filterTabs}>
+              {[
+                { id: "all" as const, label: "전체" },
+                { id: "domestic" as const, label: "국내주식" },
+                { id: "overseas" as const, label: "해외주식" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setStockMarketFilter(tab.id)}
+                  className={`${styles.filterBtn} ${stockMarketFilter === tab.id ? styles.filterBtnActive : ""}`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
           </div>
+
           {/* 국내/해외 주식 등록 비율 바 */}
           <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "#f8fafc", padding: "6px 14px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
-            <span style={{ fontSize: "12px", fontWeight: 700, color: "#475569" }}>시장별 등록 비중:</span>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "#475569" }}>전체 시장 비중:</span>
             <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px" }}>
               <span style={{ display: "inline-block", width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#2563eb" }} />
               <span style={{ color: "#1e40af", fontWeight: 700 }}>국내주식 64.5%</span>
@@ -1090,28 +1170,7 @@ function WatchlistTab() {
               </tr>
             </thead>
             <tbody>
-              {[
-                { r: 1, name: "삼성전자", code: "005930", m: "국내 (코스피)", u: "19,840명" },
-                { r: 2, name: "엔비디아 (NVDA)", code: "NVDA", m: "해외 (나스닥)", u: "16,420명" },
-                { r: 3, name: "SK하이닉스", code: "000660", m: "국내 (코스피)", u: "15,890명" },
-                { r: 4, name: "애플 (AAPL)", code: "AAPL", m: "해외 (나스닥)", u: "13,100명" },
-                { r: 5, name: "테슬라 (TSLA)", code: "TSLA", m: "해외 (나스닥)", u: "12,450명" },
-                { r: 6, name: "현대차", code: "005380", m: "국내 (코스피)", u: "9,820명" },
-                { r: 7, name: "마이크로소프트 (MSFT)", code: "MSFT", m: "해외 (나스닥)", u: "9,120명" },
-                { r: 8, name: "NAVER", code: "035420", m: "국내 (코스피)", u: "7,840명" },
-                { r: 9, name: "카카오", code: "035720", m: "국내 (코스피)", u: "7,110명" },
-                { r: 10, name: "알파벳 A (GOOGL)", code: "GOOGL", m: "해외 (나스닥)", u: "6,980명" },
-                { r: 11, name: "LG에너지솔루션", code: "373220", m: "국내 (코스피)", u: "6,450명" },
-                { r: 12, name: "아마존 (AMZN)", code: "AMZN", m: "해외 (나스닥)", u: "6,120명" },
-                { r: 13, name: "기아", code: "000270", m: "국내 (코스피)", u: "5,840명" },
-                { r: 14, name: "메타 플랫폼스 (META)", code: "META", m: "해외 (나스닥)", u: "5,320명" },
-                { r: 15, name: "셀트리온", code: "068270", m: "국내 (코스피)", u: "4,980명" },
-                { r: 16, name: "브로드컴 (AVGO)", code: "AVGO", m: "해외 (나스닥)", u: "4,610명" },
-                { r: 17, name: "삼성바이오로직스", code: "207940", m: "국내 (코스피)", u: "4,250명" },
-                { r: 18, name: "AMD", code: "AMD", m: "해외 (나스닥)", u: "3,980명" },
-                { r: 19, name: "POSCO홀딩스", code: "005490", m: "국내 (코스피)", u: "3,750명" },
-                { r: 20, name: "팔란티어 (PLTR)", code: "PLTR", m: "해외 (뉴욕)", u: "3,540명" },
-              ].map((stock, i) => (
+              {filteredStocks.map((stock, i) => (
                 <tr key={i} className={stock.r <= 3 ? styles.highlightRow : ""}>
                   <td style={{ fontWeight: 800, color: stock.r <= 3 ? "#1e40af" : "#0f172a" }}>{stock.r}</td>
                   <td style={{ fontWeight: 700, color: "#0f172a" }}>{stock.name}</td>
