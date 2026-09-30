@@ -3,10 +3,10 @@ import { MyHankyungClient } from "../page";
 
 export const metadata: Metadata = {
   title: "관심종목 | My한경",
-  description: "내가 등록한 관심종목의 주가 변동과 시세 정보, AI 호재·악재 코멘트와 핵심 이슈를 한눈에 확인하세요.",
+  description: "관심종목을 그룹별로 등록하고 관리하며 주가 변동과 시세 정보, AI 호재·악재 코멘트를 한눈에 확인하세요.",
   openGraph: {
     title: "관심종목 | My한경",
-    description: "내가 등록한 관심종목의 주가 변동과 시세 정보, AI 호재·악재 코멘트와 핵심 이슈를 한눈에 확인하세요.",
+    description: "관심종목을 그룹별로 등록하고 관리하며 주가 변동과 시세 정보, AI 호재·악재 코멘트를 한눈에 확인하세요.",
     url: "https://myhankyung.vercel.app/watchlist",
   },
 };
